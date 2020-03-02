@@ -1,0 +1,18 @@
+event_odd
+  odd
+  title
+  type: ""
+  type_specifics:
+    operator: GT || LT
+    value: 
+  house
+  sport
+  event
+    name
+    starts_at
+    ends_at
+    teams: {
+      home:
+      away: 
+    }
+  market

@@ -1,0 +1,16 @@
+{
+  "name": "better_bet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.5.4",
+    "puppeteer": "^2.1.1",
+    "repl": "^0.1.3"
+  }
+}
