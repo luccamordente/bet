@@ -9,13 +9,32 @@ function delay(time) {
    });
 }
 
+async function setEventFilterTo(page) {
+	const filterDiv = await page.$('div.ls-filter__name');
+	await filterDiv.click();
+
+	delay(2000);
+
+	const hourlyFilterLink = await page.$('div.ls-filter__wrap a.chosen-single');
+	await hourlyFilterLink.click();
+	delay(100)
+
+	const hourlyFilterOptions = await page.$$('div.ls-filter__wrap li.active-result');
+	await hourlyFilterOptions[3].click();
+
+	delay(100)
+	const applyFilterButton = await page.$('div.ls-filter__wrap button.ls-filter__btn');
+	await applyFilterButton.click();	
+}
+
 async function getEventsWithUrl(page) {
 	const footballCategorySelector = 'ul.sport_menu li:first-child';
 	const footballCategory = await page.$(footballCategorySelector);
 	const footballCategoryLink = await footballCategory.$('a')
+	await setEventFilterTo(page);
+	await delay(3000)
 	await footballCategoryLink.click();
-	await delay(10000)
-
+	
 	await page.waitForSelector(footballCategorySelector + " ul");
 	
 	const eventsWithUrl = [];
@@ -45,13 +64,15 @@ async function getEventsWithUrl(page) {
 
 	}
 
+	return eventsWithUrl;
+
 }
 
 async function main() {
 	const browser = await puppeteer.launch({headless: false});
 	const page = await browser.newPage();
 	await page.goto("https://br.1xbet.com/")
-	await page.setViewport({ width: 1366, height: 99999});
+	await page.setViewport({ width: 1366, height: 900});
 	await getEventsWithUrl(page)
 
 
