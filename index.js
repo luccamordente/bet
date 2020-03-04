@@ -9,6 +9,24 @@ function delay(time) {
    });
 }
 
+async function setEventFilterTo(page) {
+	const filterDiv = await page.$('div.ls-filter__name');
+	await filterDiv.click();
+
+	delay(2000);
+
+	const hourlyFilterLink = await page.$('div.ls-filter__wrap a.chosen-single');
+	await hourlyFilterLink.click();
+	delay(100)
+
+	const hourlyFilterOptions = await page.$$('div.ls-filter__wrap li.active-result');
+	await hourlyFilterOptions[3].click();
+
+	delay(100)
+	const applyFilterButton = await page.$('div.ls-filter__wrap button.ls-filter__btn');
+	await applyFilterButton.click();	
+}
+
 function getInnerText(node) { return node.innerText }
 
 const MARKETS_WHITELIST = [
@@ -144,7 +162,7 @@ async function getEventBets(page) {
 }
 
 async function main() {
-	const browser = await puppeteer.launch({headless: false});
+	const browser = await puppeteer.launch({headless: true});
 	
 	const page = await browser.newPage();
 	await page.goto("https://br.1xbet.com/");
