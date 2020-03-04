@@ -4,13 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "scrapper": "ts-node app/index.ts"
   },
-  "author": "",
+  "author": "LUCCA E RICARDO NACIF",
   "license": "ISC",
   "dependencies": {
+    "@types/async": "^3.0.8",
+    "@types/node": "^13.7.7",
+    "async": "^3.2.0",
     "mongodb": "^3.5.4",
     "puppeteer": "^2.1.1",
-    "repl": "^0.1.3"
+    "repl": "^0.1.3",
+    "ts-node": "^8.6.2"
+  },
+  "devDependencies": {
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
   }
 }

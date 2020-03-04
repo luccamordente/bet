@@ -1,5 +1,7 @@
 'use strict';
 const puppeteer = require('puppeteer');
+import AsyncQueue from  './utils/AsyncQueue'
+// const AsyncQueue = require('./utils/AsyncQueue.ts').;
 
 const getDbInstance = require('./config/db').getDbInstance;
 
@@ -162,7 +164,18 @@ async function getEventBets(page) {
 }
 
 async function main() {
-	const browser = await puppeteer.launch({headless: true});
+	const queue = new AsyncQueue((item)=> {
+		console.log("Executando item: ", item);
+		return true;
+	}, 3)
+
+	console.log("DsajkdJkds1")
+	await queue.addJobsAndWaitForComplete([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], () => {
+		console.log("Acabout!")
+	}).catch(console.log)
+	console.log("DsajkdJkds2")
+
+	const browser = await puppeteer.launch({headless: false});
 	
 	const page = await browser.newPage();
 	await page.goto("https://br.1xbet.com/");
