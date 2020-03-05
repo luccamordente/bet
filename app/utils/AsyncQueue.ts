@@ -1,49 +1,43 @@
-import pQueue from 'p-queue';
+import { queue, AsyncQueue as AsyncQueueOriginal, AsyncWorker } from 'async';
 
 type OnFinishCallback = (errorCount: number, successCount: number) => void;
 
 export default class AsyncQueue<T> {
   errorCount: number;
-  successCount: number;
-  processingQueue: pQueue;
-  workerFunction: (data?: any) => Promise<any>;
+  processingQueue: AsyncQueueOriginal<T>;
 
-  constructor(workerFunction: (data?: any) => Promise<any>, concurrencyLimit: number) {
+  constructor(workerFunction: (item: any) => {}, concurrencyLimit: number) {
     this.errorCount = 0;
-    this.successCount = 0;
-    this.workerFunction = workerFunction;
-    this.processingQueue = new pQueue({concurrency: concurrencyLimit});
+    this.processingQueue = queue(async(item, callback) => {
+      try {
+        await workerFunction(item);
+        callback();
+      }
+      catch (e) {
+        callback(e);  
+      }
+    }, concurrencyLimit);
   }
 
   async addJobsAndWaitForComplete(
     paramsArray: T[],
-    onFinishCallback?: OnFinishCallback,
+    onFinishCallback: OnFinishCallback,
   ) {
-    return new Promise<void>(async(resolve) => {
-      if (paramsArray.length === 0) {
-        return resolve();
-      }
+    if (paramsArray.length === 0) {
+      return;
+    };
 
-      paramsArray.forEach(async(row) => {
-        await this.processingQueue.add(() => {
-          return this.workerFunction(row).then(() => {
-            this.successCount += 1;
-          }).catch((e) => {
-            this.errorCount += 1;
-            console.error("One of the functions returned an error!", row, e);
-          })
-          
-        });
-      });
+    this.processingQueue.push(paramsArray)
 
-      await this.processingQueue.onIdle();
-
-      if (onFinishCallback != null) {
-        onFinishCallback(this.errorCount, this.successCount);
-        resolve();
-      }
+    this.processingQueue.error((error, task) => {
+      console.error("Error on ",  task, error);
+      this.errorCount += 1;
     });
+
+    await this.processingQueue.drain();
+
+    if (onFinishCallback != null) {
+      onFinishCallback(this.errorCount, paramsArray.length - this.errorCount);
+    }
   }
 }
-
-
