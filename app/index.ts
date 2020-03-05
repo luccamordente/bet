@@ -1,7 +1,6 @@
 'use strict';
 const puppeteer = require('puppeteer');
 import AsyncQueue from  './utils/AsyncQueue'
-// const AsyncQueue = require('./utils/AsyncQueue.ts').;
 
 const getDbInstance = require('./config/db').getDbInstance;
 
@@ -163,37 +162,40 @@ async function getEventBets(page) {
 	return bets;
 }
 
-async function main() {
-	const queue = new AsyncQueue((item)=> {
-		console.log("Executando item: ", item);
-		return true;
-	}, 3)
+type AES = {
+	name: string
+}
 
-	console.log("DsajkdJkds1")
-	await queue.addJobsAndWaitForComplete([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], () => {
-		console.log("Acabout!")
-	}).catch(console.log)
-	console.log("DsajkdJkds2")
+async function main() {
 
 	const browser = await puppeteer.launch({headless: false});
 	
-	const page = await browser.newPage();
-	await page.goto("https://br.1xbet.com/");
-	await page.setViewport({ width: 1366, height: 1000});
 	
-	const eventsUrls = await getEventsUrls(page);
+	await browser.goto("https://br.1xbet.com/");
+	await browser.setViewport({ width: 1366, height: 1000});
+	
+	const eventsUrls = await getEventsUrls(browser);
 
-	for (const eventUrl of eventsUrls) {
-		await page.goto("https://br.1xbet.com/en/"+eventUrl);
+	const queue = new AsyncQueue(async(url)=> {
+		console.log("Executando item: ", url);
+		const eventPage = await browser.newPage();
+		await browser.goto("https://br.1xbet.com/en/" + url);
 		
-		const bets = await getEventBets(page);
+		const bets = await getEventBets(browser);
 		for (const bet of bets) {
 			Object.assign(bet, { sport: 'Football', house: '1xBet' });
 			
 			// TODO send somewhere to be processed. maybe add to a queue?
 			console.log(bet);
 		}
-	}
+		return true;
+	}, 3)
+
+	console.log("DsajkdJkds1")
+	await queue.addJobsAndWaitForComplete(eventsUrls, (errorCount, successCount) => {
+		console.log("Acabout!", errorCount, successCount)
+	});
+
 
 	// const conn = await mongoClient.connect("mongodb+srv://betterbet:tXGvRktFZpXWZUq3@betterbet-cfnll.mongodb.net/test?retryWrites=true&w=majority")
 	// const db = conn.db('better_bet')
