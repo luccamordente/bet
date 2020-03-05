@@ -1,18 +1,17 @@
 event_odd
-  odd
-  title
-  type: ""
+  odd: 1.2
+  market: "total_points"
+  type: "over_under"
   type_specifics:
-    operator: GT || LT
-    value: 
+    operator: "over" || "under"
+    value: number
   house
   sport
   event
+    league_name
     name
     starts_at
-    ends_at
-    teams: {
-      home:
-      away: 
+    participants: {
+      home: ""
+      away: ""
     }
-  market

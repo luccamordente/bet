@@ -1,13 +1,14 @@
 'use strict';
 
 const repl = require('repl');
-const getDbInstance = require('./config/db').getDbInstance;
+const fetch = require('node-fetch');
+const getDbInstance = require('./app/config/db').getDbInstance;
 const puppeteer = require('puppeteer');
 
 
 puppeteer.launch({headless: false}).then((browser) => {
 	browser.newPage().then((page) => {
-		getDbInstance().then((db) => {
+		// getDbInstance().then((db) => {
 			const replServer = repl.start({
 				prompt: "cli >",
 				terminal: true
@@ -15,8 +16,9 @@ puppeteer.launch({headless: false}).then((browser) => {
 
 			replServer.write('\n')
 			replServer.context.db = db;
+			replServer.context.fetch = fetch;
 			replServer.context.page = page;
 
-		})
+		// })
 	})
 })
