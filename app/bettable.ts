@@ -1,13 +1,22 @@
-interface Bettable {
-  odd: number,
-  market: {
-    key: "total_points",
-    type: "over_under",
+type MarketType<T> = { type: T } & (
+  T extends "over_under"
+  ? {
+    type: T,
     operation: {
       operator: "over" | "under",
       value: number,
     },
-  },
+  }
+  : never
+);
+
+type Market =
+  MarketType<"over_under"> & { key: "total_points" }
+  | MarketType<"over_under"> & { key: "total_corners" }
+
+interface Bettable {
+  odd: number,
+  market: Market,
   house: "1xbet" | "pinnacle",
   sport: "football",
   event: {

@@ -126,7 +126,7 @@ function normalizeBets(bets: Bet[]): Bettable[] {
 }
 
 async function saveBettables(bettables: Bettable[]): Promise<void> {
-  console.log(bettables);
+  console.log("Saving bettables", bettables);
 }
 
 /**
