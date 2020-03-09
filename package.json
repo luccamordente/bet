@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "console": "ts-node repl.ts",
     "scrapper": "ts-node app/index.ts"
   },
-  "author": "LUCCA E RICARDO NACIF",
+  "author": "Lucca Mordente & Ricardo Nacif",
   "license": "ISC",
   "dependencies": {
     "@types/array.prototype.flatmap": "^1.2.1",
