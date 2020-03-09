@@ -5,8 +5,8 @@ import PinnacleRetriveBetsAndUpdateDb from  './houses/pinnacle';
 
 async function main() {
 
-	// await OneXBetRetriveBetsAndUpdateDb();
-	await PinnacleRetriveBetsAndUpdateDb();
+	await OneXBetRetriveBetsAndUpdateDb();
+	// await PinnacleRetriveBetsAndUpdateDb();
 }
 
 main();
