@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 
-import { Bettable } from '../bettable';
+import { save as saveBettables, Bettable } from '../models/bettable';
 
 const DEFAULT_REQUEST_CONFIG = {
     headers: {"accept":"application/json","content-type":"application/json","x-api-key":"CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R","x-device-uuid":"995eb6f3-65211f6e-e22c04e9-42a211b8", referrer: "https://www.pinnacle.com/en/soccer/leagues/","referrerPolicy":"no-referrer-when-downgrade",},
@@ -102,7 +102,7 @@ function filterMarkets(markets: Market[]): Market[] {
 function normalizeBets(bets: Bet[]): Bettable[] {
   return bets.map((bet) => {
     return {
-      odd: bet.price.price,
+      odd: bet.price.price, // FIXME convert to decimal
       market: {
         key: "total_points",
         type: "over_under",
@@ -123,10 +123,6 @@ function normalizeBets(bets: Bet[]): Bettable[] {
       },
     };
   });
-}
-
-async function saveBettables(bettables: Bettable[]): Promise<void> {
-  console.log("Saving bettables", bettables);
 }
 
 /**
@@ -150,15 +146,18 @@ async function retriveBets(): Promise<Bet[]> {
         resolve(matchBets);
       });
     }));
-
     allBets = allBets.concat(leagueBets.flat());
   }
   return allBets;
 }
 
-export default async function retriveBetsAndUpdateDb(): Promise<void> {
+export default async function retriveBetsAndUpdateDb(): Promise<void[]> {
   const bets = await retriveBets();
-  return saveBettables(normalizeBets(bets));
+  const bettables = normalizeBets(bets);
+
+  return Promise.all(bettables.map((bettable): Promise<void> => {
+    return saveBettables(bettable);
+  }));
 }
 
 
