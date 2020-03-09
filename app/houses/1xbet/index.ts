@@ -34,11 +34,8 @@ async function retriveBets() {
     
     await homepage.goto();
 
-    await homepage.setEventFilterTo12Hours();
-
-    await delay(3000);
-
     const bets = await homepage.getFootballBets();
+    
   } catch(e) {
     console.error(e);
   } finally {
