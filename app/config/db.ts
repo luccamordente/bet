@@ -14,7 +14,6 @@ export default class DB {
       this.client.connect((error, conn) => {
         if (error === null) {
           this.db = conn.db('betterbet');
-          console.log(this.db)
           resolve(this.db);
         } else {
           reject(error);
