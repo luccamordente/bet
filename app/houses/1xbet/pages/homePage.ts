@@ -51,8 +51,14 @@ export default class HomePage extends BasePage {
 
 
   async getBetsFromFootballEvent(event:ElementHandle) {
-    await this.page.waitFor(300);
-    await event.click();
+    await this.page.waitFor(100);
+    try {
+      await event.click();
+    } catch(e) {
+      console.log("DSAdjsAHdksjahdsjkaHdsa", e, event)
+      await this.page.waitFor(333300);
+    }
+    
     await this.page.waitFor(300);
 
 
@@ -76,7 +82,7 @@ export default class HomePage extends BasePage {
     // return bets;
   }
 
-  async getFootballBets() {
+  async getFootballBets():Promise<any[]> {
     const bets = [];
     const footballCategory = await this.page.$(this.selectors.footballCategoryParentSelector);
     const footballCategoryLink = await footballCategory.$('a')
@@ -108,7 +114,6 @@ export default class HomePage extends BasePage {
 
       
     }
-    // console.timeEnd('scrap time');
-    // return bets;
+    return bets;
   }
 }

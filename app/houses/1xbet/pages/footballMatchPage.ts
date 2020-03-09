@@ -15,13 +15,17 @@ export default class FootballMatchPage extends BasePage {
 
 
   selectors:Selectors = {
-    scoreboard: '.c-scoreboard__start--green'
+    scoreboardMainTitle: '.c-scoreboard__start--green',
+    scoreboardTeamName: '.c-scoreboard-team__name',
+    betGroup: '.bets > div:not(.bets__empty-cell)',
+    betGroupsDiv: '.bet_group',
+
   }
 
   async validateIfIsIndeedAMatch() {
     // TODO stat time is not available in non match pages
     try {
-      await this.page.waitForSelector(this.selectors.scoreboard, {timeout: 800});
+      await this.page.waitForSelector(this.selectors.scoreboardMainTitle, {timeout: 800});
     } catch (e) {
       if (e instanceof errors.TimeoutError) {
         return false
@@ -49,7 +53,7 @@ export default class FootballMatchPage extends BasePage {
   async getMarketBets(betGroupElement) {
     const bets = [];
 
-    const betsElements = await betGroupElement.$$('.bets > div:not(.bets__empty-cell)');
+    const betsElements = await betGroupElement.$$(this.selectors.betGroup);
     
     for (const betElement of betsElements) {
       const title = await (await betElement.$('.bet_type')).evaluate(getInnerText);
@@ -70,7 +74,7 @@ export default class FootballMatchPage extends BasePage {
    * @returns {Array} Array of odds
    */
   async getBets() {
-    const betGroupsElements = await this.page.$$('.bet_group');
+    const betGroupsElements = await this.page.$$(this.selectors.betGroupsDiv);
     const odds = [];
 
     for (const betGroupElement of betGroupsElements) {
@@ -88,7 +92,7 @@ export default class FootballMatchPage extends BasePage {
 
   async getStartTime() {
     // TODO stat time is not available in non match this.pages
-    return await (await this.page.$('.c-scoreboard__start--green')).evaluate(getInnerText);
+    return await (await this.page.$(this.selectors.scoreboardMainTitle)).evaluate(getInnerText);
   }
 
   async getEventData() {
