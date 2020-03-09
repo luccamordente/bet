@@ -20,7 +20,4 @@ export default class BasePage {
     this.url = url;
   }
 
-  // goto: function() {
-    
-  // }
 }

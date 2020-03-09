@@ -1,4 +1,6 @@
 import BasePage, {Selectors} from "./basePage";
+import FootballMatchPage from "./footballMatchPage";
+import {ElementHandle} from "puppeteer";
 
 export default class HomePage extends BasePage {
 
@@ -48,32 +50,30 @@ export default class HomePage extends BasePage {
   }
 
 
-  async getBetsFromFootballEvent(event:Puppeeteer.element) {
-    await delay(300);
+  async getBetsFromFootballEvent(event:ElementHandle) {
+    await this.page.waitFor(300);
     await event.click();
-    await delay(300);
+    await this.page.waitFor(300);
 
-    const isValidMatch = await validateIfIsIndeedAMatch(page);
+
+    const matchPage = new FootballMatchPage(this.page);
+
+    const isValidMatch = await matchPage.validateIfIsIndeedAMatch();
     if (!isValidMatch) {
       await event.evaluate((node) => {
         node.parentNode.removeChild(node);
       });
-      continue;
-    }
+      return;
+    }    
 
-    const bets = await getEventBets(page);
-    for (const bet of bets) {
-      Object.assign(bet, { sport: 'Football', house: '1xBet' });
+    // const bets = await matchPage.getMatchBets();
+    // for (const bet of bets) {
+    //   Object.assign(bet, { sport: 'Football', house: '1xBet' });
       
-      // TODO send somewhere to be processed. maybe add to a queue?
-      console.log(bet);
-    }
+    //   console.log(bet);
+    // }
     
-    eventsUrls.push(await event.evaluate((node) => {
-      const link = node.getAttribute('href');
-      node.parentNode.parentNode.removeChild(node.parentNode);
-      return link;
-    }));
+    // return bets;
   }
 
   async getFootballBets() {
@@ -98,7 +98,7 @@ export default class HomePage extends BasePage {
       const events = await championship.$$('ul.event_menu > li > a');
       
       for( const event of events) {
-        bets.push((await getBetsFromFootballEvent(event)));
+        bets.push((await this.getBetsFromFootballEvent(event)));
 
       }
 
