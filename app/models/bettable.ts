@@ -34,7 +34,7 @@ interface Bettable {
 };
 
 async function save(bettable: Bettable): Promise<void> {
-  const db = await DB.getInstance();
+  const {db} = DB.getInstance();
   return new Promise((resolve, reject) => {
     db.collection('bettables').insertOne(bettable, (error) => {
       if (error !== null) {

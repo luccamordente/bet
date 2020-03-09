@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 
-import { save as saveBettables, Bettable } from '../models/bettable';
+import { save as saveBettable, Bettable } from '../models/bettable';
 
 const DEFAULT_REQUEST_CONFIG = {
     headers: {"accept":"application/json","content-type":"application/json","x-api-key":"CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R","x-device-uuid":"995eb6f3-65211f6e-e22c04e9-42a211b8", referrer: "https://www.pinnacle.com/en/soccer/leagues/","referrerPolicy":"no-referrer-when-downgrade",},
@@ -151,13 +151,13 @@ async function retriveBets(): Promise<Bet[]> {
   return allBets;
 }
 
-export default async function retriveBetsAndUpdateDb(): Promise<void[]> {
+export default async function retriveBetsAndUpdateDb(): Promise<void> {
   const bets = await retriveBets();
   const bettables = normalizeBets(bets);
 
-  return Promise.all(bettables.map((bettable): Promise<void> => {
-    return saveBettables(bettable);
-  }));
+  for (const bettable of bettables) {
+    await saveBettable(bettable);
+  }
 }
 
 
