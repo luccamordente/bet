@@ -11,7 +11,8 @@ async function main() {
   // await OneXBetRetriveBetsAndUpdateDb();
   await PinnacleRetriveBetsAndUpdateDb();
 
-  await DB.getInstance().close();
+	await OneXBetRetriveBetsAndUpdateDb();
+	// await PinnacleRetriveBetsAndUpdateDb();
 }
 
 main();
