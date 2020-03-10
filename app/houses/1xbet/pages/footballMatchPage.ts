@@ -1,5 +1,6 @@
 import {ElementHandle, errors} from "puppeteer";
 import BasePage, {Selectors} from "./BasePage";
+import {Bet, Teams, Market} from '../index';
 
 function getInnerText(node) { return node.innerText };
 
@@ -34,7 +35,7 @@ export default class FootballMatchPage extends BasePage {
     return true
   }
 
-  async getTeamsData() {
+  async getTeamsData():Promise<Teams> {
     const teamsElements = await this.page.$$('.c-scoreboard-team__name');
     const teamsNames = [];
 
@@ -78,7 +79,7 @@ export default class FootballMatchPage extends BasePage {
     const odds = [];
 
     for (const betGroupElement of betGroupsElements) {
-      const marketName = (await (await betGroupElement.$('.bet-title')).evaluate(getInnerText)).trim();
+      const marketName = (await (await betGroupElement.$('.bet-title')).evaluate(getInnerText)).trim() as Market;
       if (isMarketWhitelisted(marketName)) {
         const marketBets = await this.getMarketBets(betGroupElement);
         for (const marketBet of marketBets) {
@@ -107,7 +108,7 @@ export default class FootballMatchPage extends BasePage {
    * augmented with that data.
    * @param {*} this.page 
    */
-  async getEventBets() {
+  async getEventBets():Promise<Bet[]> {
     const bets = await this.getBets();
     
     if (bets.length) {

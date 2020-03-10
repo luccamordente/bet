@@ -13,10 +13,6 @@ const FOOTBALL_ID = 29;
 
 type Id = number;
 
-interface Sport {
-  readonly id: Id,
-};
-
 interface League {
   readonly id: Id,
   readonly name: string,

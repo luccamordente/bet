@@ -1,3 +1,16 @@
+{
+  title: 'Total Under 5.5',
+  odd: '1.016',
+  market: 'Total',
+  event: {
+    teams: { home: 'Portsmouth', away: 'Fleetwood Town' },
+    startTime: '10.03.2020 16:45'
+  },
+  sport: 'Football',
+  house: '1xBet'
+}
+
+
 ver o savebettables
 salvar 1xbet bets no db
 

@@ -1,10 +1,9 @@
 import BasePage, {Selectors} from "./basePage";
 import FootballMatchPage from "./footballMatchPage";
 import {ElementHandle} from "puppeteer";
+import {Bet} from '../index';
 
 export default class HomePage extends BasePage {
-
-  
 
   selectors:Selectors = {
     footballCategory: 'ul.sport_menu li:first-child',
@@ -50,12 +49,11 @@ export default class HomePage extends BasePage {
   }
 
 
-  async getBetsFromFootballEvent(event:ElementHandle) {
+  async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
     await this.page.waitFor(100);
     try {
       await event.click();
     } catch(e) {
-      console.log("DSAdjsAHdksjahdsjkaHdsa", e, event)
       await this.page.waitFor(333300);
     }
     
@@ -72,17 +70,17 @@ export default class HomePage extends BasePage {
       return;
     }    
 
-    // const bets = await matchPage.getMatchBets();
-    // for (const bet of bets) {
-    //   Object.assign(bet, { sport: 'Football', house: '1xBet' });
+    const bets = await matchPage.getEventBets();
+    for (const bet of bets) {
+      Object.assign(bet, { sport: 'football' });
       
-    //   console.log(bet);
-    // }
+      console.log(bet);
+    }
     
-    // return bets;
+    return bets;
   }
 
-  async getFootballBets():Promise<any[]> {
+  async getFootballBets():Promise<Bet[]> {
     const bets = [];
     const footballCategory = await this.page.$(this.selectors.footballCategoryParentSelector);
     const footballCategoryLink = await footballCategory.$('a')

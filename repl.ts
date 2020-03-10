@@ -10,7 +10,7 @@ const replServer = repl.start({
 })
 replServer.write('\n');
 
-DB.getInstance().then(db => {
+DB.getInstance().connect().then(db => {
 	replServer.context.db = db;
 });
 

@@ -8,11 +8,8 @@ import DB from './config/db';
 async function main() {
   await DB.getInstance().connect();
 
-  // await OneXBetRetriveBetsAndUpdateDb();
-  await PinnacleRetriveBetsAndUpdateDb();
-
+  // await PinnacleRetriveBetsAndUpdateDb();
 	await OneXBetRetriveBetsAndUpdateDb();
-	// await PinnacleRetriveBetsAndUpdateDb();
 }
 
 main();
