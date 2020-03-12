@@ -1,0 +1,7 @@
+version: '3'
+services:
+  scrapper:
+    build: ./scrapper
+    volumes:
+      - "./scrapper:/usr/app"
+    command: [ "npm", "run", "dev"]

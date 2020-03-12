@@ -1,5 +1,5 @@
 import {ElementHandle, errors} from "puppeteer";
-import BasePage, {Selectors} from "./BasePage";
+import BasePage, {Selectors} from "./basePage";
 import {Bet, Teams, Market} from '../index';
 
 function getInnerText(node) { return node.innerText };
