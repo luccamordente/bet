@@ -1,7 +1,7 @@
 'use strict';
 
 import repl from 'repl';
-import DB from './app/config/db';
+import DB from './src/config/db';
 import puppeteer from 'puppeteer';
 
 const replServer = repl.start({

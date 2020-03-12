@@ -29,7 +29,7 @@ async function retriveBets():Promise<any[]> {
   let bets = [];
   try {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
         defaultViewport: { width: 1900, height: 10900},
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });

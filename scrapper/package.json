@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "console": "ts-node repl.ts",
-    "scrapper": "ts-node app/index.ts"
+    "scrapper": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts"
   },
   "author": "Lucca Mordente & Ricardo Nacif",
   "license": "ISC",
