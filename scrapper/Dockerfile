@@ -21,7 +21,5 @@ ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
 
 WORKDIR /usr/app/
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install --quiet
-
-CMD [ "npm", "run", "dev  "]
