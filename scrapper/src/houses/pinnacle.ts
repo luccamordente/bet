@@ -1,6 +1,8 @@
 import axios from 'axios';
 import moment from 'moment';
 
+import { americanToDecimal } from '../utils/odds';
+
 import { save as saveBettable, Bettable } from '../models/bettable';
 
 const DEFAULT_REQUEST_CONFIG = {
@@ -98,7 +100,7 @@ function filterMarkets(markets: Market[]): Market[] {
 function normalizeBets(bets: Bet[]): Bettable[] {
   return bets.map((bet) => {
     return {
-      odd: bet.price.price, // FIXME convert to decimal
+      odd: americanToDecimal(bet.price.price),
       market: {
         key: "total_points",
         type: "over_under",
@@ -111,7 +113,7 @@ function normalizeBets(bets: Bet[]): Bettable[] {
       sport: "football",
       event: {
         league: bet.match.league.name,
-        starts_at: bet.match.startTime,
+        starts_at: new Date(bet.match.startTime),
         participants: {
           home: bet.match.participants[0].name,
           away: bet.match.participants[1].name,
