@@ -37,7 +37,7 @@ async function save(bettable: Bettable): Promise<void> {
   const {db} = DB.getInstance();
   return new Promise((resolve, reject) => {
     db.collection('bettables').insertOne(bettable, (error) => {
-      if (error !== null) {
+      if (error === null) {
         resolve();
       } else {
         reject(error);

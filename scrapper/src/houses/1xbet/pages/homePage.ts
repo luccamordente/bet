@@ -56,9 +56,8 @@ export default class HomePage extends BasePage {
     } catch(e) {
       await this.page.waitFor(333300);
     }
-    
-    await this.page.waitFor(300);
 
+    await this.page.waitFor(300);
 
     const matchPage = new FootballMatchPage(this.page);
 
@@ -67,16 +66,14 @@ export default class HomePage extends BasePage {
       await event.evaluate((node) => {
         node.parentNode.removeChild(node);
       });
-      return;
-    }    
+      return [];
+    }
 
     const bets = await matchPage.getEventBets();
     for (const bet of bets) {
       Object.assign(bet, { sport: 'football' });
-      
-      console.log(bet);
     }
-    
+
     return bets;
   }
 
@@ -86,13 +83,13 @@ export default class HomePage extends BasePage {
     const footballCategoryLink = await footballCategory.$('a')
     await this.setEventFilterTo12Hours();
     await this.page.waitFor(3000)
-    
+
     await footballCategoryLink.click();
 
     await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul");
 
     const championships = await footballCategory.$$('ul > li');
-    
+
     for( const championship of championships) {
 
       const championshipLink = await championship.$('a');
@@ -100,17 +97,18 @@ export default class HomePage extends BasePage {
       await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul > li ul ");
 
       const events = await championship.$$('ul.event_menu > li > a');
-      
-      for( const event of events) {
-        bets.push((await this.getBetsFromFootballEvent(event)));
 
+      for(const event of events) {
+        const eventBets = await this.getBetsFromFootballEvent(event);
+
+        for (const bet of eventBets) {
+          bets.push(bet);
+        }
       }
 
       await championship.evaluate((node) => {
         node.parentNode.removeChild(node);
       });
-
-      
     }
     return bets;
   }
