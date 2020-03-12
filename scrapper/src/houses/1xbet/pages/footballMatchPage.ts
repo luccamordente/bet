@@ -55,13 +55,20 @@ export default class FootballMatchPage extends BasePage {
     const bets = [];
 
     const betsElements = await betGroupElement.$$(this.selectors.betGroup);
-    
+
     for (const betElement of betsElements) {
       const title = await (await betElement.$('.bet_type')).evaluate(getInnerText);
       const odd = await (await betElement.$('.koeff')).evaluate(getInnerText);
-      
+
+      if (title == null) { 
+        throw new Error("Title not found for bet.");
+      }
+      if (odd == null) { 
+        throw new Error("Odd not found for bet.");
+      }
+
       bets.push({
-        title, 
+        title,
         odd,
       });
     }

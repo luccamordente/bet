@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { save as saveBettables, Bettable } from '../../models/bettable';
+import { save as saveBettable, Bettable } from '../../models/bettable';
 import HomePage from './pages/homePage';
 import moment from 'moment';
 
@@ -23,8 +23,7 @@ export interface Bet {
   readonly sport: "Football"
 };
 
-async function retriveBets():Promise<any[]> {
-  
+async function retriveBets():Promise<Bet[]> {
   let browser: puppeteer.Browser;
   let bets = [];
   try {
@@ -35,26 +34,22 @@ async function retriveBets():Promise<any[]> {
     });
     const page = (await browser.pages())[0];
     const homepage = new HomePage(page, "https://br.1xbet.com/" );
-    
     await homepage.goto();
 
     bets = await homepage.getFootballBets();
-    console.log("oh as bets aki!", bets)
-    
   } catch(e) {
     console.error(e);
   } finally {
     browser.close();
   }
   return bets;
-
 }
 
 
 function normalizeBets(bets: Bet[]): Bettable[] {
   return bets.map((bet) => {
     return {
-      odd: parseFloat(bet.odd), // FIXME convert to decimal
+      odd: parseFloat(bet.odd),
       market: {
         key: "total_points",
         type: "over_under",
@@ -80,14 +75,17 @@ function normalizeBets(bets: Bet[]): Bettable[] {
 export default async function retriveBetsAndUpdateDb() {
   console.time('scrap time');
   let bets = await retriveBets();
-  console.timeEnd('scrap time'); 
+  console.timeEnd('scrap time');
   bets = bets.filter(n => n);
+  console.log(bets.length, 'bets found.');
   const bettables = normalizeBets(bets);
 
-  console.time('save time ');
+  console.time('save time');
   for (const bettable of bettables) {
-    await saveBettables(bettable);
-  }  
+    saveBettable(bettable).catch( error => {
+      console.error(error);
+    });
+  }
   console.timeEnd('save time'); 
   
 }
