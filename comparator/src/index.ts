@@ -62,7 +62,7 @@ async function run() {
   }
   console.log(`Found ${count} opportunities`);
 
-  setTimeout(run, 30 * 1000);
+  setTimeout(run, 5 * 1000);
 }
 
 async function main() {
