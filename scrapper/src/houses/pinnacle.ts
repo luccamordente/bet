@@ -182,7 +182,6 @@ export default async function retriveBetsAndUpdateDb(): Promise<number> {
   let savedCount = 0;
 
   for await (const bet of retriveBets()) {
-    console.log(`Normalizing bet ${bet.price.price}`);
     const bettable = normalizeBet(bet);
     console.log(`Saving bettable ${bettable.odd}`);
     await saveBettable(bettable);

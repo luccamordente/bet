@@ -78,7 +78,6 @@ export default async function retriveBetsAndUpdateDb():Promise<number> {
     if (typeof bet !== 'object') {
       continue;
     }
-    console.log(`Normalizing bet ${bet.odd}`);
     const bettable = normalizeBet(bet);
 
     console.log(`Saving bettable ${bettable.odd}`);

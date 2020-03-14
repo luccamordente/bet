@@ -50,14 +50,17 @@ async function run() {
   });
 
 
+  let count = 0;
   for (const grp of groups) {
     const comparables = compare(grp.items);
     for (const c of comparables) {
       if (c.profit > 0) {
         console.log(`${Math.round(c.profit*10000)/100}%`, c.bettables);
+        count++;
       }
     }
   }
+  console.log(`Found ${count} opportunities`);
 
   setTimeout(run, 30 * 1000);
 }

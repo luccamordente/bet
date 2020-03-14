@@ -92,7 +92,8 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
 
     const championships = await footballCategory.$$('ul > li');
 
-    for( const championship of championships) {
+    for(const championship of championships) {
+      console.group(`Processing league`);
 
       const championshipLink = await championship.$('a');
       await championshipLink.click();
@@ -101,16 +102,21 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
       const events = await championship.$$('ul.event_menu > li > a');
 
       for(const event of events) {
+        console.group(`Processing event`);
         const eventBets = await this.getBetsFromFootballEvent(event);
 
         for (const bet of eventBets) {
-          yield bet
+          console.group(`Processing bet ${bet.odd}`);
+          yield bet;
+          console.groupEnd();
         }
+        console.groupEnd();
       }
 
       await championship.evaluate((node) => {
         node.parentNode.removeChild(node);
       });
+      console.groupEnd();
     }
     return bets;
   }
