@@ -33,6 +33,8 @@ interface Match {
     Participant & { alignment: "home" },
     Participant & { alignment: "away" },
   ],
+  readonly type: "matchup",
+  readonly units: "Regular",
 };
 
 type BetPeriod = 0 | 1 | 2;
@@ -49,6 +51,7 @@ interface Bet {
   readonly period: BetPeriod,
   readonly match: Match,
   readonly price: BetPrice,
+  readonly extractTime: Date,
 };
 
 interface Market {
@@ -60,20 +63,22 @@ interface Market {
 
 
 async function getSportLeagues(sportId: Id): Promise<League[]> {
-  let response;
+  let leagues: League[];
   try {
-    response = await axios.get(`${API_HOST}/sports/${sportId}/leagues?all=false`, DEFAULT_REQUEST_CONFIG);
+    leagues = (await axios.get(`${API_HOST}/sports/${sportId}/leagues?all=false`, DEFAULT_REQUEST_CONFIG)).data;
   } catch (error) {
     console.error(`Error getting sport leagues from sport ${sportId}`, error);
     return [];
   }
-  return response.data;
+  return leagues;
 }
 
 async function getMatchBets(matchId: Id): Promise<Bet[]> {
   let markets: (Bet & Market)[];
+  let extractTime;
   try {
     markets = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
+    extractTime = new Date();
   } catch (error) {
     console.error(`Error getting match bets from matcg ${matchId}`, error);
     return [];
@@ -84,7 +89,14 @@ async function getMatchBets(matchId: Id): Promise<Bet[]> {
   // Split market into bets
   for (const market of filterMarkets(markets)) {
     for (const price of market.prices) {
-      const bet: Bet = Object.assign({}, market, { price, prices: undefined });
+      const bet: Bet = Object.assign(
+        {
+          price,
+          extractTime,
+          prices: undefined,
+        },
+        market,
+      );
       bets.push(bet);
     };
   }
@@ -105,7 +117,7 @@ async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
 
 function filterMatches(matches: Match[]): Match[] {
   return matches.filter((match: Match) => {
-    return moment(match.startTime).isBetween(moment.now(), moment().add(12, 'hours'))
+    return moment(match.startTime).isBetween(moment.now(), moment().add(12, 'hours')) && match.type === "matchup" && match.units === "Regular";
   });
 }
 
@@ -137,6 +149,7 @@ function normalizeBets(bets: Bet[]): Bettable[] {
           away: bet.match.participants[1].name,
         },
       },
+      extracted_at: bet.extractTime,
     };
   });
 }
@@ -149,11 +162,16 @@ async function retriveBets(): Promise<Bet[]> {
   const bets: Bet[] = [];
 
   for(const league of leagues) {
+    console.log ("Processing league", league);
     const matches: Match[] = await getLeagueMatches(league.id);
 
     for (const match of matches) {
+      console.log("Processing match ", match);
+
       const matchBets = await getMatchBets(match.id);
       for (const bet of matchBets) {
+        console.log("Processing bet ", bet)
+
         // Add match data to bets
         bets.push(Object.assign(bet, { match }));
       }
@@ -167,6 +185,7 @@ export default async function retriveBetsAndUpdateDb(): Promise<number> {
   const bettables = normalizeBets(bets);
 
   for (const bettable of bettables) {
+    console.log("Saving bettable", bettable);
     await saveBettable(bettable);
   }
   return bettables.length;

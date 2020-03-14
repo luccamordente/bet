@@ -20,7 +20,8 @@ export interface Bet {
   readonly odd: string;
   readonly market: Market;
   readonly event: Event;
-  readonly sport: "Football"
+  readonly sport: "Football";
+  readonly extractTime: Date;
 };
 
 async function retriveBets():Promise<Bet[]> {
@@ -68,6 +69,7 @@ function normalizeBets(bets: Bet[]): Bettable[] {
           away: bet.event.teams.away,
         },
       },
+      extractTime: bet.extractTime,
     };
   });
 }

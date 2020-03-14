@@ -26,6 +26,7 @@ export default class FootballMatchPage extends BasePage {
   async validateIfIsIndeedAMatch() {
     // TODO stat time is not available in non match pages
     try {
+      // TODO avoid that long of a timeout
       await this.page.waitForSelector(this.selectors.scoreboardMainTitle, {timeout: 800});
     } catch (e) {
       if (e instanceof errors.TimeoutError) {

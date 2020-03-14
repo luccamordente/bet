@@ -44,12 +44,13 @@ export default class HomePage extends BasePage {
     if (applyFilterButton == null) {
       throw new Error('object applyFilterButton is null on setEventFilterToHours');
     } else {
-      await applyFilterButton.click();  
+      await applyFilterButton.click();
     }
   }
 
 
-  async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
+async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
+    // FIXME change waitFor's to use something other than time
     await this.page.waitFor(100);
     try {
       await event.click();
@@ -60,6 +61,7 @@ export default class HomePage extends BasePage {
     await this.page.waitFor(300);
 
     const matchPage = new FootballMatchPage(this.page);
+    const extractTime = new Date();
 
     const isValidMatch = await matchPage.validateIfIsIndeedAMatch();
     if (!isValidMatch) {
@@ -71,7 +73,7 @@ export default class HomePage extends BasePage {
 
     const bets = await matchPage.getEventBets();
     for (const bet of bets) {
-      Object.assign(bet, { sport: 'football' });
+      Object.assign(bet, { sport: 'football', extractTime });
     }
 
     return bets;

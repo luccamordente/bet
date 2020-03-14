@@ -20,8 +20,6 @@ async function main() {
   const oneXBetsCount = await OneXBetRetriveBetsAndUpdateDb();
   console.log(`1xBet ended with ${oneXBetsCount} bets found. Time spent:`);
   console.timeEnd('1xbet');
-
-  
 }
 
 main().then().catch(console.error);
