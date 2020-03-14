@@ -4,4 +4,5 @@ services:
     build: ./scrapper
     volumes:
       - "./scrapper:/usr/app"
+      - /usr/app/node_modules
     command: [ "npm", "run", "dev"]

@@ -24,5 +24,4 @@ WORKDIR /usr/app/
 COPY package.json package-lock.json ./
 RUN npm install --quiet
 
-COPY . .
 CMD [ "npm", "run", "dev  "]
