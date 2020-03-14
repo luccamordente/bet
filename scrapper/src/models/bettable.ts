@@ -35,15 +35,12 @@ interface Bettable {
 
 async function save(bettable: Bettable): Promise<void> {
   const {db} = DB.getInstance();
-  return new Promise((resolve, reject) => {
-    db.collection('bettables').insertOne(bettable, (error) => {
-      if (error === null) {
-        resolve();
-      } else {
-        reject(error);
-      }
-    });
-  });
+  return db.collection('bettables').replaceOne({
+      market: bettable.market,
+      house: bettable.house,
+      sport: bettable.sport,
+      event: bettable.event,
+    }, bettable, {upsert: true});
 }
 
 export {

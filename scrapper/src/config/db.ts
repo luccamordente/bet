@@ -32,4 +32,16 @@ export default class DB {
     }
     return DB.instance;
   }
+
+  static async resetDb() {
+    await this.getInstance().db.collection('bettables').drop();
+    await this.getInstance().db.createCollection("bettables");
+    const collection = await this.getInstance().db.collection('bettables');
+    await collection.createIndex({ 
+      market: 1,
+      house: 1,
+      sport: 1,
+      event: 1
+    });
+  }
 }

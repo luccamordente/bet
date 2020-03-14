@@ -60,12 +60,24 @@ interface Market {
 
 
 async function getSportLeagues(sportId: Id): Promise<League[]> {
-  const response = await axios.get(`${API_HOST}/sports/${sportId}/leagues?all=false`, DEFAULT_REQUEST_CONFIG);
+  let response;
+  try {
+    response = await axios.get(`${API_HOST}/sports/${sportId}/leagues?all=false`, DEFAULT_REQUEST_CONFIG);
+  } catch (error) {
+    console.error(`Error getting sport leagues from sport ${sportId}`, error);
+    return [];
+  }
   return response.data;
 }
 
 async function getMatchBets(matchId: Id): Promise<Bet[]> {
-  const markets: (Bet & Market)[] = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
+  let markets: (Bet & Market)[];
+  try {
+    markets = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
+  } catch (error) {
+    console.error(`Error getting match bets from matcg ${matchId}`, error);
+    return [];
+  }
 
   const bets: Bet[] = [];
 
@@ -81,7 +93,13 @@ async function getMatchBets(matchId: Id): Promise<Bet[]> {
 }
 
 async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
-  const matches = (await axios.get(`${API_HOST}/leagues/${leagueId}/matchups`, DEFAULT_REQUEST_CONFIG)).data;
+  let matches;
+  try {
+    matches = (await axios.get(`${API_HOST}/leagues/${leagueId}/matchups`, DEFAULT_REQUEST_CONFIG)).data;
+  } catch (error) {
+    console.error(`Error getting league matches from league ${leagueId}`, error);
+    return [];
+  }
   return filterMatches(matches);
 }
 
@@ -128,34 +146,30 @@ function normalizeBets(bets: Bet[]): Bettable[] {
  */
 async function retriveBets(): Promise<Bet[]> {
   const leagues: League[] = await getSportLeagues(FOOTBALL_ID);
-  let allBets: Bet[] = [];
+  const bets: Bet[] = [];
 
   for(const league of leagues) {
     const matches: Match[] = await getLeagueMatches(league.id);
 
-    // Get all leagues matches in parallel
-    const leagueBets: Bet[][] = await Promise.all(matches.map((match): Promise<Bet[]> => {
-      return new Promise(async (resolve): Promise<void> => {
-        const matchBets = await getMatchBets(match.id);
-
+    for (const match of matches) {
+      const matchBets = await getMatchBets(match.id);
+      for (const bet of matchBets) {
         // Add match data to bets
-        matchBets.map(bet => { return Object.assign(bet, { match }); });
-
-        resolve(matchBets);
-      });
-    }));
-    allBets = allBets.concat(leagueBets.flat());
+        bets.push(Object.assign(bet, { match }));
+      }
+    }
   }
-  return allBets;
+  return bets;
 }
 
-export default async function retriveBetsAndUpdateDb(): Promise<void> {
+export default async function retriveBetsAndUpdateDb(): Promise<number> {
   const bets = await retriveBets();
   const bettables = normalizeBets(bets);
 
   for (const bettable of bettables) {
     await saveBettable(bettable);
   }
+  return bettables.length;
 }
 
 

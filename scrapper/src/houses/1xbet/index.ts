@@ -72,20 +72,16 @@ function normalizeBets(bets: Bet[]): Bettable[] {
   });
 }
 
-export default async function retriveBetsAndUpdateDb() {
-  console.time('scrap time');
+export default async function retriveBetsAndUpdateDb():Promise<number> {
   let bets = await retriveBets();
-  console.timeEnd('scrap time');
   bets = bets.filter(n => n);
-  console.log(bets.length, 'bets found.');
   const bettables = normalizeBets(bets);
 
-  console.time('save time');
   for (const bettable of bettables) {
     saveBettable(bettable).catch( error => {
       console.error(error);
     });
   }
-  console.timeEnd('save time'); 
-  
+
+  return bettables.length;
 }
