@@ -24,9 +24,9 @@ export interface Bet {
   readonly extractTime: Date;
 };
 
-async function retriveBets():Promise<Bet[]> {
+async function* retriveBets() {
   let browser: puppeteer.Browser;
-  let bets = [];
+
   try {
     browser = await puppeteer.launch({
       headless: true,
@@ -37,53 +37,56 @@ async function retriveBets():Promise<Bet[]> {
     const homepage = new HomePage(page, "https://br.1xbet.com/" );
     await homepage.goto();
 
-    bets = await homepage.getFootballBets();
+    yield* homepage.getFootballBets();
   } catch(e) {
     console.error(e);
   } finally {
     browser.close();
   }
-  return bets;
 }
 
 
-function normalizeBets(bets: Bet[]): Bettable[] {
-  return bets.map((bet) => {
-    return {
-      odd: parseFloat(bet.odd),
-      market: {
-        key: "total_points",
-        type: "over_under",
-        operation: {
-          operator: bet.title.includes('Over') ? 'over' : 'under',
-          value: parseFloat(bet.title.match(/\d+(\.\d+)?/)[0])
-        },
+function normalizeBet(bet: Bet): Bettable {
+  return {
+    odd: parseFloat(bet.odd),
+    market: {
+      key: "total_points",
+      type: "over_under",
+      operation: {
+        operator: bet.title.includes('Over') ? 'over' : 'under',
+        value: parseFloat(bet.title.match(/\d+(\.\d+)?/)[0])
       },
-      house: "1xbet",
-      sport: "football",
-      event: {
-        league: 'n/a',
-        starts_at: moment(bet.event.startTime, "DD.MM.YYYY HH:mm").toDate(), // TODO check timezone from container browser
-        participants: {
-          home: bet.event.teams.home,
-          away: bet.event.teams.away,
-        },
+    },
+    house: "1xbet",
+    sport: "football",
+    event: {
+      league: 'n/a',
+      starts_at: moment(bet.event.startTime, "DD.MM.YYYY HH:mm").toDate(), // TODO check timezone from container browser
+      participants: {
+        home: bet.event.teams.home,
+        away: bet.event.teams.away,
       },
-      extractTime: bet.extractTime,
-    };
-  });
+    },
+    extracted_at: bet.extractTime,
+  };
 }
 
 export default async function retriveBetsAndUpdateDb():Promise<number> {
-  let bets = await retriveBets();
-  bets = bets.filter(n => n);
-  const bettables = normalizeBets(bets);
+  let savedCount = 0;
 
-  for (const bettable of bettables) {
+  for await (const bet of retriveBets()) {
+    if (typeof bet !== 'object') {
+      continue;
+    }
+    console.log(`Normalizing bet ${bet.odd}`);
+    const bettable = normalizeBet(bet);
+
+    console.log(`Saving bettable ${bettable.odd}`);
     saveBettable(bettable).catch( error => {
       console.error(error);
     });
+    savedCount++;
   }
 
-  return bettables.length;
+  return savedCount;
 }

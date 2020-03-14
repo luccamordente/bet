@@ -12,6 +12,7 @@ const DEFAULT_REQUEST_CONFIG = {
 
 const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1"
 const FOOTBALL_ID = 29;
+const TIME_SPAN_HOURS = 12;
 
 type Id = number;
 
@@ -73,7 +74,7 @@ async function getSportLeagues(sportId: Id): Promise<League[]> {
   return leagues;
 }
 
-async function getMatchBets(matchId: Id): Promise<Bet[]> {
+async function* getMatchBets(matchId: Id) {
   let markets: (Bet & Market)[];
   let extractTime;
   try {
@@ -97,11 +98,9 @@ async function getMatchBets(matchId: Id): Promise<Bet[]> {
         },
         market,
       );
-      bets.push(bet);
+      yield bet;
     };
   }
-
-  return (bets);
 }
 
 async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
@@ -117,7 +116,7 @@ async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
 
 function filterMatches(matches: Match[]): Match[] {
   return matches.filter((match: Match) => {
-    return moment(match.startTime).isBetween(moment.now(), moment().add(12, 'hours')) && match.type === "matchup" && match.units === "Regular";
+    return moment(match.startTime).isBetween(moment.now(), moment().add(TIME_SPAN_HOURS, 'hours')) && match.type === "matchup" && match.units === "Regular";
   });
 }
 
@@ -127,68 +126,70 @@ function filterMarkets(markets: Market[]): Market[] {
   });
 }
 
-function normalizeBets(bets: Bet[]): Bettable[] {
-  return bets.map((bet) => {
-    return {
-      odd: americanToDecimal(bet.price.price),
-      market: {
-        key: "total_points",
-        type: "over_under",
-        operation: {
-          operator: bet.price.designation,
-          value: bet.price.points
-        },
+function normalizeBet(bet: Bet): Bettable {
+  return {
+    odd: americanToDecimal(bet.price.price),
+    market: {
+      key: "total_points",
+      type: "over_under",
+      operation: {
+        operator: bet.price.designation,
+        value: bet.price.points
       },
-      house: "pinnacle",
-      sport: "football",
-      event: {
-        league: bet.match.league.name,
-        starts_at: new Date(bet.match.startTime),
-        participants: {
-          home: bet.match.participants[0].name,
-          away: bet.match.participants[1].name,
-        },
+    },
+    house: "pinnacle",
+    sport: "football",
+    event: {
+      league: bet.match.league.name,
+      starts_at: new Date(bet.match.startTime),
+      participants: {
+        home: bet.match.participants[0].name,
+        away: bet.match.participants[1].name,
       },
-      extracted_at: bet.extractTime,
-    };
-  });
+    },
+    extracted_at: bet.extractTime,
+  };
 }
 
 /**
  * Gets all bets available from all matches of all football leagues
  */
-async function retriveBets(): Promise<Bet[]> {
+async function* retriveBets() {
   const leagues: League[] = await getSportLeagues(FOOTBALL_ID);
   const bets: Bet[] = [];
 
   for(const league of leagues) {
-    console.log ("Processing league", league);
+    console.group (`Processing league ${league.id}`);
     const matches: Match[] = await getLeagueMatches(league.id);
 
     for (const match of matches) {
-      console.log("Processing match ", match);
+      console.group(`Processing match ${match.id} on league ${match.league.id}`);
 
-      const matchBets = await getMatchBets(match.id);
-      for (const bet of matchBets) {
-        console.log("Processing bet ", bet)
-
-        // Add match data to bets
-        bets.push(Object.assign(bet, { match }));
+      for await (const bet of getMatchBets(match.id)) {
+        console.group(`Processing bet ${bet.price.price} on match ${match.id}`);
+        yield Object.assign(bet, { match });
+        console.groupEnd();
       }
+      console.groupEnd();
     }
+    console.groupEnd();
   }
-  return bets;
+
+  return;
 }
 
 export default async function retriveBetsAndUpdateDb(): Promise<number> {
-  const bets = await retriveBets();
-  const bettables = normalizeBets(bets);
+  let savedCount = 0;
 
-  for (const bettable of bettables) {
-    console.log("Saving bettable", bettable);
+  for await (const bet of retriveBets()) {
+    console.log(`Normalizing bet ${bet.price.price}`);
+    const bettable = normalizeBet(bet);
+    console.log(`Saving bettable ${bettable.odd}`);
     await saveBettable(bettable);
+    savedCount++;
   }
-  return bettables.length;
+
+  return savedCount;
 }
 
 

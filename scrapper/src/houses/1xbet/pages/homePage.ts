@@ -79,7 +79,7 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
     return bets;
   }
 
-  async getFootballBets():Promise<Bet[]> {
+  async *getFootballBets() {
     const bets = [];
     const footballCategory = await this.page.$(this.selectors.footballCategoryParentSelector);
     const footballCategoryLink = await footballCategory.$('a')
@@ -104,7 +104,7 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
         const eventBets = await this.getBetsFromFootballEvent(event);
 
         for (const bet of eventBets) {
-          bets.push(bet);
+          yield bet
         }
       }
 

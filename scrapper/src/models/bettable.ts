@@ -1,13 +1,20 @@
 import DB from '../config/db';
 
-type MarketType<T> = { type: T } & (
+
+type MarketOperation<T> = (
+  T extends "over_under"
+  ? {
+    operator: "over" | "under",
+    value: number,
+  }
+  : never
+);
+
+type MarketType<T> = (
   T extends "over_under"
   ? {
     type: T,
-    operation: {
-      operator: "over" | "under",
-      value: number,
-    },
+    operation: MarketOperation<T>
   }
   : never
 );
@@ -25,12 +32,15 @@ interface Event {
   },
 };
 
+type Odd = number;
+
 interface Bettable {
-  odd: number,
+  odd: Odd,
   market: Market,
   house: "1xbet" | "pinnacle",
   sport: "football",
   event: Event,
+  extracted_at: Date,
 };
 
 async function save(bettable: Bettable): Promise<void> {
@@ -47,3 +57,9 @@ export {
   save,
   Bettable
 };
+
+
+
+
+
+

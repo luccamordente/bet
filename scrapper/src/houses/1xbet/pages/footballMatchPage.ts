@@ -95,7 +95,7 @@ export default class FootballMatchPage extends BasePage {
         }
       }
     }
-    
+
     return odds;
   }
 
@@ -118,7 +118,7 @@ export default class FootballMatchPage extends BasePage {
    */
   async getEventBets():Promise<Bet[]> {
     const bets = await this.getBets();
-    
+
     if (bets.length) {
       const event = await this.getEventData();
       for (const bet of bets) {
