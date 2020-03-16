@@ -22,6 +22,7 @@ export interface Bet {
   readonly event: Event;
   readonly sport: "Football";
   readonly extractTime: Date;
+  readonly url: string;
 };
 
 async function* retriveBets() {
@@ -68,6 +69,7 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     extracted_at: bet.extractTime,
+    url: bet.url,
   };
 }
 
@@ -80,7 +82,7 @@ export default async function retriveBetsAndUpdateDb():Promise<number> {
     }
     const bettable = normalizeBet(bet);
 
-    console.log(`Saving bettable ${bettable.odd}`);
+    console.log(`1XBET: Saving bettable ${bettable.odd} ${moment(bettable.event.starts_at).format()}`);
     saveBettable(bettable).catch( error => {
       console.error(error);
     });

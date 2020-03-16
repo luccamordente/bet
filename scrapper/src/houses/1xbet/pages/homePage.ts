@@ -1,6 +1,6 @@
 import BasePage, {Selectors} from "./basePage";
 import FootballMatchPage from "./footballMatchPage";
-import {ElementHandle} from "puppeteer";
+import {ElementHandle, errors} from "puppeteer";
 import {Bet} from '../index';
 
 export default class HomePage extends BasePage {
@@ -60,7 +60,7 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
 
     await this.page.waitFor(300);
 
-    const matchPage = new FootballMatchPage(this.page);
+    const matchPage = new FootballMatchPage(this.page, this.page.url());
     const extractTime = new Date();
 
     const isValidMatch = await matchPage.validateIfIsIndeedAMatch();
@@ -93,31 +93,34 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
     const championships = await footballCategory.$$('ul > li');
 
     for(const championship of championships) {
-      console.group(`Processing league`);
+      console.log(`1XBET: Processing league`);
 
       const championshipLink = await championship.$('a');
       await championshipLink.click();
-      await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul > li ul ");
+      try {
+        await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul > li ul ");
+      } catch(e) {
+        if (e instanceof errors.TimeoutError) {
+          console.warn("! 1XBET: timeout waiting for football category parent selector.");
+          return;
+        }
+      }
 
       const events = await championship.$$('ul.event_menu > li > a');
 
       for(const event of events) {
-        console.group(`Processing event`);
+        console.log(`1XBET: Processing event`);
         const eventBets = await this.getBetsFromFootballEvent(event);
 
         for (const bet of eventBets) {
-          console.group(`Processing bet ${bet.odd}`);
+          console.log(`1XBET: Processing bet ${bet.odd}`);
           yield bet;
-          console.groupEnd();
         }
-        console.groupEnd();
       }
 
       await championship.evaluate((node) => {
         node.parentNode.removeChild(node);
       });
-      console.groupEnd();
     }
-    return bets;
   }
 }

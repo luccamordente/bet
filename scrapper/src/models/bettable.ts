@@ -41,6 +41,7 @@ interface Bettable {
   sport: "football",
   event: Event,
   extracted_at: Date,
+  url: string;
 };
 
 async function save(bettable: Bettable): Promise<void> {

@@ -148,6 +148,7 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     extracted_at: bet.extractTime,
+    url: null,
   };
 }
 
@@ -159,20 +160,17 @@ async function* retriveBets() {
   const bets: Bet[] = [];
 
   for(const league of leagues) {
-    console.group (`Processing league ${league.id}`);
+    console.log(`Pinnacle: Processing league ${league.id}`);
     const matches: Match[] = await getLeagueMatches(league.id);
 
     for (const match of matches) {
-      console.group(`Processing match ${match.id} on league ${match.league.id}`);
+      console.log(`Pinnacle: Processing match ${match.id} on league ${match.league.id}`);
 
       for await (const bet of getMatchBets(match.id)) {
-        console.group(`Processing bet ${bet.price.price} on match ${match.id}`);
+        console.log(`Pinnacle: Processing bet ${americanToDecimal(bet.price.price)} on match ${match.id}`);
         yield Object.assign(bet, { match });
-        console.groupEnd();
       }
-      console.groupEnd();
     }
-    console.groupEnd();
   }
 
   return;
@@ -183,8 +181,8 @@ export default async function retriveBetsAndUpdateDb(): Promise<number> {
 
   for await (const bet of retriveBets()) {
     const bettable = normalizeBet(bet);
-    console.log(`Saving bettable ${bettable.odd}`);
-    await saveBettable(bettable);
+    console.log(`Pinnacle: Saving bettable ${bettable.odd}`);
+    saveBettable(bettable);
     savedCount++;
   }
 
