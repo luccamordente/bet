@@ -104,7 +104,7 @@ async function* getMatchBets(matchId: Id) {
 }
 
 async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
-  let matches;
+  let matches: Match[];
   try {
     matches = (await axios.get(`${API_HOST}/leagues/${leagueId}/matchups`, DEFAULT_REQUEST_CONFIG)).data;
   } catch (error) {
@@ -148,7 +148,7 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     extracted_at: bet.extractTime,
-    url: null,
+    url: `https://www.pinnacle.com/pt/soccer/a/b/${bet.match.id}/`,
   };
 }
 
