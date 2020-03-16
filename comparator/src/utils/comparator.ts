@@ -2,11 +2,12 @@ import { Bettable, Odd } from '../models/bettable';
 
 import * as Operations from './operation';
 
-type Pair = [Bettable, Bettable];
+type Combination = [Bettable, Bettable];
 
 interface Profitable {
-  bettables: Pair,
+  bettables: Combination,
   profit: number,
+  createdAt: Date;
 };
 
 /**
@@ -35,27 +36,23 @@ function isComplementary(a: Bettable, b: Bettable): boolean {
  * Combines complementary items in a comparable manner.
  * Each item is only combined with items from different houses.
  */
-function combine(combinables: Bettable[]): [Bettable, Bettable][] {
+function combine<T>(
+    items: T[],
+    filter: (a: T, b: T, i: number, j: number) => boolean
+  ): [T,T][] {
   const final = [];
 
-  for (let i = 0; i < combinables.length; i++) {
-    const a = combinables[i];
-    for (let j = 0; j < combinables.length; j++) {
-      // Do not combine with itselft
-      if (i === j) {
+  for (let i = 0; i < items.length; i++) {
+    const a = items[i];
+
+    for (let j = i; j < items.length; j++) {
+      const b = items[j];
+
+      if (!filter(a, b, i, j)) {
         continue;
       }
 
-      const b = combinables[j];
-
-      // Do not combine with items on same house
-      if (a.house === b.house) {
-        continue;
-      }
-
-      if (isComplementary(a, b)) {
-        final.push([a, b]);
-      }
+      final.push([a, b]);
     }
   }
 
@@ -74,13 +71,24 @@ function calculateProfit(a: Odd, b: Odd): number {
 }
 
 function compare(bettables: Bettable[]): Profitable[] {
-  const combined = combine(bettables);
+  const combined = combine<Bettable>(bettables, (a, b, i, j) => {
+    return !(
+      // Don't want to combine with itself
+      i === j
+      // Don't want to combine bettables on the same house
+      || a.house === b.house
+      // Don't want to combine bettables that are not complimentary
+      || !isComplementary(a, b)
+    );
+  });
   return combined.map( pair => {
     return {
       bettables: pair,
       profit: calculateProfit(pair[0].odd, pair[1].odd),
+      createdAt: new Date(),
     };
   });
 };
 
 export default compare;
+export { Profitable };
