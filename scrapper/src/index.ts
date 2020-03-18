@@ -2,6 +2,7 @@
 
 import OneXBetRetriveBetsAndUpdateDb from  './houses/1xbet';
 import PinnacleRetriveBetsAndUpdateDb from  './houses/pinnacle';
+import MarathonRetriveBetsAndUpdateDb from  './houses/marathon';
 
 import DB from './config/db';
 
@@ -36,8 +37,9 @@ async function main() {
   const manager = new Manager();
 
   // Start in parallel
+  // manager.start("1XBET", OneXBetRetriveBetsAndUpdateDb);
   manager.start("Pinnacle", PinnacleRetriveBetsAndUpdateDb);
-  manager.start("1XBET", OneXBetRetriveBetsAndUpdateDb);
+  manager.start("Marathon", MarathonRetriveBetsAndUpdateDb);
 }
 
 main().then().catch(console.error);

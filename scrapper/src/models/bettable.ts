@@ -37,8 +37,8 @@ type Odd = number;
 interface Bettable {
   odd: Odd,
   market: Market,
-  house: "1xbet" | "pinnacle",
-  sport: "football",
+  house: "1xbet" | "pinnacle" | "marathon",
+  sport: string,
   event: Event,
   extracted_at: Date,
   url: string;
