@@ -1,0 +1,22 @@
+{
+  "name": "better_bet_comparator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "console": "ts-node repl.ts",
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "Lucca Mordente & Ricardo Nacif",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.7.7",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.4",
+    "ts-node": "^8.6.2"
+  },
+  "devDependencies": {
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
+  }
+}

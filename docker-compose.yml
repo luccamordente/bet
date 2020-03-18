@@ -15,3 +15,10 @@ services:
       - "./comparator:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
+
+  health:
+    build: ./health
+    volumes:
+      - "./health:/usr/app"
+      - /usr/app/node_modules
+    command: [ "npm", "run", "dev"]
