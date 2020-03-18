@@ -10,17 +10,51 @@ import compare, { Profitable } from './utils/comparator';
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
 
+const SPORTS = {
+  'basketball': '🏀 Basketball',
+  'esports': '🎮 E-Sports',
+  'hockey': '🏒 Hockey',
+  'soccer': '⚽️ Soccer',
+  'tabletennis': '🏓 Table Tennis',
+  'tennis': '🎾 Tennis',
+};
+
+function oddToString(odd: number): string {
+  return `${Math.round(odd*100)/100}`;
+}
+
+function profitToString(amount: number): string {
+  const percent = `${Math.round(amount*10000)/100}%`;
+  return `${amount > 0 ? '🍀' : '🔻'} ${percent}`;
+}
+
+function sportToString(sport: string): string {
+  return SPORTS[sport];
+}
+
+function comparableToString(comparable: Bettable) {
+  const {house, event: {participants, starts_at}} = comparable;
+  return `🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🏦 ${house.toUpperCase()} 🎭 ${participants.home} × ${participants.away}`;
+}
+
+function announceComparison(combinaton: Profitable) {
+  const [a,b] = combinaton.bettables;
+  console.group(`🔀 Comparing ${sportToString(a.sport)} ${profitToString(combinaton.profit)}`);
+  console.log(comparableToString(a));
+  console.log(comparableToString(b));
+  console.groupEnd();
+}
+
 function bettableToString(bettable: Bettable) {
-  const {odd, house, market: {key, operation}, extracted_at, url, event: {participants}} = bettable;
-  return `🏦 ${house.toUpperCase()}: ${participants.home} vs ${participants.away}
-  ✨ ${key.replace('_',' ')}: ${operation.operator} ${operation.value} | ${odd}
+  const {odd, house, market: {key, operation}, extracted_at, url, event: {participants, starts_at}} = bettable;
+  return `🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🏦 ${house.toUpperCase()} 🎭 ${participants.home} × ${participants.away}
+  ✨ ${key.replace('_',' ')}: ${operation.operator} ${operation.value} ⇢ ${oddToString(odd)}
   🕓 ${moment(extracted_at).fromNow()}
   🔗 ${url}`;
 }
 
-
 function announceProfit(profitable: Profitable): void {
-  console.group(`💰 ${Math.round(profitable.profit*10000)/100}% profit opportunity!`);
+  console.group(`💰 ${profitToString(profitable.profit)} profit opportunity!`);
   const [b1, b2] = profitable.bettables;
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
@@ -92,6 +126,8 @@ async function run() {
       ) {
         announceProfit(c);
         profitCount++;
+      } else {
+        announceComparison(c);
       }
       totalCount++;
     }

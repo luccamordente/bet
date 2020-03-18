@@ -37,8 +37,8 @@ interface Bettable {
   _id: string,
   odd: Odd,
   market: Market,
-  house: "1xbet" | "pinnacle",
-  sport: "football",
+  house: string
+  sport: string,
   event: Event,
   extracted_at: Date,
   url: string,
