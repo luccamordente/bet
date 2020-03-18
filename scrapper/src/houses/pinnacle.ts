@@ -10,9 +10,17 @@ const DEFAULT_REQUEST_CONFIG = {
     withCredentials: false,
   }
 
-const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1"
-const FOOTBALL_ID = 29;
-const TIME_SPAN_HOURS = 12;
+const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1";
+
+const SPORTS = [
+  { key: 'basketball', id: 4, },
+  // { key: 'esports', id: 12, },
+  { key: 'soccer', id: 29, },
+  { key: 'hockey', id: 19, },
+  // { key: 'tabletennis', id: 32, },
+  // { key: 'tennis', id: 33, },
+];
+const TIME_SPAN_HOURS = 24;
 
 type Id = number;
 
@@ -48,6 +56,7 @@ interface BetPrice {
 };
 
 interface Bet {
+  readonly sport: string,
   readonly type: BetType,
   readonly period: BetPeriod,
   readonly match: Match,
@@ -56,6 +65,7 @@ interface Bet {
 };
 
 interface Market {
+  readonly sport: string,
   readonly type: BetType,
   readonly period: BetPeriod,
   readonly match: Match,
@@ -138,7 +148,7 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     house: "pinnacle",
-    sport: "football",
+    sport: bet.sport,
     event: {
       league: bet.match.league.name,
       starts_at: new Date(bet.match.startTime),
@@ -148,7 +158,7 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     extracted_at: bet.extractTime,
-    url: `https://www.pinnacle.com/pt/soccer/a/b/${bet.match.id}/`,
+    url: `https://www.pinnacle.com/pt/${bet.sport}/a/b/${bet.match.id}/`,
   };
 }
 
@@ -156,19 +166,20 @@ function normalizeBet(bet: Bet): Bettable {
  * Gets all bets available from all matches of all football leagues
  */
 async function* retriveBets() {
-  const leagues: League[] = await getSportLeagues(FOOTBALL_ID);
-  const bets: Bet[] = [];
+  for (const {id: sportId, key: sportKey} of SPORTS) {
+    const leagues: League[] = await getSportLeagues(sportId);
 
-  for(const league of leagues) {
-    console.log(`Pinnacle: Processing league ${league.id}`);
-    const matches: Match[] = await getLeagueMatches(league.id);
+    for(const league of leagues) {
+      // console.log(`Pinnacle: Processing league ${league.id}`);
+      const matches: Match[] = await getLeagueMatches(league.id);
 
-    for (const match of matches) {
-      console.log(`Pinnacle: Processing match ${match.id} on league ${match.league.id}`);
+      for (const match of matches) {
+        // console.log(`Pinnacle: Processing match ${match.id} on league ${match.league.id}`);
 
-      for await (const bet of getMatchBets(match.id)) {
-        console.log(`Pinnacle: Processing bet ${americanToDecimal(bet.price.price)} on match ${match.id}`);
-        yield Object.assign(bet, { match });
+        for await (const bet of getMatchBets(match.id)) {
+          // console.log(`Pinnacle: Processing bet ${americanToDecimal(bet.price.price)} on match ${match.id}`);
+          yield Object.assign(bet, { match, sport: sportKey });
+        }
       }
     }
   }
@@ -181,7 +192,7 @@ export default async function retriveBetsAndUpdateDb(): Promise<number> {
 
   for await (const bet of retriveBets()) {
     const bettable = normalizeBet(bet);
-    console.log(`Pinnacle: Saving bettable ${bettable.odd}`);
+    console.log(`💾 Pinnacle ${bettable.sport} ${Math.round(bettable.odd*100)/100} ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
     saveBettable(bettable);
     savedCount++;
   }
