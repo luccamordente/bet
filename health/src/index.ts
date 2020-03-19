@@ -131,7 +131,9 @@ function mergeWithBaseReport(report: Report): Report {
       baseItem.sports[j] = reportItemSport;
     })
 
-    baseItem.house.status = baseItem.sports.map(s => s.status).reduce((prev, curr) => prev * curr as unknown as Status);
+    baseItem.house.status = baseItem.sports.map(s => s.status).reduce((acc, curr) => {
+      return Math.min(acc + curr, 1) as unknown as Status;
+    }, 0);
   });
 
   return base;
@@ -154,7 +156,7 @@ function processReport(rawReport: RawReport): Report {
     const item: ReportItem = {
       house: {
         name: rawItem._id.house.name,
-        status: sports.map(s => s.status).reduce((prev, curr) => prev * curr as unknown as Status ),
+        status: 0, // this will be calculated later
       },
       sports
     };
@@ -167,7 +169,7 @@ function processReport(rawReport: RawReport): Report {
 async function getReport(): Promise<RawReport> {
   return await getCollection().aggregate([
     {
-      $match: { extracted_at: { $gt: new Date(new Date().getTime() - 1000 * 5 * 60), /* last 1 minute */ } }
+      $match: { extracted_at: { $gt: new Date(new Date().getTime() - 1000 * 2 * 60), /* last 2 minutes */ } }
     }, {
       $group: {
         _id: { house: "$house", sport: "$sport", },
@@ -187,11 +189,15 @@ async function getReport(): Promise<RawReport> {
 }
 
 async function run() {
-  console.group(`\n🏥 Health Check ${moment().format('DD/MM/YY hh:mm')}`);
-  console.log(reportToString(processReport(await getReport())));
-  console.groupEnd();
-
-  setTimeout(run, 30 * 1000);
+  try {
+    console.group(`\n🏥 Health Check ${moment().format('DD/MM/YY hh:mm')}`);
+    console.log(reportToString(processReport(await getReport())));
+  } catch(error) {
+    console.log(error);
+  } finally {
+    console.groupEnd();
+    setTimeout(run, 30 * 1000);
+  }
 }
 
 async function main() {
