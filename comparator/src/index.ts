@@ -54,8 +54,8 @@ function bettableToString(bettable: Bettable) {
 }
 
 function announceProfit(profitable: Profitable): void {
-  console.group(`💰 ${profitToString(profitable.profit)} profit opportunity!`);
   const [b1, b2] = profitable.bettables;
+  console.group(`💰 ${sportToString(b1.sport)} ${profitToString(profitable.profit)} profit opportunity!`);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
   console.groupEnd();
@@ -68,9 +68,17 @@ async function run() {
 
   // FIXME this is slow
   // TODO add condition to only get valid bettables based on event start time
-  const bettables = await getCollection().find({
-    extracted_at: { $gt: moment().subtract(MAXIMUM_EXTRACT_MINUTES, 'minutes').toDate() }
-  }).toArray();
+  let bettables;
+  try {
+    bettables = await getCollection().find({
+      extracted_at: { $gt: moment().subtract(MAXIMUM_EXTRACT_MINUTES, 'minutes').toDate() }
+    }).toArray();
+  } catch (error) {
+    console.error("Error connecting to database. Will try again.");
+    await DB.getInstance().connect();
+    setTimeout(run, 5 * 1000);
+    return;
+  }
 
   console.log(`${bettables.length} bettables found`);
 

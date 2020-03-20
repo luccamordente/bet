@@ -51,7 +51,11 @@ export default abstract class BasePage<DataType, PreparedDataType> {
       console.error("Error getting data", e.message, e.stack);
       return;
     } finally {
-      await this.destroyContent();
+      try {
+        await this.destroyContent();
+      } catch(e2) {
+        console.error("Error destroying content", e2.message, e2.stack);
+      }
     }
     return this.prepareData(data);
   }

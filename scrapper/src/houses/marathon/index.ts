@@ -70,8 +70,8 @@ class MarathonWebsite {
           }
         }
       }
-    } catch(e) {
-      throw e;
+    } catch(error) {
+      console.log(error);
     } finally {
       browser.close();
     }
