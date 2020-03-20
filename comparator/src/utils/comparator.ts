@@ -1,6 +1,6 @@
-import { Bettable, Odd } from '../models/bettable';
+import { Bettable, Odd, MarketType } from '../models/bettable';
 
-import * as Operations from './operation';
+import * as Operations from './operations';
 
 type Combination = [Bettable, Bettable];
 
@@ -9,6 +9,11 @@ interface Profitable {
   profit: number,
   createdAt: Date;
 };
+
+const OPERATIONS_MAP: Record<MarketType, any extends typeof Operations.Operation ? any : never> = {
+  'over_under': Operations.OverUnder,
+  'spread': Operations.Spread,
+}
 
 /**
  * Validates if bettables are complementary by looking at the
@@ -26,9 +31,8 @@ function isComplementary(a: Bettable, b: Bettable): boolean {
   switch (a.market.type) {
     case "over_under":
       return new Operations.OverUnder(a.market.operation, b.market.operation).check();
-
-    default:
-      throw new Error(`Don't know how to compare "${a.market.type}" kind of market type.`);
+    case "spread":
+      return new Operations.Spread(a.market.operation, b.market.operation).check();
   }
 }
 

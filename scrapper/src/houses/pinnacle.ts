@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { americanToDecimal } from '../utils/odds';
 
-import { save as saveBettable, Bettable } from '../models/bettable';
+import { save as saveBettable, Bettable, BettableMarket, MarketKey } from '../models/bettable';
 
 const DEFAULT_REQUEST_CONFIG = {
     headers: {"accept":"application/json","content-type":"application/json","x-api-key":"CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R","x-device-uuid":"995eb6f3-65211f6e-e22c04e9-42a211b8", referrer: "https://www.pinnacle.com/en/soccer/leagues/","referrerPolicy":"no-referrer-when-downgrade",},
@@ -12,7 +12,7 @@ const DEFAULT_REQUEST_CONFIG = {
 
 const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1";
 
-const SPORTS = [
+const SPORTS: { key: string, id: number }[] = [
   { key: 'basketball', id: 4, },
   // { key: 'esports', id: 12, },
   { key: 'soccer', id: 29, },
@@ -20,7 +20,14 @@ const SPORTS = [
   // { key: 'tabletennis', id: 32, },
   // { key: 'tennis', id: 33, },
 ];
-const TIME_SPAN_HOURS = 24;
+const TIME_SPAN_HOURS: number = 24;
+
+const NORMALIZED_MARKET_KEY: { [key:string]: MarketKey } = {
+  's;0;ou;': 'game_score_total',   // score; on game; over/under
+  's;0;s;': 'game_score_handicap', // score; on game; spread (handicap)
+}
+
+const ALLOWED_MARKETS = Object.keys(NORMALIZED_MARKET_KEY);
 
 type Id = number;
 
@@ -50,7 +57,7 @@ type BetPeriod = 0 | 1 | 2;
 type BetType = "total";
 
 interface BetPrice {
-  readonly designation: "over" | "under",
+  readonly designation: string,
   readonly points: number,
   readonly price: number,
 };
@@ -62,6 +69,8 @@ interface Bet {
   readonly match: Match,
   readonly price: BetPrice,
   readonly extractTime: Date,
+  readonly key: string,
+  readonly matchupId: number,
 };
 
 interface Market {
@@ -70,6 +79,8 @@ interface Market {
   readonly period: BetPeriod,
   readonly match: Match,
   readonly prices: BetPrice[],
+  readonly key: string,
+  readonly matchupId: number,
 };
 
 
@@ -85,7 +96,7 @@ async function getSportLeagues(sportId: Id): Promise<League[]> {
 }
 
 async function* getMatchBets(matchId: Id) {
-  let markets: (Bet & Market)[];
+  let markets: Market[];
   let extractTime;
   try {
     markets = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
@@ -97,11 +108,20 @@ async function* getMatchBets(matchId: Id) {
 
   const bets: Bet[] = [];
 
+  const filteredMarkets = filterMarkets(markets, (market) => {
+    // The market should have the same matchupId of the market match,
+    // which means that it's not an alternate market like corners.
+    // When support is added for additional markets, this needs to be
+    // cross referenced with a different API endpoint.
+    return market.matchupId === matchId;
+  });
+
   // Split market into bets
-  for (const market of filterMarkets(markets)) {
+  for (const market of filteredMarkets) {
     for (const price of market.prices) {
       const bet: Bet = Object.assign(
         {
+          key: market.key,
           price,
           extractTime,
           prices: undefined,
@@ -126,27 +146,55 @@ async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
 
 function filterMatches(matches: Match[]): Match[] {
   return matches.filter((match: Match) => {
-    return moment(match.startTime).isBetween(moment.now(), moment().add(TIME_SPAN_HOURS, 'hours')) && match.type === "matchup" && match.units === "Regular";
+    return moment(match.startTime).isBetween(moment.now(), moment().add(TIME_SPAN_HOURS, 'hours')) 
+    && match.type === "matchup"
+    && match.units === "Regular";
   });
 }
 
-function filterMarkets(markets: Market[]): Market[] {
+/**
+ * Allows a market if the market key includes one of the allowed market keys
+ * defined on ALLOWED_MARKETS, plus matches the conditions of the extraFilter function.
+ */
+function filterMarkets(markets: Market[], extraFilter: (market: Market) => boolean): Market[] {
   return markets.filter(market => {
-    return market.type === "total" && market.period === 0
+    return ALLOWED_MARKETS.some(allowed => {
+      return market.key.includes(allowed);
+    }) && extraFilter(market);
   });
+}
+
+function normalizeMarket(bet: Bet): BettableMarket {
+  const key = NORMALIZED_MARKET_KEY[bet.key.match(/(.*;)/)[1]];
+
+  switch (key) {
+    case 'game_score_total':
+      return {
+        key,
+        type: 'over_under',
+        operation: {
+          operator: bet.price.designation as 'over' | 'under',
+          value: bet.price.points,
+        }
+      }
+    case 'game_score_handicap':
+      return {
+        key,
+        type: 'spread',
+        operation: {
+          operator: bet.price.designation as 'home' | 'away',
+          value: bet.price.points,
+        }
+      }
+    default:
+      throw new Error(`Market key '${key}' not found!`);
+  }
 }
 
 function normalizeBet(bet: Bet): Bettable {
   return {
     odd: americanToDecimal(bet.price.price),
-    market: {
-      key: "total_points",
-      type: "over_under",
-      operation: {
-        operator: bet.price.designation,
-        value: bet.price.points
-      },
-    },
+    market: normalizeMarket(bet),
     house: "pinnacle",
     sport: bet.sport,
     event: {
@@ -187,12 +235,23 @@ async function* retriveBets() {
   return;
 }
 
+// function validate() {
+//   for (const allowedMarket of ALLOWED_MARKETS) {
+//     const normalizedMarket = MARKET_NORMALIZATION[allowedMarket];
+//     if (normalizedMarket === undefined) {
+//       throw new Error(`Market '${allowedMarket}' is not normalized!`);
+//     }
+//   }
+// }
+
 export default async function retriveBetsAndUpdateDb(): Promise<number> {
+  // validate();
+
   let savedCount = 0;
 
   for await (const bet of retriveBets()) {
     const bettable = normalizeBet(bet);
-    console.log(`💾 Pinnacle ${bettable.sport} ${Math.round(bettable.odd*100)/100} ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
+    console.log(`💾 Pinnacle ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100}) ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
     saveBettable(bettable);
     savedCount++;
   }

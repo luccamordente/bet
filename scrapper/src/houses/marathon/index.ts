@@ -1,10 +1,11 @@
 import puppeteer from 'puppeteer';
 import moment from 'moment';
 
-import { save as saveBettable, Bettable } from '../../models/bettable';
+import { save as saveBettable, Bettable, BettableMarket, MarketType, MarketKey } from '../../models/bettable';
 
 import SportPage from './pages/sportPage';
 import FootballMatchPage, { Members, Price } from './pages/footballMatchPage';
+import { NORMALIZED_MARKET_KEY, normalizedMarketKey } from './types';
 
 export interface Bet {
   sport: string,
@@ -96,18 +97,57 @@ function normalizeDate(date: string): Date {
   throw new Error(`Cannot normalize date: ${date}`);
 }
 
+function normalizeMarket(bet: Bet): BettableMarket {
+  let member: string;
+  let value: string;
+  let operator;
+  let type: MarketType;
+  const key = normalizedMarketKey(bet.price.mn);
+
+  switch (key) {
+    case 'game_score_total':
+      [, operator, value] = bet.price.sn.match(/(\w+)\s+([\d\.]+)/);
+      operator = operator === 'Under' ? 'under' : 'over';
+      type = 'over_under';
+
+      return {
+        key,
+        type: "over_under",
+        operation: {
+          operator,
+          value: parseFloat(value),
+        },
+      }
+
+    case 'game_score_handicap':
+      [, member, value] = bet.price.sn.match(/(.*) \(([+-]?[\d\.]+)\)/);
+
+      if (bet.members.home.match(member) !== null) {
+        operator = 'home';
+      } else if (bet.members.away.match(member) !== null) {
+        operator = 'away';
+      } else {
+        throw new Error(`Member '${member} in price.sn ${bet.price.sn} doesn't match any of the extracted members in ${bet.members}`);
+      }
+
+      return {
+        key,
+        type: "spread",
+        operation: {
+          operator,
+          value: parseFloat(value),
+        },
+      }
+
+    default:
+      throw new Error(`Market key '${key}' not found!`);
+  }
+}
+
 function normalizeBet(bet: Bet): Bettable {
-  const [,operator, value] = bet.price.sn.match(/(\w+)\s+([\d\.]+)/);
   return {
     odd: parseFloat(bet.price.epr),
-    market: {
-      key: "total_points",
-      type: "over_under",
-      operation: {
-        operator: operator === 'Under' ? 'under' : 'over',
-        value: parseFloat(value),
-      },
-    },
+    market: normalizeMarket(bet),
     house: "marathon",
     sport: bet.sport.toLowerCase().replace(/[^a-z]/g, ''),
     event: {
@@ -130,7 +170,7 @@ export default async function retriveBetsAndUpdateDb():Promise<number> {
   for await (const bet of website.retrieveBets()) {
     const bettable = normalizeBet(bet);
 
-    console.log(`💾 Marathon ${bettable.sport} ${Math.round(bettable.odd*100)/100} ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
+    console.log(`💾 Marathon ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100})  ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
     saveBettable(bettable).catch( error => {
       console.error(error);
     });

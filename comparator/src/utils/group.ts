@@ -1,13 +1,18 @@
-function groupWithMatch(
-  items: any[], 
-  matches: (a: any, b: any) => boolean,
-  id: (item: any) => any
-): any[] {
+type Group<T> = {
+  id: any,
+  items: T[],
+};
+
+function groupWithMatch<T>(
+  items: T[],
+  matches: (a: T, b: T) => boolean,
+  id: (item: T) => any
+): Group<T>[] {
   const groups = [];
 
   for (let i = 0; i < items.length; i++) {
     const a = items[i];
-    const group = {
+    const group: Group<T> = {
       id: id(a),
       items: [],
     };

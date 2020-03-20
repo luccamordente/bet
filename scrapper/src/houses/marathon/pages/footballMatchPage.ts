@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { getInnerText } from '../../../utils/pageHelpers';
 import BasePage from './basePage';
+import { MarketName } from '../types';
 
 export type Members = {
   home: string,
@@ -28,14 +29,24 @@ export interface Price {
   epr: string, // E? Price
 };
 
-const MARKETS_WHITELIST = [
-  'Total Goals',
-  // 'Total Maps',
-  'Total Points',
-];
+export function assertMarket(marketName: never): boolean {
+  return false;
+}
 
-function isMarketWhitelisted(market) {
-  return MARKETS_WHITELIST.includes(market);
+function filterMarket(mn: string, sn: string): boolean {
+  const marketName = mn as MarketName;
+
+  switch (marketName) {
+    case MarketName.TOTAL_GOALS:
+    case MarketName.TOTAL_POINTS:
+      return sn.match(/(Over|Under)/) !== null;
+
+    case MarketName.TO_WIN_MATCH_WITH_HANDICAP:
+      return true;
+
+    default:
+      return assertMarket(marketName);
+  }
 }
 
 class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageData> {
@@ -63,8 +74,7 @@ class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageDat
 
   private filterPrices(prices: Price[]): Price[] {
     return prices.filter(price => {
-      return isMarketWhitelisted(price.mn)
-        && price.sn.match(/(Over|Under)/) !== null;
+      return filterMarket(price.mn, price.sn);
     });
   }
 

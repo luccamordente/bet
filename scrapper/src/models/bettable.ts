@@ -1,27 +1,55 @@
 import DB from '../config/db';
 
 
-type MarketOperation<T> = (
+export type MarketType = "over_under" | "spread";
+
+export type MarketOperation<T> = (
   T extends "over_under"
   ? {
     operator: "over" | "under",
     value: number,
   }
+  : T extends "team_over_under"
+  ? {
+    participant: "home" | "away",
+    operator: "over" | "under",
+    value: number,
+  }
+  : T extends "spread"
+  ? {
+    operator: "home" | "away"
+    value: number,
+  }
   : never
 );
 
-type MarketType<T> = (
-  T extends "over_under"
+type MarketSpecs<T> = (
+  T extends MarketType
   ? {
-    type: T,
+    type: Extract<MarketType, T>,
     operation: MarketOperation<T>
   }
   : never
 );
 
-type Market =
-  MarketType<"over_under"> & { key: "total_points" }
-  | MarketType<"over_under"> & { key: "total_corners" }
+export type MarketKey =
+  | "game_score_total"
+  // | "game_score_team_total"
+  | "game_score_handicap"
+;
+
+// TODO use `context` or period to denote dynamic game/half/map/etc
+// depending on the sport.
+type GenericBettableMarket<T, M> = {
+  key: T extends MarketKey ? T : never
+} & MarketSpecs<M>;
+
+// Possible combinations
+export type BettableMarket =
+  | GenericBettableMarket<"game_score_total", "over_under">
+  // | GenericBettableMarket<"game_score_team_total", "team_over_under">
+  | GenericBettableMarket<"game_score_handicap", "spread">
+;
 
 interface Event {
   league: string,
@@ -36,7 +64,7 @@ type Odd = number;
 
 interface Bettable {
   odd: Odd,
-  market: Market,
+  market: BettableMarket,
   house: "1xbet" | "pinnacle" | "marathon",
   sport: string,
   event: Event,
