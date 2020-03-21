@@ -2,7 +2,7 @@ import {ElementHandle, errors} from "puppeteer";
 import BasePage, {Selectors} from "./basePage";
 import {Bet, Teams, Market} from '../index';
 
-function getInnerText(node) { return node.innerText };
+import { getInnerText } from '../../../utils/pageHelpers';
 
 const MARKETS_WHITELIST = [
   'Total'
