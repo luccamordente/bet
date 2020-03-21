@@ -1,6 +1,5 @@
 import DB from '../config/db';
 
-
 export type MarketType = "over_under" | "spread";
 
 export type MarketOperation<T> = (
@@ -9,13 +8,7 @@ export type MarketOperation<T> = (
     operator: "over" | "under",
     value: number,
   }
-  : T extends "team_over_under"
-  ? {
-    participant: "home" | "away",
-    operator: "over" | "under",
-    value: number,
-  }
-  : T extends "spread"
+  :T extends "spread"
   ? {
     operator: "home" | "away"
     value: number,
@@ -32,11 +25,7 @@ type MarketSpecs<T> = (
   : never
 );
 
-export type MarketKey =
-  | "game_score_total"
-  // | "game_score_team_total"
-  | "game_score_handicap"
-;
+export type MarketKey = "game_score_total" | "game_score_handicap";
 
 // TODO use `context` or period to denote dynamic game/half/map/etc
 // depending on the sport.
@@ -47,7 +36,6 @@ type GenericBettableMarket<T, M> = {
 // Possible combinations
 export type BettableMarket =
   | GenericBettableMarket<"game_score_total", "over_under">
-  // | GenericBettableMarket<"game_score_team_total", "team_over_under">
   | GenericBettableMarket<"game_score_handicap", "spread">
 ;
 
@@ -60,35 +48,20 @@ interface Event {
   },
 };
 
-type Odd = number;
+export type Odd = number;
 
-interface Bettable {
+export interface Bettable {
+  _id: string,
   odd: Odd,
   market: BettableMarket,
-  house: "1xbet" | "pinnacle" | "marathon",
+  house: string
   sport: string,
   event: Event,
   extracted_at: Date,
-  url: string;
+  url: string,
 };
 
-async function save(bettable: Bettable): Promise<void> {
+export function getCollection(): any {
   const {db} = DB.getInstance();
-  return db.collection('bettables').replaceOne({
-      market: bettable.market,
-      house: bettable.house,
-      sport: bettable.sport,
-      event: bettable.event,
-    }, bettable, {upsert: true});
+  return db.collection('bettables');
 }
-
-export {
-  save,
-  Bettable
-};
-
-
-
-
-
-

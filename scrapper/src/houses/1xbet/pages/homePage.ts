@@ -1,6 +1,6 @@
 import BasePage, {Selectors} from "./basePage";
 import FootballMatchPage from "./footballMatchPage";
-import {ElementHandle} from "puppeteer";
+import {ElementHandle, errors} from "puppeteer";
 import {Bet} from '../index';
 
 export default class HomePage extends BasePage {
@@ -44,12 +44,13 @@ export default class HomePage extends BasePage {
     if (applyFilterButton == null) {
       throw new Error('object applyFilterButton is null on setEventFilterToHours');
     } else {
-      await applyFilterButton.click();  
+      await applyFilterButton.click();
     }
   }
 
 
-  async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
+async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
+    // FIXME change waitFor's to use something other than time
     await this.page.waitFor(100);
     try {
       await event.click();
@@ -59,7 +60,8 @@ export default class HomePage extends BasePage {
 
     await this.page.waitFor(300);
 
-    const matchPage = new FootballMatchPage(this.page);
+    const matchPage = new FootballMatchPage(this.page, this.page.url());
+    const extractTime = new Date();
 
     const isValidMatch = await matchPage.validateIfIsIndeedAMatch();
     if (!isValidMatch) {
@@ -71,13 +73,13 @@ export default class HomePage extends BasePage {
 
     const bets = await matchPage.getEventBets();
     for (const bet of bets) {
-      Object.assign(bet, { sport: 'football' });
+      Object.assign(bet, { sport: 'football', extractTime });
     }
 
     return bets;
   }
 
-  async getFootballBets():Promise<Bet[]> {
+  async *getFootballBets() {
     const bets = [];
     const footballCategory = await this.page.$(this.selectors.footballCategoryParentSelector);
     const footballCategoryLink = await footballCategory.$('a')
@@ -90,19 +92,29 @@ export default class HomePage extends BasePage {
 
     const championships = await footballCategory.$$('ul > li');
 
-    for( const championship of championships) {
+    for(const championship of championships) {
+      console.log(`1XBET: Processing league`);
 
       const championshipLink = await championship.$('a');
       await championshipLink.click();
-      await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul > li ul ");
+      try {
+        await this.page.waitForSelector(this.selectors.footballCategoryParentSelector + " ul > li ul ");
+      } catch(e) {
+        if (e instanceof errors.TimeoutError) {
+          console.warn("! 1XBET: timeout waiting for football category parent selector.");
+          return;
+        }
+      }
 
       const events = await championship.$$('ul.event_menu > li > a');
 
       for(const event of events) {
+        console.log(`1XBET: Processing event`);
         const eventBets = await this.getBetsFromFootballEvent(event);
 
         for (const bet of eventBets) {
-          bets.push(bet);
+          console.log(`1XBET: Processing bet ${bet.odd}`);
+          yield bet;
         }
       }
 
@@ -110,6 +122,5 @@ export default class HomePage extends BasePage {
         node.parentNode.removeChild(node);
       });
     }
-    return bets;
   }
 }

@@ -26,9 +26,10 @@ export default class FootballMatchPage extends BasePage {
   async validateIfIsIndeedAMatch() {
     // TODO stat time is not available in non match pages
     try {
-      await this.page.waitForSelector(this.selectors.scoreboardMainTitle, {timeout: 800});
+      await this.page.waitForSelector(this.selectors.scoreboardMainTitle, {timeout: 3000});
     } catch (e) {
       if (e instanceof errors.TimeoutError) {
+        console.warn("! 1XBET: not a match or execution timed out");
         return false
       }
     }
@@ -60,10 +61,10 @@ export default class FootballMatchPage extends BasePage {
       const title = await (await betElement.$('.bet_type')).evaluate(getInnerText);
       const odd = await (await betElement.$('.koeff')).evaluate(getInnerText);
 
-      if (title == null) { 
+      if (title == null) {
         throw new Error("Title not found for bet.");
       }
-      if (odd == null) { 
+      if (odd == null) {
         throw new Error("Odd not found for bet.");
       }
 
@@ -77,25 +78,25 @@ export default class FootballMatchPage extends BasePage {
   }
 
   /**
-   * Gets odds for all markets
-   * @param {*} this.page 
-   * @returns {Array} Array of odds
+   * Gets bets for all markets
+   * @param {*} this.page
+   * @returns {Array} Array of bets
    */
   async getBets() {
     const betGroupsElements = await this.page.$$(this.selectors.betGroupsDiv);
-    const odds = [];
+    const bets = [];
 
     for (const betGroupElement of betGroupsElements) {
       const marketName = (await (await betGroupElement.$('.bet-title')).evaluate(getInnerText)).trim() as Market;
       if (isMarketWhitelisted(marketName)) {
         const marketBets = await this.getMarketBets(betGroupElement);
         for (const marketBet of marketBets) {
-          odds.push(Object.assign({}, marketBet, { market: marketName }));
+          bets.push(Object.assign({}, marketBet, { market: marketName }));
         }
       }
     }
-    
-    return odds;
+
+    return bets;
   }
 
   async getStartTime() {
@@ -113,15 +114,14 @@ export default class FootballMatchPage extends BasePage {
   /**
    * Get bets data. If any bets are found, we look for event data, then return all the bets,
    * augmented with that data.
-   * @param {*} this.page 
    */
   async getEventBets():Promise<Bet[]> {
     const bets = await this.getBets();
-    
+
     if (bets.length) {
       const event = await this.getEventData();
       for (const bet of bets) {
-        Object.assign(bet, {event});
+        Object.assign(bet, {event, url: this.url});
       }
     }
 

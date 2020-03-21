@@ -1,8 +1,24 @@
 version: '3'
+
 services:
+  
   scrapper:
     build: ./scrapper
     volumes:
       - "./scrapper:/usr/app"
+      - /usr/app/node_modules
+    command: [ "npm", "run", "dev"]
+
+  comparator:
+    build: ./comparator
+    volumes:
+      - "./comparator:/usr/app"
+      - /usr/app/node_modules
+    command: [ "npm", "run", "dev"]
+
+  health:
+    build: ./health
+    volumes:
+      - "./health:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
