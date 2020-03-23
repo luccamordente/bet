@@ -80,7 +80,7 @@ function bettableToString(stakeable: Stakeable) {
 
 function announceProfit(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
-  console.group(`💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} ${profitToString(profitable.profit)} profit opportunity!`);
+  console.group(`${profitToString(profitable.profit)} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} `);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
   console.groupEnd();
