@@ -122,12 +122,12 @@ function normalizeMarket(bet: Bet): BettableMarket {
     case 'game_score_handicap':
       [, member, value] = bet.price.sn.match(/(.*) \(([+-]?[\d\.]+)\)/);
 
-      if (bet.members.home.match(member) !== null) {
+      if (bet.members.home.includes(member)) {
         operator = 'home';
-      } else if (bet.members.away.match(member) !== null) {
+      } else if (bet.members.away.includes(member)) {
         operator = 'away';
       } else {
-        throw new Error(`Member '${member} in price.sn ${bet.price.sn} doesn't match any of the extracted members in ${bet.members}`);
+        throw new Error(`Member '${member}' in price.sn '${bet.price.sn}' doesn't match any of the extracted members in ${JSON.stringify(bet.members)}`);
       }
 
       return {
