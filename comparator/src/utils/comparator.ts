@@ -2,10 +2,14 @@ import { Bettable, Odd, MarketType } from '../models/bettable';
 
 import * as Operations from './operations';
 
-type Combination = [Bettable, Bettable];
+export type Stakeable = Bettable & {
+  stake: number;
+};
 
-interface Profitable {
-  bettables: Combination,
+type Combination = [Stakeable, Stakeable];
+
+type Profitable = {
+  stakeables: Combination,
   profit: number,
   createdAt: Date;
 };
@@ -67,12 +71,30 @@ function combine<T>(
  * Calculate the profit off two odds, assuming they are complementary.
  */
 function calculateProfit(a: Odd, b: Odd): number {
-  const sum = a + b;
-  const aRatio = a / sum;
-  const bRatio = b / sum;
+  const [aRatio, bRatio] = calculateStake(a, b);
   const profit = (a * bRatio + b * aRatio) / 2 - 1;
   return profit;
 }
+
+function calculateStake(oddA: number, oddB: number): [number, number] {
+  const sum = oddA + oddB;
+  const aRatio = oddA / sum;
+  const bRatio = oddB / sum;
+  return [aRatio, bRatio];
+}
+
+function compute(a: Bettable, b: Bettable): Profitable {
+  const [stakeA, stakeB] = calculateStake(a.odd, b.odd);
+  const stakeableA: Stakeable = Object.assign({ stake: stakeA }, a);
+  const stakeableB: Stakeable = Object.assign({ stake: stakeB }, b);
+
+  return {
+    stakeables: [stakeableA, stakeableB],
+    profit: calculateProfit(stakeableA.odd, stakeableB.odd),
+    createdAt: new Date(),
+  };
+}
+
 
 function compare(bettables: Bettable[]): Profitable[] {
   const combined = combine<Bettable>(bettables, (a, b, i, j) => {
@@ -86,11 +108,7 @@ function compare(bettables: Bettable[]): Profitable[] {
     );
   });
   return combined.map( pair => {
-    return {
-      bettables: pair,
-      profit: calculateProfit(pair[0].odd, pair[1].odd),
-      createdAt: new Date(),
-    };
+    return compute(...pair);
   });
 };
 

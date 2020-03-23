@@ -3,10 +3,10 @@ import moment from 'moment';
 
 import DB from './config/db';
 
-import { getCollection, Bettable, BettableMarket } from './models/bettable';
+import { getCollection, Bettable } from './models/bettable';
 
 import group from './utils/group';
-import compare, { Profitable } from './utils/comparator';
+import compare, { Profitable, Stakeable } from './utils/comparator';
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
 
@@ -47,7 +47,7 @@ function oddToString(odd: number): string {
 }
 
 function profitToString(amount: number): string {
-  const percent = `${Math.round(amount*10000)/100}%`;
+  const percent = `${(amount*100).toFixed(2)}%`;
   return `${amount > 0 ? '🍀' : '🔻'} ${percent}`;
 }
 
@@ -61,23 +61,24 @@ function comparableToString(comparable: Bettable) {
 }
 
 function announceComparison(combinaton: Profitable) {
-  const [a,b] = combinaton.bettables;
-  console.group(`${sportToString(a.sport)} 🛒 ${a.market.key} ${profitToString(combinaton.profit)}`);
+  const [a,b] = combinaton.stakeables;
+  console.group(`${profitToString(combinaton.profit)} ${sportToString(a.sport)} 🛒 ${a.market.key}`);
   console.log(comparableToString(a));
   console.log(comparableToString(b));
   console.groupEnd();
 }
 
-function bettableToString(bettable: Bettable) {
-  const {odd, house, market: {key, operation}, extracted_at, url, event: {participants, starts_at}} = bettable;
+function bettableToString(stakeable: Stakeable) {
+  const {stake, odd, house, market: {key, operation}, extracted_at, url, event: {participants, starts_at}} = stakeable;
   return `🏦 ${house.toUpperCase()} 🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🎭 ${participants.home} × ${participants.away}
   ✨ ${key.replace('_',' ')}: ${operation.operator} ${operation.value} ⇢ ${oddToString(odd)}
+  💰 Stake: ${(stake * 100).toFixed(1)}%
   🕓 ${moment(extracted_at).fromNow()}
   🔗 ${url}`;
 }
 
 function announceProfit(profitable: Profitable): void {
-  const [b1, b2] = profitable.bettables;
+  const [b1, b2] = profitable.stakeables;
   console.group(`💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} ${profitToString(profitable.profit)} profit opportunity!`);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
@@ -169,12 +170,12 @@ async function run() {
   let totalCount = 0;
   let profitCount = 0;
   for (const grp of groups) {
-    const comparables = compare(grp.items);
-    for (const c of comparables) {
+    const profitables = compare(grp.items);
+    for (const c of profitables) {
       if (
         c.profit > 0
-        && moment(c.bettables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
-        && moment(c.bettables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
+        && moment(c.stakeables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
+        && moment(c.stakeables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
       ) {
         announceProfit(c);
         profitCount++;
