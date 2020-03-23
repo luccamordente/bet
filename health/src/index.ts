@@ -5,7 +5,7 @@ import DB from './config/db';
 
 const SPORTS = {
   'basketball': '🏀 Basketball',
-  // 'esports': '🎮 E-Sports',
+  'esports': '🎮 E-Sports',
   'hockey': '🏒 Hockey',
   'soccer': '⚽️ Soccer',
   // 'tabletennis': '🏓 Table Tennis',
@@ -19,8 +19,8 @@ const HOUSES = {
 };
 
 const HEALTH_TEMPLATE = {
-  'marathon': ['basketball', 'hockey', 'soccer'],
-  'pinnacle': ['basketball', 'hockey', 'soccer'],
+  'marathon': ['basketball', 'esports', 'hockey', 'soccer'],
+  'pinnacle': ['basketball', 'esports', 'hockey', 'soccer'],
   '1xbet'   : ['soccer'],
 };
 
@@ -196,7 +196,7 @@ async function run() {
     console.log(error);
   } finally {
     console.groupEnd();
-    setTimeout(run, 30 * 1000);
+    setTimeout(run, 3 * 1000);
   }
 }
 

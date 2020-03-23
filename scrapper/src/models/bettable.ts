@@ -34,7 +34,6 @@ type MarketSpecs<T> = (
 
 export type MarketKey =
   | "game_score_total"
-  // | "game_score_team_total"
   | "game_score_handicap"
 ;
 
@@ -47,7 +46,6 @@ type GenericBettableMarket<T, M> = {
 // Possible combinations
 export type BettableMarket =
   | GenericBettableMarket<"game_score_total", "over_under">
-  // | GenericBettableMarket<"game_score_team_total", "team_over_under">
   | GenericBettableMarket<"game_score_handicap", "spread">
 ;
 

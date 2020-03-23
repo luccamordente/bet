@@ -39,9 +39,11 @@ function filterMarket(mn: string, sn: string): boolean {
   switch (marketName) {
     case MarketName.TOTAL_GOALS:
     case MarketName.TOTAL_POINTS:
+    case MarketName.TOTAL_MAPS:
       return sn.match(/(Over|Under)/) !== null;
 
     case MarketName.TO_WIN_MATCH_WITH_HANDICAP:
+    case MarketName.TO_WIN_MATCH_WITH_HANDICAP_BY_MAPS:
       return true;
 
     default:

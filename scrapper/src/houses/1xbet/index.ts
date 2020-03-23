@@ -51,7 +51,7 @@ function normalizeBet(bet: Bet): Bettable {
   return {
     odd: parseFloat(bet.odd),
     market: {
-      key: "total_points",
+      key: "game_score_total",
       type: "over_under",
       operation: {
         operator: bet.title.includes('Over') ? 'over' : 'under',
@@ -59,10 +59,10 @@ function normalizeBet(bet: Bet): Bettable {
       },
     },
     house: "1xbet",
-    sport: "football",
+    sport: "soccer",
     event: {
       league: 'n/a',
-      starts_at: moment(bet.event.startTime, "DD.MM.YYYY HH:mm").toDate(), // TODO check timezone from container browser
+      starts_at: moment(bet.event.startTime, "DD.MM.YYYY HH:mm").toDate(),
       participants: {
         home: bet.event.teams.home,
         away: bet.event.teams.away,
@@ -82,7 +82,7 @@ export default async function retriveBetsAndUpdateDb():Promise<number> {
     }
     const bettable = normalizeBet(bet);
 
-    console.log(`1XBET: Saving bettable ${bettable.odd} ${moment(bettable.event.starts_at).format()}`);
+    console.log(`💾 1XBET ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100}) ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
     saveBettable(bettable).catch( error => {
       console.error(error);
     });

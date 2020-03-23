@@ -1,8 +1,8 @@
 import { MarketOperation } from "../../models/bettable";
 
 export default abstract class Operation<T> {
-  public operationA: MarketOperation<T>;
-  public operationB: MarketOperation<T>;
+  protected operationA: MarketOperation<T>;
+  protected operationB: MarketOperation<T>;
 
   constructor(operationA, operationB) {
     this.operationA = operationA;

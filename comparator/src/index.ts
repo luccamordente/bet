@@ -70,7 +70,7 @@ function announceComparison(combinaton: Profitable) {
 
 function bettableToString(bettable: Bettable) {
   const {odd, house, market: {key, operation}, extracted_at, url, event: {participants, starts_at}} = bettable;
-  return `🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🏦 ${house.toUpperCase()} 🎭 ${participants.home} × ${participants.away}
+  return `🏦 ${house.toUpperCase()} 🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🎭 ${participants.home} × ${participants.away}
   ✨ ${key.replace('_',' ')}: ${operation.operator} ${operation.value} ⇢ ${oddToString(odd)}
   🕓 ${moment(extracted_at).fromNow()}
   🔗 ${url}`;

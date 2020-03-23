@@ -14,13 +14,13 @@ const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1";
 
 const SPORTS: { key: string, id: number }[] = [
   { key: 'basketball', id: 4, },
-  // { key: 'esports', id: 12, },
+  { key: 'esports', id: 12, },
   { key: 'soccer', id: 29, },
   { key: 'hockey', id: 19, },
   // { key: 'tabletennis', id: 32, },
   // { key: 'tennis', id: 33, },
 ];
-const TIME_SPAN_HOURS: number = 24;
+const TIME_SPAN_HOURS: number = 24 * 5;
 
 const NORMALIZED_MARKET_KEY: { [key:string]: MarketKey } = {
   's;0;ou;': 'game_score_total',   // score; on game; over/under
@@ -102,11 +102,9 @@ async function* getMatchBets(matchId: Id) {
     markets = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
     extractTime = new Date();
   } catch (error) {
-    console.error(`Error getting match bets from matcg ${matchId}`, error);
+    console.error(`Error getting match bets from match ${matchId}`, error);
     return [];
   }
-
-  const bets: Bet[] = [];
 
   const filteredMarkets = filterMarkets(markets, (market) => {
     // The market should have the same matchupId of the market match,
@@ -146,7 +144,7 @@ async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
 
 function filterMatches(matches: Match[]): Match[] {
   return matches.filter((match: Match) => {
-    return moment(match.startTime).isBetween(moment.now(), moment().add(TIME_SPAN_HOURS, 'hours')) 
+    return moment(match.startTime).isBetween(moment.now(), moment().add(TIME_SPAN_HOURS, 'hours'))
     && match.type === "matchup"
     && match.units === "Regular";
   });

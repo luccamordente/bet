@@ -93,7 +93,6 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
     const championships = await footballCategory.$$('ul > li');
 
     for(const championship of championships) {
-      console.log(`1XBET: Processing league`);
 
       const championshipLink = await championship.$('a');
       await championshipLink.click();
@@ -109,11 +108,9 @@ async getBetsFromFootballEvent(event:ElementHandle):Promise<Bet[]> {
       const events = await championship.$$('ul.event_menu > li > a');
 
       for(const event of events) {
-        console.log(`1XBET: Processing event`);
         const eventBets = await this.getBetsFromFootballEvent(event);
 
         for (const bet of eventBets) {
-          console.log(`1XBET: Processing bet ${bet.odd}`);
           yield bet;
         }
       }

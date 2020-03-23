@@ -1,11 +1,11 @@
 import puppeteer from 'puppeteer';
 import moment from 'moment';
 
-import { save as saveBettable, Bettable, BettableMarket, MarketType, MarketKey } from '../../models/bettable';
+import { save as saveBettable, Bettable, BettableMarket, MarketType } from '../../models/bettable';
 
 import SportPage from './pages/sportPage';
 import FootballMatchPage, { Members, Price } from './pages/footballMatchPage';
-import { NORMALIZED_MARKET_KEY, normalizedMarketKey } from './types';
+import { normalizedMarketKey } from './types';
 
 export interface Bet {
   sport: string,
@@ -24,13 +24,13 @@ declare const document: {
 
 const SPORTS = [
   { key: 'basketball', id: 6, },
-  // { key: 'esports', id: 1895085 },
+  { key: 'esports', id: 1895085 },
   { key: 'soccer', id: 11, },
   { key: 'hockey', id: 537, },
   // { key: 'tabletennis', id: 382549, },
   // { key: 'tennis', id: 2398, },
 ];
-const TIME_SPAN_HOURS = 24;
+const TIME_SPAN_HOURS = 24 * 5;
 
 
 class MarathonWebsite {

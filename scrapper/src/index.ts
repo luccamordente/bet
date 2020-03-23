@@ -39,7 +39,7 @@ async function main() {
   // Start in parallel
   // manager.start("1XBET", OneXBetRetriveBetsAndUpdateDb);
   manager.start("Pinnacle", PinnacleRetriveBetsAndUpdateDb);
-   manager.start("Marathon", MarathonRetriveBetsAndUpdateDb);
+  manager.start("Marathon", MarathonRetriveBetsAndUpdateDb);
 }
 
 main().then().catch(console.error);
