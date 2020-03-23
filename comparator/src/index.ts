@@ -7,7 +7,7 @@ import { getCollection, Bettable } from './models/bettable';
 
 import group from './utils/group';
 import compare from './utils/comparator';
-import { Opportunity, Stakeable } from './models/opportunity'
+import { save as saveOpportunity, Opportunity, Stakeable } from './models/opportunity'
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
 
@@ -78,7 +78,7 @@ function bettableToString(stakeable: Stakeable) {
   🔗 ${url}`;
 }
 
-function announceProfit(profitable: Opportunity): void {
+function announceOpportunity(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
   console.group(`${profitToString(profitable.profit)} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} `);
   console.log(bettableToString(b1));
@@ -171,17 +171,23 @@ async function run() {
   let totalCount = 0;
   let profitCount = 0;
   for (const grp of groups) {
-    const profitables = compare(grp.items);
-    for (const c of profitables) {
+    const opportunities = compare(grp.items);
+    for (const opportunity of opportunities) {
       if (
-        c.profit > 0
-        && moment(c.stakeables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
-        && moment(c.stakeables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
+        opportunity.profit > 0
+        && moment(opportunity.stakeables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
+        && moment(opportunity.stakeables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
       ) {
-        announceProfit(c);
+        announceOpportunity(opportunity);
+
+        saveOpportunity(opportunity).then(isFresh => {
+          if (isFresh && opportunity.profit > 0.01) {
+            // publish on Telegram channel
+          }
+        });
         profitCount++;
       } else {
-        announceComparison(c);
+        announceComparison(opportunity);
       }
       totalCount++;
     }

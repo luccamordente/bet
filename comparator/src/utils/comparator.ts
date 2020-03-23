@@ -77,10 +77,13 @@ function compute(a: Bettable, b: Bettable): Opportunity {
   const stakeableA: Stakeable = Object.assign({ stake: stakeA }, a);
   const stakeableB: Stakeable = Object.assign({ stake: stakeB }, b);
 
+  const date = new Date();
+
   return {
     stakeables: [stakeableA, stakeableB],
     profit: calculateProfit(stakeableA.odd, stakeableB.odd),
-    createdAt: new Date(),
+    createdAt: date,
+    updatedAt: date,
   };
 }
 
