@@ -1,18 +1,7 @@
 import { Bettable, Odd, MarketType } from '../models/bettable';
+import { Opportunity, Stakeable } from '../models/opportunity';
 
 import * as Operations from './operations';
-
-export type Stakeable = Bettable & {
-  stake: number;
-};
-
-type Combination = [Stakeable, Stakeable];
-
-type Profitable = {
-  stakeables: Combination,
-  profit: number,
-  createdAt: Date;
-};
 
 const OPERATIONS_MAP: Record<MarketType, any extends typeof Operations.Operation ? any : never> = {
   'over_under': Operations.OverUnder,
@@ -83,7 +72,7 @@ function calculateStake(oddA: number, oddB: number): [number, number] {
   return [aRatio, bRatio];
 }
 
-function compute(a: Bettable, b: Bettable): Profitable {
+function compute(a: Bettable, b: Bettable): Opportunity {
   const [stakeA, stakeB] = calculateStake(a.odd, b.odd);
   const stakeableA: Stakeable = Object.assign({ stake: stakeA }, a);
   const stakeableB: Stakeable = Object.assign({ stake: stakeB }, b);
@@ -96,7 +85,7 @@ function compute(a: Bettable, b: Bettable): Profitable {
 }
 
 
-function compare(bettables: Bettable[]): Profitable[] {
+function compare(bettables: Bettable[]): Opportunity[] {
   const combined = combine<Bettable>(bettables, (a, b, i, j) => {
     return !(
       // Don't want to combine with itself
@@ -113,4 +102,3 @@ function compare(bettables: Bettable[]): Profitable[] {
 };
 
 export default compare;
-export { Profitable };

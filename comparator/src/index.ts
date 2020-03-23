@@ -6,7 +6,8 @@ import DB from './config/db';
 import { getCollection, Bettable } from './models/bettable';
 
 import group from './utils/group';
-import compare, { Profitable, Stakeable } from './utils/comparator';
+import compare from './utils/comparator';
+import { Opportunity, Stakeable } from './models/opportunity'
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
 
@@ -60,9 +61,9 @@ function comparableToString(comparable: Bettable) {
   return ` 🏦 ${house.toUpperCase()} (${operation.operator} ${operation.value} ⇢ ${oddToString(odd)} ) 🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🎭 ${participants.home} × ${participants.away}`;
 }
 
-function announceComparison(combinaton: Profitable) {
-  const [a,b] = combinaton.stakeables;
-  console.group(`${profitToString(combinaton.profit)} ${sportToString(a.sport)} 🛒 ${a.market.key}`);
+function announceComparison(opportunity: Opportunity) {
+  const [a,b] = opportunity.stakeables;
+  console.group(`${profitToString(opportunity.profit)} ${sportToString(a.sport)} 🛒 ${a.market.key}`);
   console.log(comparableToString(a));
   console.log(comparableToString(b));
   console.groupEnd();
@@ -77,7 +78,7 @@ function bettableToString(stakeable: Stakeable) {
   🔗 ${url}`;
 }
 
-function announceProfit(profitable: Profitable): void {
+function announceProfit(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
   console.group(`💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} ${profitToString(profitable.profit)} profit opportunity!`);
   console.log(bettableToString(b1));
