@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 networks:
   app-tier:
@@ -14,17 +14,6 @@ services:
       - 'mongodb_data:/bitnami'
     networks:
       - app-tier
-
-  scrapper:
-    build: ./scrapper
-    volumes:
-      - "./scrapper:/usr/app"
-      - /usr/app/node_modules
-    command: [ "npm", "run", "dev"]
-    networks:
-      - app-tier
-    depends_on:
-      - mongodb
 
   comparator:
     build: ./comparator
@@ -47,6 +36,43 @@ services:
       - app-tier
     depends_on:
       - mongodb
+
+  # Scrappers
+
+  marathon:
+    build: ./scrappers/marathon
+    volumes:
+      - "./scrappers/marathon:/usr/app"
+      - /usr/app/node_modules
+    command: [ "npm", "run", "dev"]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+  
+  pinnacle:
+    build: ./scrappers/pinnacle
+    volumes:
+      - "./scrappers/pinnacle:/usr/app"
+      - /usr/app/node_modules
+    command: [ "npm", "run", "dev"]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+  
+  # 1xbet:
+  #   build: ./scrappers/1xbet
+  #   volumes:
+  #     - "./scrappers/1xbet:/usr/app"
+  #     - /usr/app/node_modules
+  #   command: [ "npm", "run", "dev"]
+  #   networks:
+  #     - app-tier
+  #   depends_on:
+  #     - mongodb
+  
+  # End Scrappers
     
 volumes:
   mongodb_data:
