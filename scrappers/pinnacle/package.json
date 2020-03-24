@@ -1,0 +1,23 @@
+{
+  "name": "better_bet_pinnacle_scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "Lucca Mordente, Ricardo Nacif, Gabriel Cangussu",
+  "license": "ISC",
+  "dependencies": {
+    "@types/array.prototype.flatmap": "^1.2.1",
+    "@types/node": "^13.7.7",
+    "axios": "^0.19.2",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.4",
+    "ts-node": "^8.6.2"
+  },
+  "devDependencies": {
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
+  }
+}
