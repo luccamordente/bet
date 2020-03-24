@@ -21,6 +21,9 @@ services:
       - "./comparator:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
+    environment:
+      - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
+      - TELEGRAM_OPPORTUNITY_CHAT_ID=-445597702
     networks:
       - app-tier
     depends_on:

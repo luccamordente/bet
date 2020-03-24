@@ -7,18 +7,11 @@ import { getCollection, Bettable } from './models/bettable';
 
 import group from './utils/group';
 import compare from './utils/comparator';
-import { save as saveOpportunity, Opportunity, Stakeable } from './models/opportunity'
+import { save as saveOpportunity, Opportunity } from './models/opportunity'
+import { profitToString, sportToString, comparableToString, bettableToString } from './utils/string';
+import publishOpportunity from './publishOpportunity';
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
-
-const SPORTS = {
-  'basketball': '🏀 Basketball',
-  'esports': '🎮 E-Sports',
-  'hockey': '🏒 Hockey',
-  'soccer': '⚽️ Soccer',
-  'tabletennis': '🏓 Table Tennis',
-  'tennis': '🎾 Tennis',
-};
 
 const PARTICIPANT_NAME_SANITIZERS = [
   // E-sports: some strings are clipped, so this matches espo
@@ -43,39 +36,12 @@ const PARTICIPANT_NAME_SANITIZERS = [
   /\s?\bwomen\b\s?/i,
 ];
 
-function oddToString(odd: number): string {
-  return `${Math.round(odd*100)/100}`;
-}
-
-function profitToString(amount: number): string {
-  const percent = `${(amount*100).toFixed(2)}%`;
-  return `${amount > 0 ? '🍀' : '🔻'} ${percent}`;
-}
-
-function sportToString(sport: string): string {
-  return SPORTS[sport];
-}
-
-function comparableToString(comparable: Bettable) {
-  const {odd, house, event: {participants, starts_at}, market: { operation }} = comparable;
-  return ` 🏦 ${house.toUpperCase()} (${operation.operator} ${operation.value} ⇢ ${oddToString(odd)} ) 🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🎭 ${participants.home} × ${participants.away}`;
-}
-
 function announceComparison(opportunity: Opportunity) {
   const [a,b] = opportunity.stakeables;
   console.group(`${profitToString(opportunity.profit)} ${sportToString(a.sport)} 🛒 ${a.market.key}`);
   console.log(comparableToString(a));
   console.log(comparableToString(b));
   console.groupEnd();
-}
-
-function bettableToString(stakeable: Stakeable) {
-  const {stake, odd, house, market: {key, operation}, extracted_at, url, event: {participants, starts_at}} = stakeable;
-  return `🏦 ${house.toUpperCase()} 🗓  ${moment(starts_at).format('DD/MMM hh:mm')} 🎭 ${participants.home} × ${participants.away}
-  ✨ ${key.replace('_',' ')}: ${operation.operator} ${operation.value} ⇢ ${oddToString(odd)}
-  💰 Stake: ${(stake * 100).toFixed(1)}%
-  🕓 ${moment(extracted_at).fromNow()}
-  🔗 ${url}`;
 }
 
 function announceOpportunity(profitable: Opportunity): void {
@@ -94,7 +60,7 @@ function sanitizeParticipantName(name: string): string {
   for (const sanitizer of PARTICIPANT_NAME_SANITIZERS) {
     sanitized = sanitized.replace(sanitizer, '');
   }
-  return sanitized
+  return sanitized;
 }
 
 function groupBettables(bettables: Bettable[]) {
@@ -182,7 +148,7 @@ async function run() {
 
         saveOpportunity(opportunity).then(isFresh => {
           if (isFresh && opportunity.profit > 0.01) {
-            // publish on Telegram channel
+            publishOpportunity(opportunity);
           }
         });
         profitCount++;
