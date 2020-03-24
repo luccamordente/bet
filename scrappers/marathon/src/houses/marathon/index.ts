@@ -6,6 +6,7 @@ import { save as saveBettable, Bettable, BettableMarket, MarketType } from '../.
 import SportPage from './pages/sportPage';
 import FootballMatchPage, { Members, Price } from './pages/footballMatchPage';
 import { normalizedMarketKey } from './types';
+import { sanitizedEquals } from '../../utils';
 
 export interface Bet {
   sport: string,
@@ -122,9 +123,9 @@ function normalizeMarket(bet: Bet): BettableMarket {
     case 'game_score_handicap':
       [, member, value] = bet.price.sn.match(/(.*) \(([+-]?[\d\.]+)\)/);
 
-      if (bet.members.home.includes(member)) {
+      if (sanitizedEquals(bet.members.home, member)) {
         operator = 'home';
-      } else if (bet.members.away.includes(member)) {
+      } else if (sanitizedEquals(bet.members.away, member)) {
         operator = 'away';
       } else {
         throw new Error(`Member '${member}' in price.sn '${bet.price.sn}' doesn't match any of the extracted members in ${JSON.stringify(bet.members)}`);
