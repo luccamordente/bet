@@ -8,7 +8,7 @@ export default class DB {
   private constructor () {}
 
   async connect() {
-    this.client = await new MongoClient("mongodb+srv://betterbet:tXGvRktFZpXWZUq3@betterbet-cfnll.mongodb.net/betterbet?retryWrites=true&w=majority");
+    this.client = await new MongoClient("mongodb://mongodb");
 
     return new Promise((resolve, reject) => {
       this.client.connect((error, conn) => {

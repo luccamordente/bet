@@ -1,13 +1,30 @@
 version: '3'
 
+networks:
+  app-tier:
+    driver: bridge
+
 services:
-  
+
+  mongodb:
+    image: 'bitnami/mongodb:4.0'
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/bitnami'
+    networks:
+      - app-tier
+
   scrapper:
     build: ./scrapper
     volumes:
       - "./scrapper:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
 
   comparator:
     build: ./comparator
@@ -15,6 +32,10 @@ services:
       - "./comparator:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
 
   health:
     build: ./health
@@ -22,3 +43,11 @@ services:
       - "./health:/usr/app"
       - /usr/app/node_modules
     command: [ "npm", "run", "dev"]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+    
+volumes:
+  mongodb_data:
+    driver: local
