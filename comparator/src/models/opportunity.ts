@@ -27,7 +27,8 @@ function generateId(opportunity: Opportunity): string {
  * Creates a new opportunity if it doesn't exist in the database.
  * If it does, updates it only if the profit found is greater than
  * the previous one recorded.
- * @returns Whether or not the record is a fresh opportunity.
+ * @returns `true` if the opportunity was saved or updated on the database
+ * or `false` if no operation was done on the database.
  */
 export async function save(opportunity: Opportunity): Promise<boolean> {
   const {db} = DB.getInstance();
