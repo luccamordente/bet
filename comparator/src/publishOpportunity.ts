@@ -15,7 +15,12 @@ export default function publishOpportunity(opportunity: Opportunity) {
         text: opportunityMessage(opportunity)
       }
     })
-    .catch(console.error);
+    .then((resp => {
+      if (!resp.ok) {
+        logError(resp);
+      }
+    }))
+    .catch(logError);
 }
 
 function opportunityMessage(opportunity: Opportunity): string {
@@ -35,4 +40,9 @@ function opportunityMessage(opportunity: Opportunity): string {
     `🎭 ${participantsToString(participants)}\n`+
     `🗓  ${startDateToString(starts_at)}`
   );
+}
+
+function logError(error: unknown) {
+  console.error('Error publishing opportunity!');
+  console.error(error);
 }

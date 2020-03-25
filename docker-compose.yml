@@ -23,7 +23,7 @@ services:
     command: [ "npm", "run", "dev"]
     environment:
       - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
-      - TELEGRAM_OPPORTUNITY_CHAT_ID=-445597702
+      - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001355004972
     networks:
       - app-tier
     depends_on:
