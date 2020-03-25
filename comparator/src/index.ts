@@ -8,7 +8,7 @@ import { getCollection, Bettable } from './models/bettable';
 import group from './utils/group';
 import compare from './utils/comparator';
 import { save as saveOpportunity, Opportunity } from './models/opportunity'
-import { profitToString, sportToString, comparableToString, bettableToString } from './utils/string';
+import { profitToString, sportToString, comparableToString, bettableToString, marketToString } from './utils/string';
 import publishOpportunity from './publishOpportunity';
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
@@ -38,7 +38,8 @@ const PARTICIPANT_NAME_SANITIZERS = [
 
 function announceComparison(opportunity: Opportunity) {
   const [a,b] = opportunity.stakeables;
-  console.group(`${profitToString(opportunity.profit)} ${sportToString(a.sport)} 🛒 ${a.market.key}`);
+  const {sport} = a;
+  console.group(`${profitToString(opportunity.profit)} ${sportToString(a.sport)} 🛒 ${marketToString(a.market, sport)}`);
   console.log(comparableToString(a));
   console.log(comparableToString(b));
   console.groupEnd();
@@ -46,7 +47,8 @@ function announceComparison(opportunity: Opportunity) {
 
 function announceOpportunity(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
-  console.group(`${profitToString(profitable.profit)} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${b1.market.key} `);
+  const {sport} = b1;
+  console.group(`${profitToString(profitable.profit)} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${marketToString(b1.market, sport)} `);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
   console.groupEnd();

@@ -1,6 +1,6 @@
 import { Stakeable } from "../models/opportunity";
 import moment from "moment";
-import { Bettable } from "../models/bettable";
+import { Bettable, BettableMarket } from "../models/bettable";
 
 const SPORTS = {
   basketball: "🏀 Basketball",
@@ -53,6 +53,38 @@ export function comparableToString(comparable: Bettable) {
 export function participantsToString(participants: { home: string, away: string }) {
   const { home, away } = participants;
   return `${home} × ${away}`;
+}
+
+export function marketToString(market: BettableMarket, sport: string) {
+  switch (market.key) {
+    case "game_score_total":
+      switch (sport) {
+        case "basketball":
+        case "tabletennis":
+        case "tennis":
+          return "Total de pontos no jogo";
+        case "esports":
+          return "Total de mapas no jogo";
+        case "hockey":
+        case "soccer":
+          return "Total de gols no jogo";
+      }
+      break;
+    case "game_score_handicap":
+      switch (sport) {
+        case "basketball":
+        case "tabletennis":
+        case "tennis":
+          return "Handicap de pontos no jogo";
+        case "esports":
+          return "Handicap de mapas no jogo";
+        case "hockey":
+        case "soccer":
+          return "Handicap de gols no jogo";
+      }
+      break;
+  }
+  return market.key;
 }
 
 export function bettableToString(stakeable: Stakeable) {
