@@ -1,7 +1,7 @@
 import { assertEnv } from "./utils/assert";
 import { Opportunity } from "./models/opportunity";
 import betTelegramBot from "./config/betTelegramBot";
-import { profitToString, sportToString, bettableToString } from "./utils/string";
+import { profitToString, bettableToTelegramString, participantsToString, startDateToString, houseToString } from "./utils/string";
 
 assertEnv(process.env, ["TELEGRAM_OPPORTUNITY_CHAT_ID"]);
 
@@ -19,14 +19,20 @@ export default function publishOpportunity(opportunity: Opportunity) {
 }
 
 function opportunityMessage(opportunity: Opportunity): string {
-  const [b1, b2] = opportunity.stakeables;
+  const [o1, o2] = opportunity.stakeables;
+  const {
+    event: { starts_at, participants },
+    market: { key: market },
+  } = o1;
   return (
-    `${profitToString(
-      opportunity.profit
-    )} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${
-      b1.market.key
-    }\n` +
-    `${bettableToString(b1)}\n` +
-    `${bettableToString(b2)}`
+    `${profitToString(opportunity.profit)}\n` +
+    `🏦 ${houseToString(o1.house)} + ${houseToString(o2.house)}\n` +
+    `🛒 ${market}\n\n`+
+    `________________________\n\n`+
+    `${bettableToTelegramString(o1)}\n\n` +
+    `${bettableToTelegramString(o2)}\n\n` +
+    `________________________\n\n`+
+    `🎭 ${participantsToString(participants)}\n`+
+    `🗓  ${startDateToString(starts_at)}`
   );
 }

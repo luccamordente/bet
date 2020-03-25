@@ -27,37 +27,66 @@ export function sportToString(sport: string): string {
   throw new TypeError(`Invalid sport '${sport}'`);
 }
 
+export function houseToString(house: string) {
+  const capitalized = house.charAt(0).toUpperCase() + house.slice(1);
+  return capitalized;
+}
+
+export function startDateToString(startDate: Date) {
+  return `${moment(startDate).format(
+    "DD/MMM hh:mm"
+  )}`;
+}
+
 export function comparableToString(comparable: Bettable) {
   const {
     odd,
     house,
-    event: { participants, starts_at },
-    market: { operation }
+    market: { operation },
+    event: { starts_at, participants }
   } = comparable;
-  return ` 🏦 ${house.toUpperCase()} (${operation.operator} ${
+  return ` 🏦 ${houseToString(house)} (${operation.operator} ${
     operation.value
-  } ⇢ ${oddToString(odd)} ) 🗓  ${moment(starts_at).format("DD/MMM hh:mm")} 🎭 ${
-    participants.home
-  } × ${participants.away}`;
+  } ⇢ ${oddToString(odd)}) 🗓  ${startDateToString(starts_at)} 🎭 ${participantsToString(participants)}`;
+}
+
+export function participantsToString(participants: { home: string, away: string }) {
+  const { home, away } = participants;
+  return `${home} × ${away}`;
 }
 
 export function bettableToString(stakeable: Stakeable) {
   const {
+    house,
     stake,
     odd,
-    house,
     market: { key, operation },
     extracted_at,
     url,
-    event: { participants, starts_at }
+    event: { starts_at, participants }
   } = stakeable;
-  return `🏦 ${house.toUpperCase()} 🗓  ${moment(starts_at).format(
-    "DD/MMM hh:mm"
-  )} 🎭 ${participants.home} × ${participants.away}
+  return `🏦 ${houseToString(house)} 🗓  ${startDateToString(starts_at)} 🎭 ${participantsToString(participants)}
   ✨ ${key.replace("_", " ")}: ${operation.operator} ${
     operation.value
   } ⇢ ${oddToString(odd)}
   💰 Stake: ${(stake * 100).toFixed(1)}%
   🕓 ${moment(extracted_at).fromNow()}
   🔗 ${url}`;
+}
+
+export function bettableToTelegramString(stakeable: Stakeable) {
+  const {
+    house,
+    stake,
+    odd,
+    market: { key, operation },
+    url,
+  } = stakeable;
+  return `🏦 ${houseToString(house)}\n` +
+  `  🛒 ${key.replace("_", " ")}: ${operation.operator} ${
+    operation.value
+  }\n`+
+  `  ⚖️ Odd: ${oddToString(odd)}\n` +
+  `  💰Stake: ${(stake * 100).toFixed(1)}%\n` +
+  `  🔗 ${url}`;
 }
