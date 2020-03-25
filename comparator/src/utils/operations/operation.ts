@@ -4,7 +4,7 @@ export default abstract class Operation<T> {
   protected operationA: MarketOperation<T>;
   protected operationB: MarketOperation<T>;
 
-  constructor(operationA, operationB) {
+  constructor(operationA: MarketOperation<T>, operationB: MarketOperation<T>) {
     this.operationA = operationA;
     this.operationB = operationB;
   }
