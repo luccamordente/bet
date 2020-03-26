@@ -69,7 +69,9 @@ function calculateStake(oddA: number, oddB: number): [number, number] {
   const sum = oddA + oddB;
   const aRatio = oddA / sum;
   const bRatio = oddB / sum;
-  return [aRatio, bRatio];
+  
+  // This needs to be inverted to guarantee returns
+  return [bRatio, aRatio];
 }
 
 function compute(a: Bettable, b: Bettable): Opportunity {
