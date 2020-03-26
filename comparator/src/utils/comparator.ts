@@ -60,8 +60,8 @@ function combine<T>(
  * Calculate the profit off two odds, assuming they are complementary.
  */
 function calculateProfit(a: Odd, b: Odd): number {
-  const [aRatio, bRatio] = calculateStake(a, b);
-  const profit = (a * bRatio + b * aRatio) / 2 - 1;
+  const [stakeA, stakeB] = calculateStake(a, b);
+  const profit = (a * stakeA + b * stakeB) / 2 - 1;
   return profit;
 }
 
@@ -69,7 +69,9 @@ function calculateStake(oddA: number, oddB: number): [number, number] {
   const sum = oddA + oddB;
   const aRatio = oddA / sum;
   const bRatio = oddB / sum;
-  return [aRatio, bRatio];
+  
+  // This needs to be inverted to guarantee returns
+  return [bRatio, aRatio];
 }
 
 function compute(a: Bettable, b: Bettable): Opportunity {
