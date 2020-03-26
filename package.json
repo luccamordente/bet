@@ -1,0 +1,13 @@
+{
+  "name": "@bet/core",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*"
+  ],
+  "devDependencies": {
+    "@yarnpkg/pnpify": "^2.0.0-rc.20",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3"
+  }
+}

@@ -1,3 +1,17 @@
-**/node_modules
-node_modules
-npm-debug.log
+# yarn
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+
+# git
+.git
+.gitattributes
+.gitignore
+
+# Visual Studio Code
+.vscode
+
+# Docker
+Dockerfile
+docker-compose.yml

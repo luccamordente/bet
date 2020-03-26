@@ -1,0 +1,7 @@
+{
+  "name": "@bet/telegram-bot-api",
+  "dependencies": {
+    "@types/node-fetch": "^2.5.5",
+    "node-fetch": "^2.6.0"
+  }
+}
