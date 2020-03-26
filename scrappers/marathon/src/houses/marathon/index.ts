@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import moment from 'moment';
 
-import { save as saveBettable, Bettable, BettableMarket, MarketType } from '../../models/bettable';
+import { Bettable, BettableMarket, MarketType } from '../../models/bettable';
 
 import SportPage from './pages/sportPage';
 import FootballMatchPage, { Members, Price } from './pages/footballMatchPage';
@@ -47,30 +47,39 @@ class MarathonWebsite {
       await page.evaluate(() => document.body.innerHTML = "" );
 
       for (const sport of SPORTS) {
-        const footballPage = new SportPage(page, `https://www.marathonbet.com/pt/betting/${sport.id}?periodGroupAllEvents=${TIME_SPAN_HOURS}`);
-        const urls = (await footballPage.getData()).urls;
+        const sportPage = new SportPage(page, `https://www.marathonbet.com/pt/betting/${sport.id}?periodGroupAllEvents=${TIME_SPAN_HOURS}`);
 
-        for (const url of urls) {
-          const footballMatchPage = new FootballMatchPage(page, url);
-          const data = await footballMatchPage.getData();
-          if (data === undefined) {
-            continue;
-          }
-          const extractTime = new Date();
+        // Each page of url data
+        for await (const {urls} of sportPage.getData()) {
 
-          for (const price of data.prices) {
+          for (const url of urls) {
+            const eventPage = new FootballMatchPage(page, url);
 
-            const bet: Bet = {
-              sport: sport.key,
-              members: data.members,
-              date: data.date,
-              url: data.url,
-              extractTime,
-              price
+            // Each page of match data
+            for await (const data of eventPage.getData()) {
+              if (data === undefined) {
+                continue;
+              }
+              const extractTime = new Date();
+
+              for (const price of data.prices) {
+
+                const bet: Bet = {
+                  sport: sport.key,
+                  members: data.members,
+                  date: data.date,
+                  url: data.url,
+                  extractTime,
+                  price
+                }
+                yield bet;
+              }
             }
-            yield bet;
+
           }
+
         }
+
       }
     } catch(error) {
       console.log(error);
@@ -128,7 +137,7 @@ function normalizeMarket(bet: Bet): BettableMarket {
       } else if (sanitizedEquals(bet.members.away, member)) {
         operator = 'away';
       } else {
-        throw new Error(`Member '${member}' in price.sn '${bet.price.sn}' doesn't match any of the extracted members in ${JSON.stringify(bet.members)}`);
+        throw new Error(`Member '${member}' in price.sn '${bet.price.sn}' doesn't match any of the extracted members in ${JSON.stringify(bet.members)} (${bet.url})`);
       }
 
       return {
@@ -164,19 +173,9 @@ function normalizeBet(bet: Bet): Bettable {
   };
 }
 
-export default async function retriveBetsAndUpdateDb():Promise<number> {
-  let savedCount = 0;
-
+export default async function *retriveBets() {
   const website = new MarathonWebsite();
   for await (const bet of website.retrieveBets()) {
-    const bettable = normalizeBet(bet);
-
-    console.log(`💾 Marathon ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100})  ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
-    saveBettable(bettable).catch( error => {
-      console.error(error);
-    });
-    savedCount++;
+    yield normalizeBet(bet);
   }
-
-  return savedCount;
 }

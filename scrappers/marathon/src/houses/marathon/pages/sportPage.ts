@@ -1,13 +1,26 @@
-import puppeteer from 'puppeteer';
 import axios from 'axios';
+import { URL } from "url";
 
 import BasePage from './basePage';
+import * as types from "./types";
 
 declare const window: {
   location: {
     origin: string,
   },
 };
+
+interface ReponseContent {
+  selector: 'nextPageContent',
+  content: string,
+};
+
+interface ResponseProp {
+  prop: string,
+  val: any,
+}
+
+type Response = [ReponseContent, ResponseProp];
 
 interface Sport {
   urls: string[],
@@ -19,12 +32,18 @@ class SportPage extends BasePage<Sport, Sport> {
     link: '.member-area-content-table .member-link',
   };
 
-  protected async getContent(): Promise<string> {
-    // This makes the content smaller
-    const url = `${this.url}&pageAction=default`;
-    const response = (await axios.get(url)).data;
+  protected async getContent(page: number): Promise<types.Content> {
+    const url = new URL(this.url);
+    url.searchParams.append('pageAction', 'getPage');
+    url.searchParams.append('page', `${page}`);
 
-    return response[0].content;
+    const response = await axios.get<Response>(url.toString());
+    const [{content}, {val: hasNextPage}] = response.data;
+
+    return {
+      content,
+      hasNextPage,
+    };
   }
 
   private async parseUrls(): Promise<string[]> {

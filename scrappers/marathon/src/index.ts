@@ -1,39 +1,37 @@
-'use strict';
+import moment from 'moment';
 
-import MarathonRetriveBetsAndUpdateDb from  './houses/marathon';
+import retrieveBets from './houses/marathon';
+import { save } from './models/bettable';
 
 import DB from './config/db';
 
 
+const NAME = "Marathon";
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
 
-class Manager {
-  private scrappers = {};
+async function run() {
+  console.log(`Starting ${NAME} sync.`);
+  console.time(NAME);
 
-  async start(name: string, fn: () => Promise<number>): Promise<void> {
-    this.scrappers[name] = fn;
-    await this.run(name);
+  let count = 0;
+  for await (const bettable of retrieveBets()) {
+    console.log(`💾 Marathon ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100})  ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
+    save(bettable).catch(error => {
+      console.error(error);
+    });
+    count++;
   }
+  console.log(`${NAME} ended with ${count} bets found. Time spent:`);
+  console.timeEnd(NAME);
 
-  private async run(name) {
-    const scrapper = this.scrappers[name];
-
-    console.log(`Starting ${name} sync.`);
-    console.time(name);
-    const count = await scrapper();
-    console.log(`${name} ended with ${count} bets found. Time spent:`);
-    console.timeEnd(name);
-
-    setTimeout(() => {
-      this.run(name);
-    }, SCRAPPING_INTERVAL);
-  }
+  setTimeout(() => {
+    run();
+  }, SCRAPPING_INTERVAL);
 }
 
 async function main() {
   await DB.getInstance().connect();
-  const manager = new Manager();
-  manager.start("Marathon", MarathonRetriveBetsAndUpdateDb);
+  run();
 }
 
 main().then().catch(console.error);

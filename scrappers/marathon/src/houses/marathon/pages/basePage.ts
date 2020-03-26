@@ -1,9 +1,9 @@
 import { Page } from "puppeteer";
+import * as types from "./types";
 
 declare const document: {
   createElement: (content: string) => any,
 };
-
 
 export default abstract class BasePage<DataType, PreparedDataType> {
   protected page: Page;
@@ -34,30 +34,35 @@ export default abstract class BasePage<DataType, PreparedDataType> {
       node.parentNode.removeChild(node);
     });
   }
-
-  protected abstract async getContent(): Promise<string>;
+  
+  protected abstract async getContent(page: number): Promise<types.Content>;
 
   protected abstract parseContent(): Promise<DataType>;
 
   protected abstract prepareData(data: DataType): PreparedDataType;
 
-  public async getData(): Promise<PreparedDataType | undefined> {
+  public async *getData(): AsyncGenerator<PreparedDataType> {
     let data;
     try {
-      const content = await this.getContent();
-      await this.appendContent(content);
-      data = await this.parseContent();
+      let hasNextPage = true;
+      let pageNumber = 0;
+
+      while (hasNextPage) {
+        const content = await this.getContent(pageNumber);
+
+        await this.appendContent(content.content);
+        data = await this.parseContent();
+        await this.destroyContent();
+
+        hasNextPage = content.hasNextPage;
+        yield this.prepareData(data);
+        pageNumber++;
+
+      }
     } catch(e) {
       console.error("Error getting data", e.message, e.stack);
-      return;
-    } finally {
-      try {
-        await this.destroyContent();
-      } catch(e2) {
-        console.error("Error destroying content", e2.message, e2.stack);
-      }
     }
-    return this.prepareData(data);
+
   }
 
 }

@@ -2,12 +2,36 @@ import axios from 'axios';
 
 import { getInnerText } from '../../../utils/pageHelpers';
 import BasePage from './basePage';
+
 import { MarketName } from '../types';
+import * as types from "./types";
+import { URL } from 'url';
 
 export type Members = {
   home: string,
   away: string,
 };
+
+interface ReponseContent<Selector> {
+  selector: Selector,
+  content: string,
+};
+
+interface ResponseProp {
+  prop: string,
+  val: any,
+}
+
+type Response = [
+  ReponseContent<'#footerLinks'>,
+  ReponseContent<'#events_content'>,
+  ResponseProp,
+  ResponseProp,
+  ResponseProp,
+  ResponseProp,
+  ResponseProp,
+  ResponseProp,
+];
 
 interface FootballMatchData {
   members: Members,
@@ -90,12 +114,18 @@ class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageDat
     return this.filterPrices(prices);
   }
 
-  protected async getContent(): Promise<string | undefined> {
-    // This makes the content smaller
-    const url = `${this.url}?pageAction=default`;
-    const response = (await axios.get(url)).data;
+  protected async getContent(page: number): Promise<types.Content> {
+    const url = new URL(this.url);
+    // Apparently match pages don't have pagination
+    url.searchParams.append('pageAction', 'default');
 
-    return response[1].content;
+    const response = await axios.get<Response>(url.toString());
+    const [,{content}] = response.data;
+
+    return {
+      content,
+      hasNextPage: false,
+    };
   }
 
   protected async parseContent(): Promise<FootballMatchData> {
