@@ -2,7 +2,7 @@
   "name": "@bet/comparator",
   "scripts": {
     "console": "ts-node --transpile-only repl.ts",
-    "dev": "yarn && ts-node --transpile-only index.ts"
+    "dev": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",

@@ -1,7 +1,7 @@
 {
   "name": "@bet/health",
   "scripts": {
-    "dev": "yarn && ts-node --transpile-only index.ts"
+    "dev": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
     "@types/mongodb": "^3.5.3",
