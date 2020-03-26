@@ -1,26 +1,24 @@
-version: '3.4'
+version: "3.7"
 
 networks:
   app-tier:
     driver: bridge
 
 services:
-
   mongodb:
-    image: 'bitnami/mongodb:4.0'
+    image: bitnami/mongodb:4.2.5-debian-10-r10
     ports:
-      - "27017:27017"
+      - 27017:27017
     volumes:
-      - 'mongodb_data:/bitnami'
+      - mongodb_data:/bitnami
     networks:
       - app-tier
 
   comparator:
-    build: ./comparator
+    build: ./
     volumes:
-      - "./comparator:/usr/app"
-      - /usr/app/node_modules
-    command: [ "npm", "run", "dev"]
+      - ./:/app/
+    command: [yarn, workspace, "@bet/comparator", dev]
     environment:
       - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
       - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001355004972
@@ -30,53 +28,55 @@ services:
       - mongodb
 
   health:
-    build: ./health
+    build: ./
     volumes:
-      - "./health:/usr/app"
-      - /usr/app/node_modules
-    command: [ "npm", "run", "dev"]
+      - ./:/app/
+    command: [yarn, workspace, "@bet/health", dev]
     networks:
       - app-tier
     depends_on:
       - mongodb
 
-  # Scrappers
+  # Scrapers
 
-  marathon:
-    build: ./scrappers/marathon
+  scraper-marathon:
+    build:
+      context: ./
+      args:
+        INSTALL_CHROMIUM: "true"
     volumes:
-      - "./scrappers/marathon:/usr/app"
-      - /usr/app/node_modules
-    command: [ "npm", "run", "dev"]
+      - ./:/app/
+    command: [yarn, workspace, "@bet/scraper-marathon", dev]
     networks:
       - app-tier
     depends_on:
       - mongodb
-  
-  pinnacle:
-    build: ./scrappers/pinnacle
+
+  scraper-pinnacle:
+    build: ./
     volumes:
-      - "./scrappers/pinnacle:/usr/app"
-      - /usr/app/node_modules
-    command: [ "npm", "run", "dev"]
+      - ./:/app/
+    command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
     networks:
       - app-tier
     depends_on:
       - mongodb
-  
-  # 1xbet:
-  #   build: ./scrappers/1xbet
+
+  # scraper-1xbet:
+  #   build:
+  #     context: ./
+  #     args:
+  #       INSTALL_CHROMIUM: true
   #   volumes:
-  #     - "./scrappers/1xbet:/usr/app"
-  #     - /usr/app/node_modules
-  #   command: [ "npm", "run", "dev"]
+  #     - ./:/app/
+  #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
   #   networks:
   #     - app-tier
   #   depends_on:
   #     - mongodb
-  
-  # End Scrappers
-    
+  #
+  # End of scrapers
+
 volumes:
   mongodb_data:
     driver: local

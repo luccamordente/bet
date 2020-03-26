@@ -1,0 +1,21 @@
+{
+  "name": "@bet/comparator",
+  "scripts": {
+    "console": "ts-node --transpile-only repl.ts",
+    "dev": "ts-node --transpile-only index.ts"
+  },
+  "dependencies": {
+    "@bet/assert": "workspace:packages/assert",
+    "@bet/telegram-bot-api": "workspace:packages/telegram-bot-api",
+    "@types/mongodb": "^3.5.3",
+    "@types/node": "^13.9.4",
+    "@types/string-similarity": "^3.0.0",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.5",
+    "string-similarity": "^4.0.1"
+  },
+  "devDependencies": {
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
+  }
+}
