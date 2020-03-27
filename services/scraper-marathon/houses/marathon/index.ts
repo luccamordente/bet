@@ -91,8 +91,8 @@ class MarathonWebsite {
   private launch(): Promise<puppeteer.Browser> {
     return puppeteer.launch({
       headless: true,
-        defaultViewport: { width: 1900, height: 5000},
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      defaultViewport: { width: 1900, height: 5000 },
+      args: [],
     });
   }
 }

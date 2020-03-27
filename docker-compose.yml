@@ -1,5 +1,19 @@
 version: "3.7"
 
+# Volumes to share between services using extension fields
+# https://docs.docker.com/compose/compose-file/#extension-fields
+x-volumes: &default-volumes
+  - ./.yarn/cache:/app/.yarn/cache:ro
+  - ./.yarn/plugins:/app/.yarn/plugins:ro
+  - ./.yarn/releases:/app/.yarn/releases:ro
+  - ./packages:/app/packages:ro
+  - ./services:/app/services:ro
+  - ./.pnp.js:/app/.pnp.js:ro
+  - ./.yarnrc.yml:/app/.yarnrc.yml:ro
+  - ./package.json:/app/package.json:ro
+  - ./tsconfig.json:/app/tsconfig.json:ro
+  - ./yarn.lock:/app/yarn.lock:ro
+
 networks:
   app-tier:
     driver: bridge
@@ -16,8 +30,7 @@ services:
 
   comparator:
     build: ./
-    volumes:
-      - ./:/app/
+    volumes: *default-volumes
     command: [yarn, workspace, "@bet/comparator", dev]
     environment:
       - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
@@ -29,8 +42,7 @@ services:
 
   health:
     build: ./
-    volumes:
-      - ./:/app/
+    volumes: *default-volumes
     command: [yarn, workspace, "@bet/health", dev]
     networks:
       - app-tier
@@ -44,18 +56,20 @@ services:
       context: ./
       args:
         INSTALL_CHROMIUM: "true"
-    volumes:
-      - ./:/app/
+    volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
     networks:
       - app-tier
     depends_on:
       - mongodb
+    shm_size: 1gb
+    init: true
+    security_opt:
+      - seccomp=docker/seccomp-chromium.json
 
   scraper-pinnacle:
     build: ./
-    volumes:
-      - ./:/app/
+    volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
     networks:
       - app-tier
@@ -67,8 +81,7 @@ services:
   #     context: ./
   #     args:
   #       INSTALL_CHROMIUM: true
-  #   volumes:
-  #     - ./:/app/
+  #   volumes: *default-volumes
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
   #   networks:
   #     - app-tier
