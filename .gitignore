@@ -3,3 +3,5 @@
 !.yarn/cache
 !.yarn/releases
 !.yarn/plugins
+
+.DS_Store
