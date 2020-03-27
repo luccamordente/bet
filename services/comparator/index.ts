@@ -48,7 +48,8 @@ function announceComparison(opportunity: Opportunity) {
 function announceOpportunity(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
   const {sport} = b1;
-  console.group(`${profitToString(profitable.profit)} profit opportunity! 💰 ${sportToString(b1.sport)} 🛒 ${marketToString(b1.market, sport)} `);
+  console.group(`${profitToString(profitable.profit)} profit opportunity! ${profitable._id}`);
+  console.log(`${sportToString(b1.sport)} 🛒 ${marketToString(b1.market, sport)}`);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
   console.groupEnd();
@@ -146,16 +147,18 @@ async function run() {
         && moment(opportunity.stakeables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
         && moment(opportunity.stakeables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
       ) {
-        announceOpportunity(opportunity);
-
-        saveOpportunity(opportunity).then(isFresh => {
-          if (isFresh && opportunity.profit > 0.01) {
-            publishOpportunity(opportunity);
-          }
-        });
-        profitCount++;
+        if (opportunity.profit > 0.01) {
+          announceOpportunity(opportunity);
+          saveOpportunity(opportunity).then(isFresh => {
+            if (isFresh) {
+              console.log('Fresh opportunity found! Will publish.')
+              publishOpportunity(opportunity);
+            }
+          });
+          profitCount++;
+        }
       } else {
-        announceComparison(opportunity);
+        // announceComparison(opportunity);
       }
       totalCount++;
     }

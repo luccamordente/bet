@@ -1,18 +1,21 @@
 import { assertEnv } from "@bet/assert";
 import { Opportunity } from "./models/opportunity";
 import betTelegramBot from "./config/betTelegramBot";
-import { profitToString, bettableToTelegramString, participantsToString, startDateToString, houseToString, marketToString } from "./utils/string";
+import { bettableToTelegramString, participantsToString, startDateToString, houseToString, marketToString, sportToString, profitToTelegramString, telegramEscape } from "./utils/string";
 
 assertEnv(process.env, ["TELEGRAM_OPPORTUNITY_CHAT_ID"]);
 
 const { TELEGRAM_OPPORTUNITY_CHAT_ID } = process.env;
 
-export default function publishOpportunity(opportunity: Opportunity) {
+export default function publishOpportunity(opportunity: Opportunity, params?: object) {
   betTelegramBot
     .sendMessage({
       params: {
         chat_id: TELEGRAM_OPPORTUNITY_CHAT_ID,
-        text: opportunityMessage(opportunity)
+        text: opportunityMessage(opportunity),
+        parse_mode: 'MarkdownV2',
+        disable_web_page_preview: true,
+        ...params
       }
     })
     .then((resp => {
@@ -23,23 +26,20 @@ export default function publishOpportunity(opportunity: Opportunity) {
     .catch(logError);
 }
 
-function opportunityMessage(opportunity: Opportunity): string {
+export function opportunityMessage(opportunity: Opportunity): string {
   const [o1, o2] = opportunity.stakeables;
   const {
     event: { starts_at, participants },
-    market,
     sport,
   } = o1;
   return (
-    `${profitToString(opportunity.profit)}\n` +
-    `🏦 ${houseToString(o1.house)} + ${houseToString(o2.house)}\n` +
-    `🛒 ${marketToString(market, sport)}\n\n`+
-    `________________________\n\n`+
+    `${profitToTelegramString(opportunity.profit)}\n` +
+    telegramEscape(`🏦 ${houseToString(o1.house)} + ${houseToString(o2.house)}\n\n`) +
+    telegramEscape(`${sportToString(sport)}\n`) +
+    telegramEscape(`🎭 ${participantsToString(participants)}\n`) +
+    telegramEscape(`🗓  ${startDateToString(starts_at)}\n\n`) +
     `${bettableToTelegramString(o1)}\n\n` +
-    `${bettableToTelegramString(o2)}\n\n` +
-    `________________________\n\n`+
-    `🎭 ${participantsToString(participants)}\n`+
-    `🗓  ${startDateToString(starts_at)}`
+    `${bettableToTelegramString(o2)}\n`
   );
 }
 

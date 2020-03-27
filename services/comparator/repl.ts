@@ -1,10 +1,10 @@
 'use strict';
 
 import repl from 'repl';
-import DB from './src/config/db';
+import DB from './config/db';
 
-import group from './src/utils/group';
-import publishOpportunity from './src/publishOpportunity';
+import group from './utils/group';
+import publishOpportunity, { opportunityMessage } from './publishOpportunity';
 
 const replServer = repl.start({
   prompt: "cli > ",
@@ -18,7 +18,11 @@ DB.getInstance().connect().then(async (db) => {
     bettables: await db.collection('bettables'),
     opportunities: await db.collection('opportunities'),
   };
-  replServer.context.publish = publishOpportunity;
+  
+  replServer.context.publishOpportunity = function(opportunity, params) {
+    publishOpportunity(opportunity, { disable_notification: true, ...params});
+  };
+  replServer.context.opportunityMessage = opportunityMessage;
 });
 
 replServer.context.group = group;
