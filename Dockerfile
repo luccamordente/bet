@@ -17,12 +17,6 @@ RUN addgroup -S apprunner && adduser -S -g apprunner apprunner \
   # Chromium needs user home and downloads directories
   && mkdir -p /home/apprunner/Downloads \
   && chown -R apprunner:apprunner /home/apprunner
-  # # We don't need to do a `yarn install` because we are using "zero installs"
-  # # strategy for managing our dependencies. But yarn needs to create the file
-  # # .yarn/install-state.gz before running anything. So on development we want
-  # # to allow the apprunner user to write files to the .yarn directory.
-  # && mkdir -p /app/.yarn \
-  # && chown apprunner:apprunner /app/.yarn
 
 WORKDIR /app
 COPY . .
