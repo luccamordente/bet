@@ -12,5 +12,15 @@ ENV CHROME_BIN=/usr/bin/chromium-browser \
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
   PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
+# Add non-privileged user
+RUN addgroup -S apprunner && adduser -S -g apprunner apprunner \
+  # Chromium needs user home and downloads directories
+  && mkdir -p /home/apprunner/Downloads \
+  && chown -R apprunner:apprunner /home/apprunner
+
 WORKDIR /app
 COPY . .
+RUN yarn install --immutable --immutable-cache
+
+# Run everything after as non-privileged user.
+USER apprunner
