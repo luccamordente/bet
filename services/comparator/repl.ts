@@ -6,6 +6,9 @@ import DB from './config/db';
 import group from './utils/group';
 import publishOpportunity, { opportunityMessage } from './publishOpportunity';
 
+import { SendMessageParams } from '@bet/telegram-bot-api';
+import { Opportunity } from './models/opportunity';
+
 const replServer = repl.start({
   prompt: "cli > ",
   terminal: true
@@ -19,7 +22,7 @@ DB.getInstance().connect().then(async (db) => {
     opportunities: await db.collection('opportunities'),
   };
   
-  replServer.context.publishOpportunity = function(opportunity, params) {
+  replServer.context.publishOpportunity = function(opportunity: Opportunity, params: SendMessageParams) {
     publishOpportunity(opportunity, { disable_notification: true, ...params});
   };
   replServer.context.opportunityMessage = opportunityMessage;

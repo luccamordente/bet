@@ -1,13 +1,22 @@
 import { assertEnv } from "@bet/assert";
 import { Opportunity } from "./models/opportunity";
 import betTelegramBot from "./config/betTelegramBot";
-import { bettableToTelegramString, participantsToString, startDateToString, houseToString, marketToString, sportToString, profitToTelegramString, telegramEscape } from "./utils/string";
+import { 
+  bettableToTelegramString,
+  participantsToString,
+  startDateToString,
+  houseToString,
+  sportToString,
+  profitToTelegramString,
+  telegramEscape,
+} from "./utils/string";
+import { SendMessageParams } from "@bet/telegram-bot-api";
 
 assertEnv(process.env, ["TELEGRAM_OPPORTUNITY_CHAT_ID"]);
 
 const { TELEGRAM_OPPORTUNITY_CHAT_ID } = process.env;
 
-export default function publishOpportunity(opportunity: Opportunity, params?: object) {
+export default function publishOpportunity(opportunity: Opportunity, params?: SendMessageParams) {
   betTelegramBot
     .sendMessage({
       params: {

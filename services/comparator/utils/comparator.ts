@@ -37,7 +37,7 @@ function combine<T>(
     items: T[],
     filter: (a: T, b: T, i: number, j: number) => boolean
   ): [T,T][] {
-  const final = [];
+  const final: [T,T][] = [];
 
   for (let i = 0; i < items.length; i++) {
     const a = items[i];
