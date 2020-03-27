@@ -10,7 +10,7 @@ import {
   profitToTelegramString,
   telegramEscape,
 } from "./utils/string";
-import { SendMessageParams } from "../../packages/telegram-bot-api";
+import { SendMessageParams } from "@bet/telegram-bot-api";
 
 assertEnv(process.env, ["TELEGRAM_OPPORTUNITY_CHAT_ID"]);
 

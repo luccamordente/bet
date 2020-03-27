@@ -6,7 +6,7 @@ import DB from './config/db';
 import group from './utils/group';
 import publishOpportunity, { opportunityMessage } from './publishOpportunity';
 
-import { SendMessageParams } from '../../packages/telegram-bot-api';
+import { SendMessageParams } from '@bet/telegram-bot-api';
 import { Opportunity } from './models/opportunity';
 
 const replServer = repl.start({
