@@ -32,7 +32,7 @@ async function* retriveBets() {
     browser = await puppeteer.launch({
       headless: true,
         defaultViewport: { width: 1900, height: 10900},
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: [],
     });
     const page = (await browser.pages())[0];
     const homepage = new HomePage(page, "https://br.1xbet.com/" );
