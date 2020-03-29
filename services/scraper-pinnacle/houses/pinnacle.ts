@@ -242,6 +242,37 @@ async function* retriveBets() {
 //   }
 // }
 
+function logBettable(bettable: Bettable) {
+  const {
+    sport,
+    market,
+    odd,
+    event: {
+      starts_at,
+      participants
+    },
+    url,
+  } = bettable;
+
+  console.log(
+    `💾 Pinnacle ${sport} ${market.key}` +
+    ` (${market.operation.operator} ${market.operation.value} ⇢ ${Math.round(odd*100)/100})` +
+    ` ${starts_at.toLocaleString('pt-BR', { 
+        timeZone: 'America/Sao_Paulo',
+        year: undefined,
+        month: 'short',
+        day: 'numeric',
+        weekday: 'short',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZoneName: "short"
+      })}` +
+    ` ${participants.home} × ${participants.away}` +
+    ` ${url}`
+  );
+}
+
 export default async function retriveBetsAndUpdateDb(): Promise<number> {
   // validate();
 
@@ -249,7 +280,7 @@ export default async function retriveBetsAndUpdateDb(): Promise<number> {
 
   for await (const bet of retriveBets()) {
     const bettable = normalizeBet(bet);
-    console.log(`💾 Pinnacle ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100}) ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
+    logBettable(bettable)
     saveBettable(bettable);
     savedCount++;
   }

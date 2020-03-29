@@ -169,7 +169,7 @@ function processReport(rawReport: RawReport): Report {
 async function getReport(): Promise<RawReport> {
   return await getCollection().aggregate([
     {
-      $match: { extracted_at: { $gt: new Date(new Date().getTime() - 1000 * 2 * 60), /* last 2 minutes */ } }
+      $match: { extracted_at: { $gt: new Date(new Date().getTime() - 1000 * 60 * 1), /* last 2 minutes */ } }
     }, {
       $group: {
         _id: { house: "$house", sport: "$sport", },

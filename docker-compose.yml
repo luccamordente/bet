@@ -67,7 +67,7 @@ services:
   # Scrapers
 
   scraper-marathon:
-    <<: *headless-chrome
+    build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
     networks:
