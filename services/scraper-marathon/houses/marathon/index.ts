@@ -21,6 +21,10 @@ declare const document: {
   body: {
     innerHTML: string,
   },
+  cookie: string,
+  location: {
+    reload: () => void,
+  }
 };
 
 const SPORTS = [
@@ -37,45 +41,33 @@ const TIME_SPAN_HOURS = 24;
 class MarathonWebsite {
 
   async *retrieveBets(): AsyncGenerator<Bet> {
-    let browser: puppeteer.Browser;
     try {
-      browser = await this.launch();
-      const page = await browser.newPage();
-
-      // Load any page
-      await page.goto('https://www.marathonbet.com/pt/betting/11?periodGroupAllEvents=0');
-      await page.evaluate(() => document.body.innerHTML = "" );
-
       for (const sport of SPORTS) {
-        const sportPage = new SportPage(page, `https://www.marathonbet.com/pt/betting/${sport.id}?periodGroupAllEvents=${TIME_SPAN_HOURS}`);
+        const sportPage = new SportPage(`https://www.marathonbet.com/en/betting/${sport.id}?periodGroupAllEvents=${TIME_SPAN_HOURS}`);
+        
+        const { urls } = await sportPage.getData();
+        
+        for (const url of urls) {
+          const eventPage = new FootballMatchPage(url);
 
-        // Each page of url data
-        for await (const {urls} of sportPage.getData()) {
-
-          for (const url of urls) {
-            const eventPage = new FootballMatchPage(page, url);
-
-            // Each page of match data
-            for await (const data of eventPage.getData()) {
-              if (data === undefined) {
-                continue;
-              }
-              const extractTime = new Date();
-
-              for (const price of data.prices) {
-
-                const bet: Bet = {
-                  sport: sport.key,
-                  members: data.members,
-                  date: data.date,
-                  url: data.url,
-                  extractTime,
-                  price
-                }
-                yield bet;
-              }
+          for await (const data of eventPage.getData()) {
+            if (data === undefined) {
+              continue;
             }
+            const extractTime = new Date();
 
+            for (const price of data.prices) {
+              const bet: Bet = {
+                sport: sport.key,
+                members: data.members,
+                date: data.date,
+                url: data.url,
+                extractTime,
+                price
+              }
+
+              yield bet;
+            }
           }
 
         }
@@ -83,18 +75,8 @@ class MarathonWebsite {
       }
     } catch(error) {
       console.log(error);
-    } finally {
-      browser.close();
     }
   };
-
-  private launch(): Promise<puppeteer.Browser> {
-    return puppeteer.launch({
-      headless: true,
-      defaultViewport: { width: 1900, height: 5000 },
-      args: [],
-    });
-  }
 }
 
 function normalizeDate(date: string): Date {
@@ -176,6 +158,7 @@ function normalizeBet(bet: Bet): Bettable {
 export default async function *retriveBets() {
   const website = new MarathonWebsite();
   for await (const bet of website.retrieveBets()) {
+    console.log(JSON.stringify(bet));
     yield normalizeBet(bet);
   }
 }

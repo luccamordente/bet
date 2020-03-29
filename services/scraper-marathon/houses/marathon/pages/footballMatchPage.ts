@@ -1,7 +1,5 @@
 import axios from 'axios';
-
-import { getInnerText } from '../../../utils/pageHelpers';
-import BasePage from './basePage';
+import { parse as parseHTML } from 'node-html-parser';
 
 import { MarketName } from '../types';
 import * as types from "./types";
@@ -75,25 +73,28 @@ function filterMarket(mn: string, sn: string): boolean {
   }
 }
 
-class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageData> {
+class FootballMatchPage {
+  private url: string;
+  private root: any;
 
-  selectors = {
+  private selectors = {
     memberName: '.member-area-content-table .member-link',
     date: '.member-area-content-table .date',
-    bet: '.price[data-sel]',
+    bet: '.price',
     sport: '.sport-category-label',
   };
 
-  private async parseDate(): Promise<string> {
-    return await (await this.page.$(this.selectors.date)).evaluate(getInnerText);
+  constructor(url:string) {
+    this.url = url;
   }
 
-  private async parseMembers(): Promise<Members> {
-    const elements = await this.page.$$(this.selectors.memberName);
-    const names = [];
-    for (const element of elements) {
-      names.push(await element.evaluate(getInnerText));
-    }
+  private parseDate(): string {
+    return this.root.querySelector(this.selectors.date).text.trim();
+  }
+
+  private parseMembers(): Members {
+    const elements = this.root.querySelectorAll(this.selectors.memberName);
+    const names = elements.map(e => e.text.trim());
     const [home, away] = names;
     return {home, away};
   }
@@ -104,22 +105,29 @@ class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageDat
     });
   }
 
-  private async parsePrices(): Promise<Price[]> {
-    const prices = await this.page.$$eval(this.selectors.bet, (nodes) => {
-      return nodes.map(node => {
-        const {sn, mn, epr} = JSON.parse(node.getAttribute('data-sel')) as Price;
-        return {sn, mn, epr};
-      })
-    }) as unknown as Price[];
+  private parsePrices(): Price[] {
+    const nodes = this.root.querySelectorAll(this.selectors.bet);
+    const prices: Price[] = [];
+    for (const node of nodes) {
+      const priceData = node.getAttribute('data-sel');
+      if (priceData) {
+        const {sn, mn, epr} = JSON.parse(priceData);
+        prices.push({sn, mn, epr});
+      }
+    }
     return this.filterPrices(prices);
   }
 
-  protected async getContent(page: number): Promise<types.Content> {
+  private async getContent(): Promise<types.Content> {
     const url = new URL(this.url);
     // Apparently match pages don't have pagination
     url.searchParams.append('pageAction', 'default');
 
-    const response = await axios.get<Response>(url.toString());
+    const response = await axios.get<Response>(url.toString(), {
+      headers: {
+        Cookie: 'timezone = Atlantic_Azores;path=/'
+      }
+    });
     const [,{content}] = response.data;
 
     return {
@@ -128,10 +136,10 @@ class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageDat
     };
   }
 
-  protected async parseContent(): Promise<FootballMatchData> {
-    const date = await this.parseDate();
-    const members = await this.parseMembers();
-    const prices = await this.parsePrices();
+  private parseContent(): FootballMatchData {
+    const date = this.parseDate();
+    const members = this.parseMembers();
+    const prices = this.parsePrices();
 
     const data = {
       date,
@@ -141,11 +149,23 @@ class FootballMatchPage extends BasePage<FootballMatchData, FootballMatchPageDat
     return data;
   }
 
-  protected prepareData(data): FootballMatchPageData {
+  private prepareData(data): FootballMatchPageData {
     return Object.assign(data, {
       url: this.url,
     });
   }
+
+  public async *getData(): AsyncGenerator<FootballMatchPageData> {
+    try {
+      const content = await this.getContent();
+      this.root = parseHTML(content.content);
+      const data = this.parseContent();
+      yield this.prepareData(data);
+    } catch(e) {
+      console.error("Error getting data", e.message, e.stack);
+    }
+  }
+
 }
 
 export default FootballMatchPage;

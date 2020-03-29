@@ -170,11 +170,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/scraper-marathon", "workspace:services/scraper-marathon"],
             ["@types/mongodb", "npm:3.5.3"],
             ["@types/node", "npm:13.9.4"],
-            ["@types/puppeteer", "npm:2.0.1"],
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
-            ["puppeteer", "npm:2.1.1"],
+            ["node-html-parser", "npm:1.2.13"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
@@ -708,6 +707,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["he", [
+        ["npm:1.1.1", {
+          "packageLocation": "./.yarn/cache/he-npm-1.1.1-441b4d33c6-2.zip/node_modules/he/",
+          "packageDependencies": [
+            ["he", "npm:1.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["https-proxy-agent", [
         ["npm:4.0.0", {
           "packageLocation": "./.yarn/cache/https-proxy-agent-npm-4.0.0-9021ec873f-2.zip/node_modules/https-proxy-agent/",
@@ -886,6 +894,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.0-29c7a53447-2.zip/node_modules/node-fetch/",
           "packageDependencies": [
             ["node-fetch", "npm:2.6.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-html-parser", [
+        ["npm:1.2.13", {
+          "packageLocation": "./.yarn/cache/node-html-parser-npm-1.2.13-87b61f7f67-2.zip/node_modules/node-html-parser/",
+          "packageDependencies": [
+            ["node-html-parser", "npm:1.2.13"],
+            ["he", "npm:1.1.1"]
           ],
           "linkType": "HARD",
         }]

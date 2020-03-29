@@ -1,7 +1,5 @@
-import moment from 'moment';
-
 import retrieveBets from './houses/marathon';
-import { save } from './models/bettable';
+import { save, Bettable } from './models/bettable';
 
 import DB from './config/db';
 
@@ -9,13 +7,44 @@ import DB from './config/db';
 const NAME = "Marathon";
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
 
+function logBettable(bettable: Bettable) {
+  const {
+    sport,
+    market,
+    odd,
+    event: {
+      starts_at,
+      participants
+    },
+    url,
+  } = bettable;
+
+  console.log(
+    `💾 Marathon ${sport} ${market.key}` +
+    ` (${market.operation.operator} ${market.operation.value} ⇢ ${Math.round(odd*100)/100})` +
+    ` ${starts_at} ${starts_at.toLocaleString('pt-BR', { 
+        timeZone: 'America/Sao_Paulo',
+        year: undefined,
+        month: 'short',
+        day: 'numeric',
+        weekday: 'short',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZoneName: "short"
+      })}` +
+    ` ${participants.home} × ${participants.away}` +
+    ` ${url}`
+  );
+}
+
 async function run() {
   console.log(`Starting ${NAME} sync.`);
   console.time(NAME);
 
   let count = 0;
   for await (const bettable of retrieveBets()) {
-    console.log(`💾 Marathon ${bettable.sport} ${bettable.market.key} (${bettable.market.operation.operator} ${bettable.market.operation.value} ⇢ ${Math.round(bettable.odd*100)/100})  ${moment(bettable.event.starts_at).format('DD/MM hh:mm')}`);
+    logBettable(bettable);
     save(bettable).catch(error => {
       console.error(error);
     });
