@@ -73,7 +73,7 @@ class SportPage {
         const parsed = this.parseContent();
 
         hasNextPage = content.hasNextPage;
-        data.urls.concat(parsed);
+        data.urls = data.urls.concat(parsed);
 
         pageNumber++;
       }
