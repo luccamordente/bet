@@ -67,6 +67,7 @@ services:
   # Scrapers
 
   scraper-marathon:
+    build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
     networks:
