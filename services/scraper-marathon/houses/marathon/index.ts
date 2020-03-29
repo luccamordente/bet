@@ -31,7 +31,7 @@ const SPORTS = [
   // { key: 'tabletennis', id: 382549, },
   // { key: 'tennis', id: 2398, },
 ];
-const TIME_SPAN_HOURS = 24 * 5;
+const TIME_SPAN_HOURS = 24;
 
 
 class MarathonWebsite {

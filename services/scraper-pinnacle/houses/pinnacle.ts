@@ -20,7 +20,7 @@ const SPORTS: { key: string, id: number }[] = [
   // { key: 'tabletennis', id: 32, },
   // { key: 'tennis', id: 33, },
 ];
-const TIME_SPAN_HOURS: number = 24 * 5;
+const TIME_SPAN_HOURS: number = 24;
 
 const NORMALIZED_MARKET_KEY: { [key:string]: MarketKey } = {
   's;0;ou;': 'game_score_total',   // score; on game; over/under
