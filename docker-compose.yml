@@ -49,7 +49,7 @@ services:
     command: [yarn, workspace, "@bet/comparator", dev]
     environment:
       - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
-      - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001355004972
+      - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001315097157
     networks:
       - app-tier
     depends_on:
