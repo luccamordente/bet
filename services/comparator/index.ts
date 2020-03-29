@@ -13,6 +13,8 @@ import publishOpportunity from './publishOpportunity';
 
 const MAXIMUM_EXTRACT_MINUTES = 1;
 
+const MINIMUM_PROFIT_TO_PUBLISH = 0.02;
+
 const PARTICIPANT_NAME_SANITIZERS = [
   // E-sports: some strings are clipped, so this matches espo
   /\s?\be\-?spor?t?s?\b\s?/i,
@@ -147,7 +149,7 @@ async function run() {
         && moment(opportunity.stakeables[0].extracted_at).isAfter(moment().subtract(10, 'minutes'))
         && moment(opportunity.stakeables[1].extracted_at).isAfter(moment().subtract(10, 'minutes'))
       ) {
-        if (opportunity.profit > 0.01) {
+        if (opportunity.profit > MINIMUM_PROFIT_TO_PUBLISH) {
           announceOpportunity(opportunity);
           saveOpportunity(opportunity).then(isFresh => {
             if (isFresh) {
