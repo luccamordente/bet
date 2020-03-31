@@ -43,7 +43,7 @@ class SportPage {
     url.searchParams.append('pageAction', 'getPage');
     url.searchParams.append('page', `${page}`);
 
-    const response = await axios.get<Response>(url.toString());
+    const response = await axios.get<Response>(url.toString(), { timeout: 10000 });
     const [{content}, {val: hasNextPage}] = response.data;
 
     return {

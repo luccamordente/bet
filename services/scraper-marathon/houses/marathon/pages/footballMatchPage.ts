@@ -126,7 +126,8 @@ class FootballMatchPage {
     const response = await axios.get<Response>(url.toString(), {
       headers: {
         Cookie: 'timezone = Atlantic_Azores;path=/'
-      }
+      },
+      timeout: 10000,
     });
     const [,{content}] = response.data;
 

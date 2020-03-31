@@ -1,16 +1,16 @@
-import axios from 'axios';
+import Axios from 'axios';
 import moment from 'moment';
 
 import { americanToDecimal } from '../utils/odds';
 
 import { save as saveBettable, Bettable, BettableMarket, MarketKey } from '../models/bettable';
 
-const DEFAULT_REQUEST_CONFIG = {
-    headers: {"accept":"application/json","content-type":"application/json","x-api-key":"CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R","x-device-uuid":"995eb6f3-65211f6e-e22c04e9-42a211b8", referrer: "https://www.pinnacle.com/en/soccer/leagues/","referrerPolicy":"no-referrer-when-downgrade",},
-    withCredentials: false,
-  }
-
-const API_HOST = "https://guest.api.arcadia.pinnacle.com/0.1";
+const axios = Axios.create({
+  baseURL: 'https://guest.api.arcadia.pinnacle.com/0.1',
+  headers: {"accept":"application/json","content-type":"application/json","x-api-key":"CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R","x-device-uuid":"995eb6f3-65211f6e-e22c04e9-42a211b8", referrer: "https://www.pinnacle.com/en/soccer/leagues/","referrerPolicy":"no-referrer-when-downgrade",},
+  withCredentials: false,
+  timeout: 10000,
+});
 
 const SPORTS: { key: string, id: number }[] = [
   { key: 'basketball', id: 4, },
@@ -87,7 +87,7 @@ interface Market {
 async function getSportLeagues(sportId: Id): Promise<League[]> {
   let leagues: League[];
   try {
-    leagues = (await axios.get(`${API_HOST}/sports/${sportId}/leagues?all=false`, DEFAULT_REQUEST_CONFIG)).data;
+    leagues = (await axios.get(`/sports/${sportId}/leagues?all=false`)).data;
   } catch (error) {
     console.error(`Error getting sport leagues from sport ${sportId}`, error);
     return [];
@@ -99,7 +99,7 @@ async function* getMatchBets(matchId: Id) {
   let markets: Market[];
   let extractTime;
   try {
-    markets = (await axios.get(`${API_HOST}/matchups/${matchId}/markets/related/straight`, DEFAULT_REQUEST_CONFIG)).data;
+    markets = (await axios.get(`/matchups/${matchId}/markets/related/straight`)).data;
     extractTime = new Date();
   } catch (error) {
     console.error(`Error getting match bets from match ${matchId}`, error);
@@ -134,7 +134,7 @@ async function* getMatchBets(matchId: Id) {
 async function getLeagueMatches(leagueId: Id): Promise<Match[]> {
   let matches: Match[];
   try {
-    matches = (await axios.get(`${API_HOST}/leagues/${leagueId}/matchups`, DEFAULT_REQUEST_CONFIG)).data;
+    matches = (await axios.get(`/leagues/${leagueId}/matchups`)).data;
   } catch (error) {
     console.error(`Error getting league matches from league ${leagueId}`, error);
     return [];
