@@ -1,4 +1,4 @@
-import MongoClient from "mongodb";
+import { MongoClient } from "mongodb";
 
 export default class DB {
   private static instance;
@@ -8,18 +8,9 @@ export default class DB {
   private constructor () {}
 
   async connect() {
-    this.client = await new MongoClient("mongodb://mongodb");
-
-    return new Promise((resolve, reject) => {
-      this.client.connect((error, conn) => {
-        if (error === null) {
-          this.db = conn.db('betterbet');
-          resolve(this.db);
-        } else {
-          reject(error);
-        }
-      });
-    });
+    this.client = await MongoClient.connect(process.env.MONGODB_CONNECTION_URI);
+    this.db = this.client.db('betterbet');
+    return this.db;
   }
 
   async close() {

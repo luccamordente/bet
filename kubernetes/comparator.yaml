@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comparator
+spec:
+  selector:
+    matchLabels:
+      app: comparator
+  template:
+    metadata:
+      labels:
+        app: comparator
+    spec:
+      containers:
+        - name: comparator
+          image: poluga:latest
+          command: [yarn, workspace, "@bet/comparator", dev]
+          env:
+            - name: BET_TELEGRAM_BOT_TOKEN
+              value: 1001253173:AAFY2ven2e7ezTjddRvmsUJRJS2ulCX-1o4
+            - name: TELEGRAM_OPPORTUNITY_CHAT_ID
+              value: "-1001475105744"
+            - name: MONGODB_CONNECTION_URI
+              value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "250m"

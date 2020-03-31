@@ -50,6 +50,7 @@ services:
     environment:
       - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
       - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001315097157
+      - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
     depends_on:
@@ -59,6 +60,8 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/health", dev]
+    environment: 
+      - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
     depends_on:
@@ -70,6 +73,8 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
+    environment: 
+      - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
     depends_on:
@@ -79,6 +84,8 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
+    environment: 
+      - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
     depends_on:
@@ -88,6 +95,8 @@ services:
   #   <<: *headless-chrome
   #   volumes: *default-volumes
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
+  #   environment: 
+  #     - MONGODB_CONNECTION_URI=mongodb://mongodb
   #   networks:
   #     - app-tier
   #   depends_on:

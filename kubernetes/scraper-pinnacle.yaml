@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-pinnacle
+spec:
+  selector:
+    matchLabels:
+      app: scraper-pinnacle
+  template:
+    metadata:
+      labels:
+        app: scraper-pinnacle
+    spec:
+      containers:
+        - name: scraper-pinnacle
+          image: poluga:latest
+          command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
+          env:
+            - name: MONGODB_CONNECTION_URI
+              value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "250m"

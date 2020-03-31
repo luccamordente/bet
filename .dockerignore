@@ -16,3 +16,9 @@
 Dockerfile
 docker-compose.yml
 /docker
+
+# Kubernetes
+/kubernetes
+
+# Deploy
+/deploy_local.sh
