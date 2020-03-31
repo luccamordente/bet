@@ -17,9 +17,9 @@ spec:
           command: [yarn, workspace, "@bet/comparator", dev]
           env:
             - name: BET_TELEGRAM_BOT_TOKEN
-              value: 1001253173:AAFY2ven2e7ezTjddRvmsUJRJS2ulCX-1o4
+              value: 1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
             - name: TELEGRAM_OPPORTUNITY_CHAT_ID
-              value: "-1001475105744"
+              value: "-1001315097157"
             - name: MONGODB_CONNECTION_URI
               value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
           resources:

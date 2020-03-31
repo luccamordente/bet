@@ -48,8 +48,8 @@ services:
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/comparator", dev]
     environment:
-      - BET_TELEGRAM_BOT_TOKEN=1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
-      - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001315097157
+      - BET_TELEGRAM_BOT_TOKEN=1001253173:AAFY2ven2e7ezTjddRvmsUJRJS2ulCX-1o4
+      - TELEGRAM_OPPORTUNITY_CHAT_ID=-1001475105744
       - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
