@@ -4,8 +4,8 @@
     "dev": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
-    "@types/mongodb": "^3.5.3",
-    "@types/node": "^13.9.4",
+    "@types/mongodb": "^3.5.4",
+    "@types/node": "^13.9.8",
     "moment": "^2.24.0",
     "mongodb": "^3.5.5"
   },

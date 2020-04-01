@@ -107,8 +107,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/comparator", "workspace:services/comparator"],
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/telegram-bot-api", "workspace:packages/telegram-bot-api"],
-            ["@types/mongodb", "npm:3.5.3"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
             ["@types/string-similarity", "npm:3.0.0"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
@@ -136,8 +136,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/health/",
           "packageDependencies": [
             ["@bet/health", "workspace:services/health"],
-            ["@types/mongodb", "npm:3.5.3"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
@@ -151,8 +151,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-1xbet/",
           "packageDependencies": [
             ["@bet/scraper-1xbet", "workspace:services/scraper-1xbet"],
-            ["@types/mongodb", "npm:3.5.3"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
             ["@types/puppeteer", "npm:2.0.1"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
@@ -168,12 +168,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-marathon/",
           "packageDependencies": [
             ["@bet/scraper-marathon", "workspace:services/scraper-marathon"],
-            ["@types/mongodb", "npm:3.5.3"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
-            ["node-html-parser", "npm:1.2.13"],
+            ["node-html-parser", "npm:1.2.14"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
@@ -185,8 +185,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-pinnacle/",
           "packageDependencies": [
             ["@bet/scraper-pinnacle", "workspace:services/scraper-pinnacle"],
-            ["@types/mongodb", "npm:3.5.3"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],
             ["mongodb", "npm:3.5.5"],
@@ -212,7 +212,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-bson-npm-4.0.2-c4463d9659-2.zip/node_modules/@types/bson/",
           "packageDependencies": [
             ["@types/bson", "npm:4.0.2"],
-            ["@types/node", "npm:13.9.4"]
+            ["@types/node", "npm:13.9.8"]
           ],
           "linkType": "HARD",
         }]
@@ -245,21 +245,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/mongodb", [
-        ["npm:3.5.3", {
-          "packageLocation": "./.yarn/cache/@types-mongodb-npm-3.5.3-eba506a9b2-2.zip/node_modules/@types/mongodb/",
+        ["npm:3.5.4", {
+          "packageLocation": "./.yarn/cache/@types-mongodb-npm-3.5.4-fa7ded479f-2.zip/node_modules/@types/mongodb/",
           "packageDependencies": [
-            ["@types/mongodb", "npm:3.5.3"],
+            ["@types/mongodb", "npm:3.5.4"],
             ["@types/bson", "npm:4.0.2"],
-            ["@types/node", "npm:13.9.4"]
+            ["@types/node", "npm:13.9.8"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@types/node", [
-        ["npm:13.9.4", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-13.9.4-2c8636aea7-2.zip/node_modules/@types/node/",
+        ["npm:13.9.8", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-13.9.8-71b44edd15-2.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:13.9.4"]
+            ["@types/node", "npm:13.9.8"]
           ],
           "linkType": "HARD",
         }]
@@ -269,7 +269,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.5-8e8fd22b28-2.zip/node_modules/@types/node-fetch/",
           "packageDependencies": [
             ["@types/node-fetch", "npm:2.5.5"],
-            ["@types/node", "npm:13.9.4"],
+            ["@types/node", "npm:13.9.8"],
             ["form-data", "npm:3.0.0"]
           ],
           "linkType": "HARD",
@@ -280,7 +280,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-puppeteer-npm-2.0.1-e37ace954a-2.zip/node_modules/@types/puppeteer/",
           "packageDependencies": [
             ["@types/puppeteer", "npm:2.0.1"],
-            ["@types/node", "npm:13.9.4"]
+            ["@types/node", "npm:13.9.8"]
           ],
           "linkType": "HARD",
         }]
@@ -899,10 +899,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["node-html-parser", [
-        ["npm:1.2.13", {
-          "packageLocation": "./.yarn/cache/node-html-parser-npm-1.2.13-87b61f7f67-2.zip/node_modules/node-html-parser/",
+        ["npm:1.2.14", {
+          "packageLocation": "./.yarn/cache/node-html-parser-npm-1.2.14-426c1f9609-2.zip/node_modules/node-html-parser/",
           "packageDependencies": [
-            ["node-html-parser", "npm:1.2.13"],
+            ["node-html-parser", "npm:1.2.14"],
             ["he", "npm:1.1.1"]
           ],
           "linkType": "HARD",
