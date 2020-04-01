@@ -7,5 +7,5 @@
  */
 export function sanitizedEquals(a: string, b: string): boolean {
   const sanitizer = /[^\w]+/i;
-  return a.replace(sanitizer, '') === b.replace(sanitizer, '');
+  return a.replace(sanitizer, "") === b.replace(sanitizer, "");
 }

@@ -1,28 +1,28 @@
-import axios from 'axios';
-import { parse as parseHTML } from 'node-html-parser';
+import axios from "axios";
+import { parse as parseHTML } from "node-html-parser";
 
-import { MarketName } from '../types';
+import { MarketName } from "../types";
 import * as types from "./types";
-import { URL } from 'url';
+import { URL } from "url";
 
 export type Members = {
-  home: string,
-  away: string,
+  home: string;
+  away: string;
 };
 
 interface ReponseContent<Selector> {
-  selector: Selector,
-  content: string,
-};
+  selector: Selector;
+  content: string;
+}
 
 interface ResponseProp {
-  prop: string,
-  val: any,
+  prop: string;
+  val: any;
 }
 
 type Response = [
-  ReponseContent<'#footerLinks'>,
-  ReponseContent<'#events_content'>,
+  ReponseContent<"#footerLinks">,
+  ReponseContent<"#events_content">,
   ResponseProp,
   ResponseProp,
   ResponseProp,
@@ -32,24 +32,24 @@ type Response = [
 ];
 
 interface FootballMatchData {
-  members: Members,
-  date: string,
-  prices: Price[],
+  members: Members;
+  date: string;
+  prices: Price[];
 }
 
 interface FootballMatchPageData extends FootballMatchData {
-  url: string,
-};
+  url: string;
+}
 
 /**
  * Example string:
  * {"sn":"Under 3.5","mn":"Total Goals","ewc":"1/1 1","cid":51448346250,"prt":"CP","ewf":"1.0","epr":"1.27","prices":{"0":"27/100","1":"1.27","2":"-371","3":"0.27","4":"0.27","5":"-3.71"}}
  */
 export interface Price {
-  sn: string,  // ??
-  mn: string,  // Market Name
-  epr: string, // E? Price
-};
+  sn: string; // ??
+  mn: string; // Market Name
+  epr: string; // E? Price
+}
 
 export function assertMarket(marketName: never): boolean {
   return false;
@@ -78,13 +78,13 @@ class FootballMatchPage {
   private root: any;
 
   private selectors = {
-    memberName: '.member-area-content-table .member-link',
-    date: '.member-area-content-table .date',
-    bet: '.price',
-    sport: '.sport-category-label',
+    memberName: ".member-area-content-table .member-link",
+    date: ".member-area-content-table .date",
+    bet: ".price",
+    sport: ".sport-category-label",
   };
 
-  constructor(url:string) {
+  constructor(url: string) {
     this.url = url;
   }
 
@@ -94,13 +94,13 @@ class FootballMatchPage {
 
   private parseMembers(): Members {
     const elements = this.root.querySelectorAll(this.selectors.memberName);
-    const names = elements.map(e => e.text.trim());
+    const names = elements.map((e) => e.text.trim());
     const [home, away] = names;
-    return {home, away};
+    return { home, away };
   }
 
   private filterPrices(prices: Price[]): Price[] {
-    return prices.filter(price => {
+    return prices.filter((price) => {
       return filterMarket(price.mn, price.sn);
     });
   }
@@ -109,10 +109,10 @@ class FootballMatchPage {
     const nodes = this.root.querySelectorAll(this.selectors.bet);
     const prices: Price[] = [];
     for (const node of nodes) {
-      const priceData = node.getAttribute('data-sel');
+      const priceData = node.getAttribute("data-sel");
       if (priceData) {
-        const {sn, mn, epr} = JSON.parse(priceData);
-        prices.push({sn, mn, epr});
+        const { sn, mn, epr } = JSON.parse(priceData);
+        prices.push({ sn, mn, epr });
       }
     }
     return this.filterPrices(prices);
@@ -121,15 +121,15 @@ class FootballMatchPage {
   private async getContent(): Promise<types.Content> {
     const url = new URL(this.url);
     // Apparently match pages don't have pagination
-    url.searchParams.append('pageAction', 'default');
+    url.searchParams.append("pageAction", "default");
 
     const response = await axios.get<Response>(url.toString(), {
       headers: {
-        Cookie: 'timezone = Atlantic_Azores;path=/'
+        Cookie: "timezone = Atlantic_Azores;path=/",
       },
       timeout: 10000,
     });
-    const [,{content}] = response.data;
+    const [, { content }] = response.data;
 
     return {
       content,
@@ -162,11 +162,10 @@ class FootballMatchPage {
       this.root = parseHTML(content.content);
       const data = this.parseContent();
       yield this.prepareData(data);
-    } catch(e) {
+    } catch (e) {
       console.error("Error getting data", e.message, e.stack);
     }
   }
-
 }
 
 export default FootballMatchPage;

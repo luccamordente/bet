@@ -60,7 +60,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/health", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
@@ -73,7 +73,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
@@ -84,7 +84,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
@@ -95,7 +95,7 @@ services:
   #   <<: *headless-chrome
   #   volumes: *default-volumes
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
-  #   environment: 
+  #   environment:
   #     - MONGODB_CONNECTION_URI=mongodb://mongodb
   #   networks:
   #     - app-tier

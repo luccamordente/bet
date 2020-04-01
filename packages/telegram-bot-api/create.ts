@@ -60,6 +60,8 @@ export default function createTelegramBotAPI(token: string) {
      * Use this method to send text messages.
      * https://core.telegram.org/bots/api#sendmessage
      */
-    sendMessage: createPOST<types.Message, SendMessageParams>(getURI('sendMessage', baseURI)),
+    sendMessage: createPOST<types.Message, SendMessageParams>(
+      getURI("sendMessage", baseURI),
+    ),
   } as const;
 }

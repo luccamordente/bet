@@ -1,4 +1,4 @@
-import DB from '@bet/db';
+import DB from "@bet/db";
 
 import { Bettable } from "./bettable";
 
@@ -9,18 +9,18 @@ export type Stakeable = Bettable & {
 type Combination = [Stakeable, Stakeable];
 
 export type Opportunity = {
-  _id?: string,
-  stakeables: Combination,
-  profit: number,
+  _id?: string;
+  stakeables: Combination;
+  profit: number;
   createdAt: Date;
   updatedAt: Date;
 };
 
 function generateId(opportunity: Opportunity): string {
   return opportunity.stakeables
-    .map(s => s._id.toString())
+    .map((s) => s._id.toString())
     .sort()
-    .join('/');
+    .join("/");
 }
 
 /**
@@ -31,8 +31,8 @@ function generateId(opportunity: Opportunity): string {
  * or `false` if no operation was done on the database.
  */
 export async function save(opportunity: Opportunity): Promise<boolean> {
-  const {db} = DB.getInstance();
-  const collection = db.collection('opportunities');
+  const { db } = DB.getInstance();
+  const collection = db.collection("opportunities");
 
   const id = generateId(opportunity);
   opportunity._id = id;

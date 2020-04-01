@@ -1,4 +1,4 @@
-import Operation from './operation';
+import Operation from "./operation";
 
 function isInteger(value: number): boolean {
   return value % 1 === 0;
@@ -12,8 +12,8 @@ export default class OverUnder extends Operation<"over_under"> {
     }
 
     const operations = [this.operationA, this.operationB];
-    const under = operations.find(o => o.operator === 'under');
-    const over = operations.find(o => o.operator === 'over');
+    const under = operations.find((o) => o.operator === "under");
+    const over = operations.find((o) => o.operator === "over");
 
     if (under === undefined || over === undefined) {
       throw new Error(`Can't find value for operator!`);
