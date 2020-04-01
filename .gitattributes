@@ -1,3 +1,8 @@
+# Files to be sent to large file storage
 /.yarn/releases/**/* filter=lfs diff=lfs merge=lfs -text
 /.yarn/plugins/**/* filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+
+# Mark yarn's .pnp.js as not detectable on linguist so it doesn't
+# count on language statistics
+.pnp.js -linguist-detectable
