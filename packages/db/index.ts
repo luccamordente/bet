@@ -37,7 +37,7 @@ export default class DB {
       market: 1,
       house: 1,
       sport: 1,
-      event: 1
+      event: 1,
     });
   }
 }

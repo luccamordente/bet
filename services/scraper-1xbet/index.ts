@@ -1,6 +1,6 @@
-import OneXBetRetriveBetsAndUpdateDb from  './houses/1xbet';
+import OneXBetRetriveBetsAndUpdateDb from "./houses/1xbet";
 
-import DB from '@bet/db';
+import DB from "@bet/db";
 
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
 

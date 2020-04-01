@@ -1,12 +1,12 @@
 type Group<T> = {
-  id: any,
-  items: T[],
+  id: any;
+  items: T[];
 };
 
 function groupWithMatch<T>(
   items: T[],
   matches: (a: T, b: T) => boolean,
-  id: (item: T) => any
+  id: (item: T) => any,
 ): Group<T>[] {
   const groups = [];
 
@@ -18,7 +18,7 @@ function groupWithMatch<T>(
     };
 
     // Because we remove stuff from the array, we look in reverse order.
-    for (let j = items.length-1; j >= 0; j--) {
+    for (let j = items.length - 1; j >= 0; j--) {
       if (i === j) {
         continue;
       }

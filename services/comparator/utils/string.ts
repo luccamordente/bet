@@ -8,7 +8,7 @@ const SPORTS = {
   hockey: "🏒 Hockey",
   soccer: "⚽️ Futebol",
   tabletennis: "🏓 Tênis de Mesa",
-  tennis: "🎾 Tênis"
+  tennis: "🎾 Tênis",
 } as const;
 
 export function oddToString(odd: number): string {
@@ -16,7 +16,7 @@ export function oddToString(odd: number): string {
 }
 
 function decimalToPercent(amount: number, digits: number = 0) {
-  return `${(amount * 100).toFixed(digits)}%`
+  return `${(amount * 100).toFixed(digits)}%`;
 }
 
 export function profitToString(amount: number): string {
@@ -36,17 +36,16 @@ export function houseToString(house: string) {
 }
 
 function dateToString(date: Date): string {
-  return new Date(date)
-    .toLocaleString('pt-BR', { 
-      timeZone: 'America/Sao_Paulo',
-      year: undefined,
-      month: 'short',
-      day: 'numeric',
-      weekday: 'short',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    });
+  return new Date(date).toLocaleString("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    year: undefined,
+    month: "short",
+    day: "numeric",
+    weekday: "short",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
 }
 
 export function startDateToString(startDate: Date) {
@@ -58,15 +57,19 @@ export function comparableToString(comparable: Bettable) {
     odd,
     house,
     market: { operation },
-    event: { starts_at,
-      participants }
+    event: { starts_at, participants },
   } = comparable;
   return ` 🏦 ${houseToString(house)} (${operation.operator} ${
     operation.value
-  } ⇢ ${oddToString(odd)}) 🗓  ${startDateToString(starts_at)} 🎭 ${participantsToString(participants)}`;
+  } ⇢ ${oddToString(odd)}) 🗓  ${startDateToString(
+    starts_at,
+  )} 🎭 ${participantsToString(participants)}`;
 }
 
-export function participantsToString(participants: { home: string, away: string }) {
+export function participantsToString(participants: {
+  home: string;
+  away: string;
+}) {
   const { home, away } = participants;
   return `${home} × ${away}`;
 }
@@ -111,17 +114,17 @@ function marketOperationToString(bettable: Bettable): string {
 
   let operator: string;
   switch (operation.operator) {
-    case 'home':
-      operator = participants.home
+    case "home":
+      operator = participants.home;
       break;
-    case 'away':
-      operator = participants.away
+    case "away":
+      operator = participants.away;
       break;
-    case 'over':
-      operator = 'Over ↑'
+    case "over":
+      operator = "Over ↑";
       break;
-    case 'under':
-      operator = 'Under ↓'
+    case "under":
+      operator = "Under ↓";
       break;
   }
 
@@ -137,37 +140,61 @@ export function bettableToString(stakeable: Stakeable) {
     market,
     extracted_at,
     url,
-    event: { starts_at, participants }
+    event: { starts_at, participants },
   } = stakeable;
-  return `🏦 ${houseToString(house)} 🗓  ${startDateToString(starts_at)} 🎭 ${participantsToString(participants)}
-  🛒 ${marketToString(market, sport)}: ${marketOperationToString(stakeable)} ⇢ ${oddToString(odd)}
+  return `🏦 ${houseToString(house)} 🗓  ${startDateToString(
+    starts_at,
+  )} 🎭 ${participantsToString(participants)}
+  🛒 ${marketToString(market, sport)}: ${marketOperationToString(
+    stakeable,
+  )} ⇢ ${oddToString(odd)}
   💰 Stake: ${(stake * 100).toFixed(1)}%
   🕓 ${moment(extracted_at).fromNow()}
   🔗 ${url}`;
 }
 
 export function telegramEscape(text: string): string {
-  const chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-  const regexp = new RegExp(`([${chars.map(c => `\\${c}`).join('')}])`, 'g');
-  return text.replace(regexp, '\\$1');
+  const chars = [
+    "_",
+    "*",
+    "[",
+    "]",
+    "(",
+    ")",
+    "~",
+    "`",
+    ">",
+    "#",
+    "+",
+    "-",
+    "=",
+    "|",
+    "{",
+    "}",
+    ".",
+    "!",
+  ];
+  const regexp = new RegExp(`([${chars.map((c) => `\\${c}`).join("")}])`, "g");
+  return text.replace(regexp, "\\$1");
 }
 
 export function profitToTelegramString(amount: number): string {
-  return `🍀 __*${telegramEscape(`Oportunidade! ${decimalToPercent(amount, 2)}`)}*__`;
+  return `🍀 __*${telegramEscape(
+    `Oportunidade! ${decimalToPercent(amount, 2)}`,
+  )}*__`;
 }
 
 export function bettableToTelegramString(stakeable: Stakeable) {
-  const {
-    sport,
-    house,
-    stake,
-    odd,
-    market,
-    url,
-  } = stakeable;
-  return `🏦 __${telegramEscape(houseToString(house))}__\n` +
-  telegramEscape(`   🛒 ${marketToString(market, sport)}: ${marketOperationToString(stakeable)}\n`)+
-  telegramEscape(`   ⚖️ Odd: ${oddToString(odd)}\n` )+
-  telegramEscape(`   💰Stake: ${(stake * 100).toFixed(1)}%\n` )+
-  telegramEscape(`   🔗 ${url}`);
+  const { sport, house, stake, odd, market, url } = stakeable;
+  return (
+    `🏦 __${telegramEscape(houseToString(house))}__\n` +
+    telegramEscape(
+      `   🛒 ${marketToString(market, sport)}: ${marketOperationToString(
+        stakeable,
+      )}\n`,
+    ) +
+    telegramEscape(`   ⚖️ Odd: ${oddToString(odd)}\n`) +
+    telegramEscape(`   💰Stake: ${(stake * 100).toFixed(1)}%\n`) +
+    telegramEscape(`   🔗 ${url}`)
+  );
 }

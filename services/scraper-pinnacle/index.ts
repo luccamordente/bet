@@ -1,6 +1,6 @@
-import PinnacleRetriveBetsAndUpdateDb from  './houses/pinnacle';
+import PinnacleRetriveBetsAndUpdateDb from "./houses/pinnacle";
 
-import DB from '@bet/db';
+import DB from "@bet/db";
 
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
 
