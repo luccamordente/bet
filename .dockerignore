@@ -1,24 +1,30 @@
+# Ignore everything
+**
+
+# Un-ignore relevant files
+
 # yarn
-.yarn/*
-!.yarn/cache
-!.yarn/releases
-!.yarn/plugins
+!/.yarn/cache/**
+!/.yarn/releases/**
+!/.yarn/plugins/**
+!/.pnp.js
+!/.yarnrc.yml
+!/yarn.lock
+!/package.json
+
+# typescript
+!/tsconfig.json
+
+# source code
+!/packages/**
+!/services/**
+
+# Ignore unnecessary files that may be inside allowed directories
+# This should go after the allowed directories
 
 # git
-.git
-.gitattributes
-.gitignore
+**/.gitattributes
+**/.gitignore
 
-# Visual Studio Code
-.vscode
-
-# Docker
-Dockerfile
-docker-compose.yml
-/docker
-
-# Kubernetes
-/kubernetes
-
-# Deploy
-/deploy_local.sh
+# macOS
+**/.DS_Store
