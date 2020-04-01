@@ -1,9 +1,6 @@
-'use strict';
-
 import PinnacleRetriveBetsAndUpdateDb from  './houses/pinnacle';
 
-import DB from './config/db';
-
+import DB from '@bet/db';
 
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
 

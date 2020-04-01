@@ -6,12 +6,11 @@
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
+    "@bet/db": "workspace:packages/db",
     "@bet/telegram-bot-api": "workspace:packages/telegram-bot-api",
-    "@types/mongodb": "^3.5.4",
     "@types/node": "^13.9.8",
     "@types/string-similarity": "^3.0.0",
     "moment": "^2.24.0",
-    "mongodb": "^3.5.5",
     "string-similarity": "^4.0.1"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { compareTwoStrings } from 'string-similarity';
 import moment from 'moment';
 
-import DB from './config/db';
+import DB from '@bet/db';
 
 import { getCollection, Bettable } from './models/bettable';
 

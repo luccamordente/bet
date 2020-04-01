@@ -1,4 +1,4 @@
-import DB from '../config/db';
+import DB from '@bet/db';
 
 type MarketOperation<T> = (
   T extends "over_under"

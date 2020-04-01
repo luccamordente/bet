@@ -15,12 +15,11 @@ __metadata:
   resolution: "@bet/comparator@workspace:services/comparator"
   dependencies:
     "@bet/assert": "workspace:packages/assert"
+    "@bet/db": "workspace:packages/db"
     "@bet/telegram-bot-api": "workspace:packages/telegram-bot-api"
-    "@types/mongodb": ^3.5.4
     "@types/node": ^13.9.8
     "@types/string-similarity": ^3.0.0
     moment: ^2.24.0
-    mongodb: ^3.5.5
     string-similarity: ^4.0.1
     ts-node: ^8.8.1
     typescript: ^3.8.3
@@ -37,14 +36,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bet/db@workspace:packages/db":
+  version: 0.0.0-use.local
+  resolution: "@bet/db@workspace:packages/db"
+  dependencies:
+    "@bet/assert": "workspace:packages/assert"
+    "@types/mongodb": ^3.5.4
+    mongodb: ^3.5.5
+  languageName: unknown
+  linkType: soft
+
 "@bet/health@workspace:services/health":
   version: 0.0.0-use.local
   resolution: "@bet/health@workspace:services/health"
   dependencies:
-    "@types/mongodb": ^3.5.4
+    "@bet/db": "workspace:packages/db"
     "@types/node": ^13.9.8
     moment: ^2.24.0
-    mongodb: ^3.5.5
     ts-node: ^8.8.1
     typescript: ^3.8.3
   languageName: unknown
@@ -54,11 +62,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/scraper-1xbet@workspace:services/scraper-1xbet"
   dependencies:
-    "@types/mongodb": ^3.5.4
+    "@bet/db": "workspace:packages/db"
     "@types/node": ^13.9.8
     "@types/puppeteer": ^2.0.1
     moment: ^2.24.0
-    mongodb: ^3.5.5
     puppeteer: ^2.1.1
     ts-node: ^8.8.1
     typescript: ^3.8.3
@@ -69,12 +76,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/scraper-marathon@workspace:services/scraper-marathon"
   dependencies:
-    "@types/mongodb": ^3.5.4
+    "@bet/db": "workspace:packages/db"
     "@types/node": ^13.9.8
     axios: ^0.19.2
     moment: ^2.24.0
-    mongodb: ^3.5.5
-    node-html-parser: ^1.2.14
+    node-html-parser: ^1.2.13
     ts-node: ^8.8.1
     typescript: ^3.8.3
   languageName: unknown
@@ -84,11 +90,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/scraper-pinnacle@workspace:services/scraper-pinnacle"
   dependencies:
-    "@types/mongodb": ^3.5.4
+    "@bet/db": "workspace:packages/db"
     "@types/node": ^13.9.8
     axios: ^0.19.2
     moment: ^2.24.0
-    mongodb: ^3.5.5
     ts-node: ^8.8.1
     typescript: ^3.8.3
   languageName: unknown
@@ -701,7 +706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-html-parser@npm:^1.2.14":
+"node-html-parser@npm:^1.2.13":
   version: 1.2.14
   resolution: "node-html-parser@npm:1.2.14"
   dependencies:
