@@ -1,5 +1,4 @@
-import DB from '../config/db';
-
+import DB from '@bet/db';
 
 export type MarketType = "over_under" | "spread";
 

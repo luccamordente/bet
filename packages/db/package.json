@@ -1,0 +1,8 @@
+{
+  "name": "@bet/db",
+  "dependencies": {
+    "@bet/assert": "workspace:packages/assert",
+    "@types/mongodb": "^3.5.4",
+    "mongodb": "^3.5.5"
+  }
+}

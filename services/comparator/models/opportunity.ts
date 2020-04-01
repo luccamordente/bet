@@ -1,4 +1,4 @@
-import DB from '../config/db';
+import DB from '@bet/db';
 
 import { Bettable } from "./bettable";
 

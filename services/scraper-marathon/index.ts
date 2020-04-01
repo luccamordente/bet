@@ -1,8 +1,7 @@
 import retrieveBets from './houses/marathon';
 import { save, Bettable } from './models/bettable';
 
-import DB from './config/db';
-
+import DB from '@bet/db';
 
 const NAME = "Marathon";
 const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds

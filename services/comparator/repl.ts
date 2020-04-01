@@ -1,7 +1,5 @@
-'use strict';
-
 import repl from 'repl';
-import DB from './config/db';
+import DB from '@bet/db';
 
 import group from './utils/group';
 import publishOpportunity, { opportunityMessage } from './publishOpportunity';

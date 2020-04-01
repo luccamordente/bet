@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-import { getCollection, Bettable } from './models/bettable';
-import DB from './config/db';
+import { getCollection } from './models/bettable';
+import DB from '@bet/db';
 
 const SPORTS = {
   'basketball': '🏀 Basketball',
