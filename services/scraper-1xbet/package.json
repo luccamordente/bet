@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@bet/db": "workspace:packages/db",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.11.0",
     "@types/puppeteer": "^2.0.1",
     "moment": "^2.24.0",
     "puppeteer": "^2.1.1"
