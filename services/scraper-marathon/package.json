@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@bet/db": "workspace:packages/db",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.11.0",
     "axios": "^0.19.2",
     "moment": "^2.24.0",
     "node-html-parser": "^1.2.14"
