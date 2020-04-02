@@ -19,7 +19,7 @@ function logBettable(bettable: Bettable) {
   } = bettable;
 
   console.log(
-    `💾 Marathon ${sport} ${market.key}` +
+    `💾 ${NAME} ${sport} ${market.key}` +
     ` (${market.operation.operator} ${market.operation.value} ⇢ ${Math.round(odd*100)/100})` +
     ` ${starts_at} ${starts_at.toLocaleString('pt-BR', { 
         timeZone: 'America/Sao_Paulo',

@@ -91,6 +91,15 @@ services:
     depends_on:
       - mongodb
 
+  scraper-pinnacle-2:
+    build: ./
+    volumes: *default-volumes
+    command: [yarn, workspace, "@bet/scraper-pinnacle-2", dev]
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+
   # scraper-1xbet:
   #   <<: *headless-chrome
   #   volumes: *default-volumes

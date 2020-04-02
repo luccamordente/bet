@@ -31,8 +31,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/db"
       },
       {
+        "name": "@bet/normalizer",
+        "reference": "workspace:packages/normalizer"
+      },
+      {
         "name": "@bet/telegram-bot-api",
         "reference": "workspace:packages/telegram-bot-api"
+      },
+      {
+        "name": "@bet/bettable",
+        "reference": "workspace:packages/types"
       },
       {
         "name": "@bet/comparator",
@@ -53,19 +61,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {
         "name": "@bet/scraper-pinnacle",
         "reference": "workspace:services/scraper-pinnacle"
+      },
+      {
+        "name": "@bet/scraper-pinnacle-2",
+        "reference": "workspace:services/scraper-pinnacle-2"
       }
     ],
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.vscode\\/pnpify(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)|$))$)",
     "fallbackExclusionList": [
       ["@bet/assert", ["workspace:packages/assert"]],
+      ["@bet/bettable", ["workspace:packages/types"]],
       ["@bet/comparator", ["workspace:services/comparator"]],
       ["@bet/core", ["workspace:."]],
       ["@bet/db", ["workspace:packages/db"]],
       ["@bet/health", ["workspace:services/health"]],
+      ["@bet/normalizer", ["workspace:packages/normalizer"]],
       ["@bet/scraper-1xbet", ["workspace:services/scraper-1xbet"]],
       ["@bet/scraper-marathon", ["workspace:services/scraper-marathon"]],
       ["@bet/scraper-pinnacle", ["workspace:services/scraper-pinnacle"]],
+      ["@bet/scraper-pinnacle-2", ["workspace:services/scraper-pinnacle-2"]],
       ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]]
     ],
     "fallbackPool": [
@@ -101,6 +116,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/assert/",
           "packageDependencies": [
             ["@bet/assert", "workspace:packages/assert"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@bet/bettable", [
+        ["workspace:packages/types", {
+          "packageLocation": "./packages/types/",
+          "packageDependencies": [
+            ["@bet/bettable", "workspace:packages/types"]
           ],
           "linkType": "SOFT",
         }]
@@ -161,6 +185,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
+      ["@bet/normalizer", [
+        ["workspace:packages/normalizer", {
+          "packageLocation": "./packages/normalizer/",
+          "packageDependencies": [
+            ["@bet/normalizer", "workspace:packages/normalizer"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
       ["@bet/scraper-1xbet", [
         ["workspace:services/scraper-1xbet", {
           "packageLocation": "./services/scraper-1xbet/",
@@ -202,6 +235,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:13.9.8"],
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@bet/scraper-pinnacle-2", [
+        ["workspace:services/scraper-pinnacle-2", {
+          "packageLocation": "./services/scraper-pinnacle-2/",
+          "packageDependencies": [
+            ["@bet/scraper-pinnacle-2", "workspace:services/scraper-pinnacle-2"],
+            ["@bet/normalizer", "workspace:packages/normalizer"],
+            ["@types/mongodb", "npm:3.5.4"],
+            ["@types/node", "npm:13.9.8"],
+            ["gaxios", "npm:3.0.2"],
+            ["moment", "npm:2.24.0"],
+            ["mongodb", "npm:3.5.5"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
@@ -345,11 +395,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["abort-controller", [
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/abort-controller-npm-3.0.0-2f3a9a2bcb-2.zip/node_modules/abort-controller/",
+          "packageDependencies": [
+            ["abort-controller", "npm:3.0.0"],
+            ["event-target-shim", "npm:5.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["agent-base", [
         ["npm:5.1.1", {
           "packageLocation": "./.yarn/cache/agent-base-npm-5.1.1-d451a4ad62-2.zip/node_modules/agent-base/",
           "packageDependencies": [
             ["agent-base", "npm:5.1.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:6.0.0", {
+          "packageLocation": "./.yarn/cache/agent-base-npm-6.0.0-3a4dedf3f7-2.zip/node_modules/agent-base/",
+          "packageDependencies": [
+            ["agent-base", "npm:6.0.0"],
+            ["debug", "virtual:9021ec873f5cd9500b4ceec08eed4d94cd9a6be88a8192a7babf982eff328c8aa3b49534e3f9d0438813f4dd198614ae25547f2e3d0773630ebaf3932e7a52e1#npm:4.1.1"]
           ],
           "linkType": "HARD",
         }]
@@ -632,6 +700,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["event-target-shim", [
+        ["npm:5.0.1", {
+          "packageLocation": "./.yarn/cache/event-target-shim-npm-5.0.1-cb48709025-2.zip/node_modules/event-target-shim/",
+          "packageDependencies": [
+            ["event-target-shim", "npm:5.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["extend", [
+        ["npm:3.0.2", {
+          "packageLocation": "./.yarn/cache/extend-npm-3.0.2-e1ca07ac54-2.zip/node_modules/extend/",
+          "packageDependencies": [
+            ["extend", "npm:3.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["extract-zip", [
         ["npm:1.7.0", {
           "packageLocation": "./.yarn/cache/extract-zip-npm-1.7.0-1a60d4ee7c-2.zip/node_modules/extract-zip/",
@@ -682,6 +768,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fs.realpath-npm-1.0.0-c8f05d8126-2.zip/node_modules/fs.realpath/",
           "packageDependencies": [
             ["fs.realpath", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["gaxios", [
+        ["npm:3.0.2", {
+          "packageLocation": "./.yarn/cache/gaxios-npm-3.0.2-324fca9abe-2.zip/node_modules/gaxios/",
+          "packageDependencies": [
+            ["gaxios", "npm:3.0.2"],
+            ["abort-controller", "npm:3.0.0"],
+            ["extend", "npm:3.0.2"],
+            ["https-proxy-agent", "npm:5.0.0"],
+            ["is-stream", "npm:2.0.0"],
+            ["node-fetch", "npm:2.6.0"]
           ],
           "linkType": "HARD",
         }]
@@ -737,6 +837,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["debug", "virtual:9021ec873f5cd9500b4ceec08eed4d94cd9a6be88a8192a7babf982eff328c8aa3b49534e3f9d0438813f4dd198614ae25547f2e3d0773630ebaf3932e7a52e1#npm:4.1.1"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:5.0.0", {
+          "packageLocation": "./.yarn/cache/https-proxy-agent-npm-5.0.0-bb777903c3-2.zip/node_modules/https-proxy-agent/",
+          "packageDependencies": [
+            ["https-proxy-agent", "npm:5.0.0"],
+            ["agent-base", "npm:6.0.0"],
+            ["debug", "virtual:9021ec873f5cd9500b4ceec08eed4d94cd9a6be88a8192a7babf982eff328c8aa3b49534e3f9d0438813f4dd198614ae25547f2e3d0773630ebaf3932e7a52e1#npm:4.1.1"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["inflight", [
@@ -755,6 +864,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/inherits-npm-2.0.4-c66b3957a0-2.zip/node_modules/inherits/",
           "packageDependencies": [
             ["inherits", "npm:2.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["is-stream", [
+        ["npm:2.0.0", {
+          "packageLocation": "./.yarn/cache/is-stream-npm-2.0.0-1401f82ad7-2.zip/node_modules/is-stream/",
+          "packageDependencies": [
+            ["is-stream", "npm:2.0.0"]
           ],
           "linkType": "HARD",
         }]
