@@ -23,11 +23,11 @@ interface Parent {
   readonly participants: HomeAwayParticipants;
 }
 
-export interface GenericMatchup {
+interface GenericMatchup {
   readonly id: number;
   readonly startTime: Date;
   readonly parentId: number | null;
-  readonly parent: Parent | undefined;
+  readonly parent?: Parent;
   readonly league: League;
   readonly participants: object;
   readonly type: "matchup" | "special";
@@ -36,7 +36,6 @@ export interface GenericMatchup {
 
 interface RootMatchup extends GenericMatchup {
   readonly parentId: null;
-  readonly parent: undefined;
   readonly participants: HomeAwayParticipants;
   readonly type: "matchup";
   readonly units: "Regular";

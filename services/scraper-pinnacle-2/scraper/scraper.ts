@@ -1,5 +1,4 @@
-import fetcher, { Config } from "./fetcher";
-import { Bet } from "../types";
+import fetcher, { Config, Listener as FetcherListener } from "./fetcher";
 import { Bettable } from "@bet/types";
 import normalize from "../normalize";
 
@@ -13,14 +12,14 @@ type Listener = (bettable: Bettable) => void;
 function run(config: Config, emit: Listener): void {
 
   /**
-   * Handles denormalized bets by classifying and normalizing them.
-   * @param bet The bet to be normalized
+   * Handles denormalized markets by classifying and normalizing them.
+   * @param event The market with it's matchup.
    */
-  function handle(bet: Bet) {
-    const normalized = normalize(bet);
+  const handle: FetcherListener = (event) => {
+    const normalized = normalize(event);
     
     if (normalized.ok) {
-      emit(normalized.bettable);
+      normalized.bettables.forEach(emit);
     } else {
       console.error(normalized.message, normalized.data);
     }

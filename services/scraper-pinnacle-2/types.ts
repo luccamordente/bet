@@ -1,9 +1,12 @@
 import * as pinnacle from "./pinnacle-api/types";
 
-export interface League extends pinnacle.League {};
+export type League = pinnacle.League;
 
-export interface Match extends pinnacle.Match {};
+export type Matchup = pinnacle.Matchup;
 
-export interface Bet extends pinnacle.Bet {
-  match: Match;
-};
+export type Market = pinnacle.Market;
+
+export interface MarketContext {
+  readonly market: Market;
+  readonly matchup: Matchup;
+}

@@ -1,4 +1,4 @@
-import { getLeagues, getMatches, getBets } from "../pinnacle-api";
+import { getLeagues, getMatchups, getMarkets } from "../pinnacle-api";
 
 import { Sport, SPORTS } from "./sports";
 
@@ -8,24 +8,20 @@ export interface Config {
   time: number;
 }
 
-type Listener = (bettable: types.Bet) => any;
+export type Listener = (event: types.MarketContext) => void;
 
 function run(config: Config, emit: Listener): void {
   
-  async function handleBet(bet: types.Bet) {
-    emit(bet);
-  }
-  
-  async function handleMatch(match: types.Match) {
-    const bets = await getBets({ matchId: match.id });
-    console.log('Requested bets', JSON.stringify(bets, null, "\t"));
-    for (const bet of bets) {
-      await handleBet({ ...bet, match });
+  async function handleMatch(matchup: types.Matchup) {
+    const markets = await getMarkets({ matchId: matchup.id });
+    console.log('Requested markets', JSON.stringify(markets, null, "\t"));
+    for (const market of markets) {
+      emit({market, matchup});
     }
   }
   
   async function handleLeague(league: types.League) {
-    const matches = await getMatches({ leagueId: league.id });
+    const matches = await getMatchups({ leagueId: league.id });
     console.log('Requested matches', JSON.stringify(matches, null, "\t"));
     for (const match of matches) {
       await handleMatch(match);

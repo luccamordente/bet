@@ -1,4 +1,4 @@
-import total from "./total";
+import total from "./regular-handicap";
 
 export {
   total
