@@ -1,0 +1,1 @@
+export { Bettable } from "./bettable";

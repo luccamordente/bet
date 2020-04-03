@@ -10,12 +10,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bet/bettable@workspace:packages/types":
-  version: 0.0.0-use.local
-  resolution: "@bet/bettable@workspace:packages/types"
-  languageName: unknown
-  linkType: soft
-
 "@bet/comparator@workspace:services/comparator":
   version: 0.0.0-use.local
   resolution: "@bet/comparator@workspace:services/comparator"
@@ -64,12 +58,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bet/normalizer@workspace:packages/normalizer":
-  version: 0.0.0-use.local
-  resolution: "@bet/normalizer@workspace:packages/normalizer"
-  languageName: unknown
-  linkType: soft
-
 "@bet/scraper-1xbet@workspace:services/scraper-1xbet":
   version: 0.0.0-use.local
   resolution: "@bet/scraper-1xbet@workspace:services/scraper-1xbet"
@@ -102,7 +90,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/scraper-pinnacle-2@workspace:services/scraper-pinnacle-2"
   dependencies:
-    "@bet/normalizer": "workspace:packages/normalizer"
+    "@bet/types": "workspace:packages/types"
     "@types/mongodb": ^3.5.3
     "@types/node": ^13.9.4
     gaxios: ^3.0.2
@@ -132,6 +120,12 @@ __metadata:
   dependencies:
     "@types/node-fetch": ^2.5.5
     node-fetch: ^2.6.0
+  languageName: unknown
+  linkType: soft
+
+"@bet/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@bet/types@workspace:packages/types"
   languageName: unknown
   linkType: soft
 

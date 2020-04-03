@@ -31,15 +31,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/db"
       },
       {
-        "name": "@bet/normalizer",
-        "reference": "workspace:packages/normalizer"
-      },
-      {
         "name": "@bet/telegram-bot-api",
         "reference": "workspace:packages/telegram-bot-api"
       },
       {
-        "name": "@bet/bettable",
+        "name": "@bet/types",
         "reference": "workspace:packages/types"
       },
       {
@@ -71,17 +67,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "ignorePatternData": "(^(?:\\.vscode\\/pnpify(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)|$))$)",
     "fallbackExclusionList": [
       ["@bet/assert", ["workspace:packages/assert"]],
-      ["@bet/bettable", ["workspace:packages/types"]],
       ["@bet/comparator", ["workspace:services/comparator"]],
       ["@bet/core", ["workspace:."]],
       ["@bet/db", ["workspace:packages/db"]],
       ["@bet/health", ["workspace:services/health"]],
-      ["@bet/normalizer", ["workspace:packages/normalizer"]],
       ["@bet/scraper-1xbet", ["workspace:services/scraper-1xbet"]],
       ["@bet/scraper-marathon", ["workspace:services/scraper-marathon"]],
       ["@bet/scraper-pinnacle", ["workspace:services/scraper-pinnacle"]],
       ["@bet/scraper-pinnacle-2", ["workspace:services/scraper-pinnacle-2"]],
-      ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]]
+      ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]],
+      ["@bet/types", ["workspace:packages/types"]]
     ],
     "fallbackPool": [
       [
@@ -116,15 +111,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/assert/",
           "packageDependencies": [
             ["@bet/assert", "workspace:packages/assert"]
-          ],
-          "linkType": "SOFT",
-        }]
-      ]],
-      ["@bet/bettable", [
-        ["workspace:packages/types", {
-          "packageLocation": "./packages/types/",
-          "packageDependencies": [
-            ["@bet/bettable", "workspace:packages/types"]
           ],
           "linkType": "SOFT",
         }]
@@ -185,15 +171,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
-      ["@bet/normalizer", [
-        ["workspace:packages/normalizer", {
-          "packageLocation": "./packages/normalizer/",
-          "packageDependencies": [
-            ["@bet/normalizer", "workspace:packages/normalizer"]
-          ],
-          "linkType": "SOFT",
-        }]
-      ]],
       ["@bet/scraper-1xbet", [
         ["workspace:services/scraper-1xbet", {
           "packageLocation": "./services/scraper-1xbet/",
@@ -246,7 +223,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-pinnacle-2/",
           "packageDependencies": [
             ["@bet/scraper-pinnacle-2", "workspace:services/scraper-pinnacle-2"],
-            ["@bet/normalizer", "workspace:packages/normalizer"],
+            ["@bet/types", "workspace:packages/types"],
             ["@types/mongodb", "npm:3.5.4"],
             ["@types/node", "npm:13.9.8"],
             ["gaxios", "npm:3.0.2"],
@@ -265,6 +242,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/telegram-bot-api", "workspace:packages/telegram-bot-api"],
             ["@types/node-fetch", "npm:2.5.5"],
             ["node-fetch", "npm:2.6.0"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@bet/types", [
+        ["workspace:packages/types", {
+          "packageLocation": "./packages/types/",
+          "packageDependencies": [
+            ["@bet/types", "workspace:packages/types"]
           ],
           "linkType": "SOFT",
         }]

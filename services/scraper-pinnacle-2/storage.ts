@@ -1,4 +1,5 @@
-import { save, Bettable } from './bettable';
+import { Bettable } from '@bet/types';
+import { save } from './bettable';
 
 function log(bettable: Bettable) {
   const {
@@ -13,8 +14,8 @@ function log(bettable: Bettable) {
   } = bettable;
 
   console.log(
-    `💾 Pinnacle ${sport} ${market.key}` +
-    ` (${market.operation.operator} ${market.operation.value} ⇢ ${Math.round(odd*100)/100})` +
+    `💾 Pinnacle ${sport} ${market.kind}` +
+    ` (${market.value} ⇢ ${Math.round(odd*100)/100})` +
     ` ${starts_at.toLocaleString('pt-BR', { 
         timeZone: 'America/Sao_Paulo',
         year: undefined,
@@ -32,7 +33,7 @@ function log(bettable: Bettable) {
 }
 
 export default function store(bettable: Bettable) {
-  console.log('Fake saving: ', bettable);
+  console.log(bettable);
   // return save(bettable)
   //   .then(() => {
   //     log(bettable);

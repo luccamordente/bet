@@ -1,34 +1,30 @@
-type TeamScope = "home" | "away" | "both";
+type Team = "home" | "away" | "both";
 
-export interface HandicapMarket {
-  type: "handicap";
-  operation: "spread";
-  scope: {
-    period: unknown;
-    team: undefined;
-  };
-  unit: unknown;
-  value: ["home" | "away", number];
+export interface Handicap {
+  readonly kind: "handicap";
+  readonly operation: "spread";
+  readonly team: undefined;
+  readonly value: readonly ["home" | "away", number];
 }
 
-export interface TotalMarket {
-  type: "total";
-  operation: "over_under";
-  value: ["over" | "under", number];
-  scope: {
-    period: unknown
-    team: TeamScope;
-  };
-  unit: unknown;
+export interface Total {
+  readonly kind: "total";
+  readonly operation: "over_under";
+  readonly team: Team;
+  readonly value: readonly ["over" | "under", number];
 }
 
-export interface OddEvenMarket {
-  type: "odd_even";
-  operation: "binary";
-  scope: {
-    period: unknown;
-    team: TeamScope;
-  };
-  unit: unknown;
-  value: "odd" | "even";
+export interface OddEven {
+  readonly kind: "odd_even";
+  readonly operation: "binary";
+  readonly team: Team;
+  readonly value: "odd" | "even";
+}
+
+export interface Result {
+  readonly kind: "result";
+  readonly operation: "binary";
+  readonly team: undefined;
+  readonly value: "home" | "away";
+  readonly unit: "team";
 }

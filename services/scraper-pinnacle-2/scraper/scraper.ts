@@ -1,22 +1,31 @@
 import fetcher, { Config } from "./fetcher";
-import normalize from "../normalizer";
 import { Bet } from "../types";
+import { Bettable } from "@bet/types";
+import normalize from "../normalize";
 
-type Listener = (bettable: Bettable) => any;
-let emit: Listener;
+type Listener = (bettable: Bettable) => void;
 
-function handle(bet: Bet) {
-  const normalization = normalize(bet);
-  
-  if (normalization.status === "ok") {
-    emit(normalization.object);
-  } else {
-    console.info(`Unnormalizable bet ${JSON.stringify(bet)}`);
+/**
+ * Runs the fetcher and pipes all denormalized bets to be processed.
+ * @param config Scraper configuration
+ * @param emit A callback function that receives normalized bets
+ */
+function run(config: Config, emit: Listener): void {
+
+  /**
+   * Handles denormalized bets by classifying and normalizing them.
+   * @param bet The bet to be normalized
+   */
+  function handle(bet: Bet) {
+    const normalized = normalize(bet);
+    
+    if (normalized.ok) {
+      emit(normalized.bettable);
+    } else {
+      console.error(normalized.message, normalized.data);
+    }
   }
-}
-
-function run(config: Config, listener: Listener): void {
-  emit = listener;
+  
   fetcher.run(config, handle);
 }
 

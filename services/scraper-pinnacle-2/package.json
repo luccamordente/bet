@@ -4,7 +4,7 @@
     "dev": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
-    "@bet/normalizer": "workspace:packages/normalizer",
+    "@bet/types": "workspace:packages/types",
     "@types/mongodb": "^3.5.3",
     "@types/node": "^13.9.4",
     "gaxios": "^3.0.2",

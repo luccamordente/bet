@@ -1,3 +1,5 @@
-import SoccerBettable from './sports/soccer';
+import SoccerBettable from "./sports/soccer";
+import EsportsBettable from "./sports/esports";
+import TableTennisBettable from "./sports/table-tennis";
 
-type Bettable = SoccerBettable;
+export type Bettable = SoccerBettable | EsportsBettable | TableTennisBettable;
