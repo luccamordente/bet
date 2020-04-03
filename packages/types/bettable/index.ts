@@ -1,1 +1,1 @@
-export { Bettable } from "./bettable";
+export * from "./bettable";

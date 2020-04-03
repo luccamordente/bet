@@ -2,7 +2,7 @@ import { GenericBettable } from "../generic";
 import * as markets from "../markets";
 
 interface GoalsMarket {
-  readonly period: readonly ["half", 1 | 2] | "match";
+  readonly period: readonly ["half", number] | "match";
   readonly unit: "goals";
 }
 

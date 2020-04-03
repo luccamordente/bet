@@ -25,7 +25,8 @@ interface Parent {
 
 interface GenericMatchup {
   readonly id: number;
-  readonly startTime: Date;
+  /** ISO datetime string */
+  readonly startTime: string;
   readonly parentId: number | null;
   readonly parent?: Parent;
   readonly league: League;
@@ -34,13 +35,14 @@ interface GenericMatchup {
   readonly units: string | null;
 }
 
-interface RootMatchup extends GenericMatchup {
+export interface RootMatchup extends GenericMatchup {
   readonly parentId: null;
   readonly participants: HomeAwayParticipants;
   readonly type: "matchup";
   readonly units: "Regular";
 }
-interface ChildMatchup extends GenericMatchup {
+
+export interface ChildMatchup extends GenericMatchup {
   readonly parentId: number;
   readonly parent: Parent;
   readonly participants: HomeAwayParticipants;
@@ -48,7 +50,7 @@ interface ChildMatchup extends GenericMatchup {
   readonly units: string;
 }
 
-interface SpecialMatchup extends GenericMatchup {
+export interface SpecialMatchup extends GenericMatchup {
   readonly parentId: number;
   readonly parent: Parent;
   readonly participants: readonly [
@@ -151,7 +153,7 @@ interface GenericMarket {
   readonly version: number;
 }
 
-interface MoneylineMarket extends GenericMarket {
+export interface MoneylineMarket extends GenericMarket {
   readonly prices:
     | TeamDesignationPrices
     | TeamDrawableDesignationPrices
@@ -159,17 +161,18 @@ interface MoneylineMarket extends GenericMarket {
   readonly type: "moneyline";
 }
 
-interface TotalMarket extends GenericMarket {
+export interface TotalMarket extends GenericMarket {
   readonly prices: OverUnderDesignationPrices;
   readonly type: "total";
 }
 
-interface TeamTotalMarket extends GenericMarket {
+export interface TeamTotalMarket extends GenericMarket {
   readonly prices: OverUnderDesignationPrices;
   readonly side: "home" | "away";
   readonly type: "team_total";
 }
-interface SpreadMarket extends GenericMarket {
+
+export interface SpreadMarket extends GenericMarket {
   readonly prices: TeamPointDesignationPrices;
   readonly type: "spread";
 }
