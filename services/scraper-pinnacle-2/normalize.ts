@@ -28,7 +28,8 @@ export default function normalize(context: MarketContext): NormalizeResult {
     default:
       return {
         ok: false,
-        message: "Unnormalizable market context!",
+        code: "unknown",
+        message: "Unknown error normalizing market context!",
         data: { context },
       };
   }

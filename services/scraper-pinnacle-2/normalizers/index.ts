@@ -1,5 +1,3 @@
-import total from "./regular-handicap";
+import regularHandicap from "./regular-handicap";
 
-export {
-  total
-}
+export { regularHandicap };

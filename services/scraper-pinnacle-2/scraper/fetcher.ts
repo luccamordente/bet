@@ -14,7 +14,6 @@ function run(config: Config, emit: Listener): void {
   
   async function handleMatch(matchup: types.Matchup) {
     const markets = await getMarkets({ matchId: matchup.id });
-    console.log('Requested markets', JSON.stringify(markets, null, "\t"));
     for (const market of markets) {
       emit({market, matchup});
     }
@@ -22,7 +21,6 @@ function run(config: Config, emit: Listener): void {
   
   async function handleLeague(league: types.League) {
     const matches = await getMatchups({ leagueId: league.id });
-    console.log('Requested matches', JSON.stringify(matches, null, "\t"));
     for (const match of matches) {
       await handleMatch(match);
     }
@@ -30,7 +28,6 @@ function run(config: Config, emit: Listener): void {
   
   async function handleSport(sport: Sport) {
     const leagues = await getLeagues({ sportId: sport.id });
-    console.log('Requested leagues', JSON.stringify(leagues, null, "\t"));
     for (const league of leagues) {
       await handleLeague(league);
     }
