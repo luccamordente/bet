@@ -39,7 +39,7 @@ async function login(): Promise<LoginResponse> {
         captchaToken: "",
         trustCode,
       }),
-    }
+    },
   );
 }
 
@@ -55,7 +55,7 @@ interface RequestOptions {
 
 async function guestRequest<T>(
   url: string,
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<T> {
   const fetchOptions = {
     ...DEFAULT_OPTIONS,
@@ -64,15 +64,15 @@ async function guestRequest<T>(
   };
 
   let json;
+  const resp = await fetch(url, fetchOptions);
+
+  if (!resp.ok) {
+    throw new Error(
+      `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`,
+    );
+  }
+
   try {
-    const resp = await fetch(url, fetchOptions);
-
-    if (!resp.ok) {
-      throw new Error(
-        `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`
-      );
-    }
-
     json = await resp.json();
   } catch (err) {
     console.error(err);
@@ -92,22 +92,22 @@ export default async function request<T>(url: string): Promise<T> {
     fetchOptions.headers.set("X-Session", sessionToken);
   }
 
+  const resp = await fetch(url, fetchOptions);
+
+  if (!resp.ok) {
+    throw new Error(
+      `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`,
+    );
+  }
+
+  // Unautheticated
+  if (resp.url.startsWith("https://guest")) {
+    await authenticate();
+    return await request<T>(url);
+  }
+
   let json;
   try {
-    const resp = await fetch(url, fetchOptions);
-
-    if (!resp.ok) {
-      throw new Error(
-        `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`
-      );
-    }
-
-    // Unautheticated
-    if (resp.url.startsWith("https://guest")) {
-      await authenticate();
-      return await request<T>(url);
-    }
-
     json = await resp.json();
   } catch (err) {
     console.error(err);

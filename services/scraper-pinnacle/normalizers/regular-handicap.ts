@@ -12,7 +12,7 @@ interface RegularHandicapContext {
 }
 
 export default function regularHandicap(
-  ctx: RegularHandicapContext
+  ctx: RegularHandicapContext,
 ): NormalizeResult {
   const { market, matchup } = ctx;
   let bettableA;
@@ -51,7 +51,7 @@ interface Price {
 function soccerBettable(
   matchup: RootMatchup,
   market: SpreadMarket,
-  price: Price
+  price: Price,
 ): NewSoccerBettable {
   return {
     ...commonBettable(matchup, price),
@@ -70,7 +70,7 @@ function soccerBettable(
 function esportsBettable(
   matchup: RootMatchup,
   market: SpreadMarket,
-  price: Price
+  price: Price,
 ): NewEsportsBettable {
   if (market.period === 0) {
     return {

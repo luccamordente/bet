@@ -22,7 +22,6 @@ function classify(context: MarketContext) {
     if (market.type === "team_total") {
       return { kind: "regular_team_total", market, matchup } as const;
     }
-  } else {
   }
   return { kind: "unknown", market, matchup } as const;
 }
@@ -45,7 +44,7 @@ export default function normalize(context: MarketContext): NormalizeResult {
         ok: false,
         code: "not_classified",
         message: "Don't know how to classify market context.",
-        data: { context },
+        data: classified,
       };
 
     default:

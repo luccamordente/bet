@@ -12,7 +12,7 @@ interface RegularTotalContext {
 }
 
 export default function regularTotal(
-  ctx: RegularTotalContext
+  ctx: RegularTotalContext,
 ): NormalizeResult {
   const { market, matchup } = ctx;
   let bettableA;
@@ -51,7 +51,7 @@ interface Price {
 function soccerBettable(
   matchup: RootMatchup,
   market: TotalMarket,
-  price: Price
+  price: Price,
 ): NewSoccerBettable {
   return {
     ...commonBettable(matchup, price),
@@ -70,33 +70,19 @@ function soccerBettable(
 function esportsBettable(
   matchup: RootMatchup,
   market: TotalMarket,
-  price: Price
+  price: Price,
 ): NewEsportsBettable {
-  if (market.period === 0) {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "total",
-        operation: "over_under",
-        period: "match",
-        team: undefined,
-        unit: "maps",
-        value: [price.designation, price.points],
-      },
-    };
-  } else {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "total",
-        operation: "over_under",
-        period: ["map", market.period],
-        team: undefined,
-        unit: "rounds",
-        value: [price.designation, price.points],
-      },
-    };
-  }
+  return {
+    ...commonBettable(matchup, price),
+    sport: "esports",
+    market: {
+      kind: "total",
+      operation: "over_under",
+      ...(market.period === 0
+        ? ({ unit: "rounds", period: ["map", market.period] } as const)
+        : ({ unit: "maps", period: "match" } as const)),
+      team: undefined,
+      value: [price.designation, price.points],
+    },
+  };
 }

@@ -1,2 +1,2 @@
-import scraper from './scraper';
+import scraper from "./scraper";
 export default scraper;

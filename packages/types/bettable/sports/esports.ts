@@ -22,15 +22,11 @@ export default interface EsportsBettable extends GenericBettable {
   readonly market:
     | (markets.Handicap & MapsMarket)
     | (markets.Handicap & RoundsMarket)
-
     | (markets.OddEven & MapsMarket)
     | (markets.OddEven & RoundsMarket)
-
     | (markets.Total & MapsMarket)
     | (markets.Total & RoundsMarket)
-
     | (markets.TeamTotal & MapsMarket)
     | (markets.TeamTotal & RoundsMarket)
-
-    | (markets.Result & ResultMarket)
+    | (markets.Result & ResultMarket);
 }

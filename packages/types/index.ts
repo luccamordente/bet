@@ -1,2 +1,2 @@
-export * from './bettable';
-export * from './normalizer';
+export * from "./bettable";
+export * from "./normalizer";

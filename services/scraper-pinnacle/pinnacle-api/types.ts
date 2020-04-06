@@ -15,7 +15,7 @@ type HomeAwayParticipants = [
   {
     readonly alignment: string;
     readonly name: string;
-  }
+  },
 ];
 
 interface Parent {
@@ -63,7 +63,7 @@ export interface SpecialMatchup extends GenericMatchup {
       alignment: "neutral";
       id: number;
       name: string;
-    }
+    },
   ];
   readonly type: "special";
   readonly units: null;
@@ -81,7 +81,7 @@ type OverUnderDesignationPrices = [
     readonly designation: "under";
     readonly points: number;
     readonly price: number;
-  }
+  },
 ];
 
 type TeamDesignationPrices = [
@@ -92,7 +92,7 @@ type TeamDesignationPrices = [
   {
     readonly designation: "away";
     readonly price: number;
-  }
+  },
 ];
 
 type TeamPointDesignationPrices = [
@@ -105,7 +105,7 @@ type TeamPointDesignationPrices = [
     readonly designation: "away";
     readonly points: number;
     readonly price: number;
-  }
+  },
 ];
 
 type TeamDrawableDesignationPrices = [
@@ -120,7 +120,7 @@ type TeamDrawableDesignationPrices = [
   {
     readonly designation: "draw";
     readonly price: number;
-  }
+  },
 ];
 
 type ParticipantPrices = [
@@ -131,7 +131,7 @@ type ParticipantPrices = [
   {
     readonly participantId: number;
     readonly price: number;
-  }
+  },
 ];
 
 interface GenericMarket {
@@ -154,15 +154,12 @@ interface GenericMarket {
 }
 
 export interface RegularMoneylineMarket extends GenericMarket {
-  readonly prices:
-    | TeamDesignationPrices
-    | TeamDrawableDesignationPrices
+  readonly prices: TeamDesignationPrices | TeamDrawableDesignationPrices;
   readonly type: "moneyline";
 }
 
 export interface SpecialMoneylineMarket extends GenericMarket {
-  readonly prices:
-    | ParticipantPrices;
+  readonly prices: ParticipantPrices;
   readonly type: "moneyline";
 }
 

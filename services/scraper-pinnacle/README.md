@@ -30,7 +30,7 @@ League info will come in all matchup responses, so no need to store any of this.
       "name": "E Sports",
       "primaryMarketType": "moneyline"
     }
-  },
+  }
 ]
 ```
 
@@ -45,6 +45,7 @@ Can return both Regular matchups and Special matchups in the same array.
 ```json
 [
 ```
+
 ```json
   {
     "ageLimit": -2,
@@ -64,7 +65,7 @@ Can return both Regular matchups and Special matchups in the same array.
     "participants": [
       {
         "alignment": "home",
-        "name": "SANDBOX Gaming",       | 
+        "name": "SANDBOX Gaming",       |
         "order": 0
       },
       {
@@ -88,10 +89,11 @@ Can return both Regular matchups and Special matchups in the same array.
 **`type === "matchup" && units !== "Regular"`**
 
 It has:
-* `parentId` that matches the regular matchup `id` above.
-* a `parent` property that has all the correct data from the matchup.
-  * participants must be retrieved from the `parent.participants` property.
-* `units` must be taken into consideration, because the market don't have direct information on it, only through their `matchupId`
+
+- `parentId` that matches the regular matchup `id` above.
+- a `parent` property that has all the correct data from the matchup.
+  - participants must be retrieved from the `parent.participants` property.
+- `units` must be taken into consideration, because the market don't have direct information on it, only through their `matchupId`
 
 ```json
   {
@@ -138,12 +140,13 @@ It has:
 **`type === "special"`**
 
 It has:
-* `units` as `null`
-* a `parentId` that matches the regular matchup `id` above.
-* a `parent` property that has all the correct data from the matchup.
-  * participants must be retrieved from the `parent.participants` property.
-* the description for the market can be found in the `special.description` property.
-* the root `participants` property have `id`s which are used in moneyline markets
+
+- `units` as `null`
+- a `parentId` that matches the regular matchup `id` above.
+- a `parent` property that has all the correct data from the matchup.
+  - participants must be retrieved from the `parent.participants` property.
+- the description for the market can be found in the `special.description` property.
+- the root `participants` property have `id`s which are used in moneyline markets
 
 ```json
   {
@@ -207,6 +210,7 @@ It has:
     "version": 44447402
   },
 ```
+
 ```json
 ]
 ```
@@ -397,67 +401,73 @@ This is a special kind of moneyline market, where the `participantId` maps to so
 ## Structure summary
 
 The most important information on the **markets** responses are:
-* **`key`**: the only information that can't be found anywhere else is after the 4th semi-collon on `"s;2;tt;14.5;away"`. `"away"` refers to the team in the `"team_total"` type of market. it's values can be `"home"` or `"away"`.
-* **`period`**: always the high level period. In the case of e-sports, even if there are rounds, the period property will always refer to the current map being played
-* **`type`**: possible values are:
-  * `"moneyline"`: a set of options (can be a team or something else like odd/even options), depending on the related matchup
-  * `"total"`: over/under points (could be anything, depending on the `units` of the matchup that it belongs to)
-  * `"team_total"` same as `"total"`, but with a team that can be found in the `key` property
-  * `"spread"`: always refers to handicap
-* **`prices`**: it's format depends on the value of the `type` property:
-  * `"moneyline"`: depending on the related matchup, can have either:
-    * `designation` for the team; or 
-    * `participantId` for different things
-  * `"total"`: 
-    * `designation` is always either `"over"` or `"under"`;
-    * `points` complements the `designation`.
-  * `"team_total"`: same as `"total"`
-  * `"spread"`: 
-    * `designation` is always either `"home"` or `"away"`
-    * `points` complements the `designation`
+
+- **`key`**: the only information that can't be found anywhere else is after the 4th semi-collon on `"s;2;tt;14.5;away"`. `"away"` refers to the team in the `"team_total"` type of market. it's values can be `"home"` or `"away"`.
+- **`period`**: always the high level period. In the case of e-sports, even if there are rounds, the period property will always refer to the current map being played
+- **`type`**: possible values are:
+  - `"moneyline"`: a set of options (can be a team or something else like odd/even options), depending on the related matchup
+  - `"total"`: over/under points (could be anything, depending on the `units` of the matchup that it belongs to)
+  - `"team_total"` same as `"total"`, but with a team that can be found in the `key` property
+  - `"spread"`: always refers to handicap
+- **`prices`**: it's format depends on the value of the `type` property:
+  - `"moneyline"`: depending on the related matchup, can have either:
+    - `designation` for the team; or
+    - `participantId` for different things
+  - `"total"`:
+    - `designation` is always either `"over"` or `"under"`;
+    - `points` complements the `designation`.
+  - `"team_total"`: same as `"total"`
+  - `"spread"`:
+    - `designation` is always either `"home"` or `"away"`
+    - `points` complements the `designation`
 
 ## Algorithm
-* get markets
-* from the matchup (by `matchupId`)
-  * get event data
-    * start time
-    * participants
-      * if there's a parent (`parentId` not null)
-        * get `participants` from the `parent`
-      * else, get `participants` from itself
-* get the type
-  * if `type` is `special`
-    * matchup should have a parent
-    * `units` should be null
-    * get `units` from matchup's `special.description`
-    * get options from matchup's `participants`
-    * get prices matching `participant.#.participantId` from matchup with parent's `participant.#.id`
-  * else `type` is `matchup`
-    * if `parentId` is not `null`
-      * `units` is something custom
-      * ``
-    * else `parentId` is `null` and `units` is `"Regular"`
-      * do what we currently do
-  * switch
-    * case `moneyline`
-      * else it's a root matchup
-        * use `designation`
-    * case `total`
-      * if matchup has a parent
 
-      * else it's a root matchup
-        * .
-    * case `team_total`
-      * if matchup has a parent
-        * .
-      * else it's a root matchup
-        * .
-    * case `spread`
-      * if matchup has a parent
-        * .
-      * else it's a root matchup
-        * .
+- get markets
+- from the matchup (by `matchupId`)
+  - get event data
+    - start time
+    - participants
+      - if there's a parent (`parentId` not null)
+        - get `participants` from the `parent`
+      - else, get `participants` from itself
+- get the type
+
+  - if `type` is `special`
+    - matchup should have a parent
+    - `units` should be null
+    - get `units` from matchup's `special.description`
+    - get options from matchup's `participants`
+    - get prices matching `participant.#.participantId` from matchup with parent's `participant.#.id`
+  - else `type` is `matchup`
+    - if `parentId` is not `null`
+      - `units` is something custom
+      - ``
+    - else `parentId` is `null` and `units` is `"Regular"`
+      - do what we currently do
+  - switch
+
+    - case `moneyline`
+      - else it's a root matchup
+        - use `designation`
+    - case `total`
+
+      - if matchup has a parent
+
+      - else it's a root matchup
+        - .
+
+    - case `team_total`
+      - if matchup has a parent
+        - .
+      - else it's a root matchup
+        - .
+    - case `spread`
+      - if matchup has a parent
+        - .
+      - else it's a root matchup
+        - .
 
 # To-do
 
-* **Understand `status` in the markets endpoint:** does it mean that, when `status` is not `"open"`, a bet cannot be placed?
+- **Understand `status` in the markets endpoint:** does it mean that, when `status` is not `"open"`, a bet cannot be placed?

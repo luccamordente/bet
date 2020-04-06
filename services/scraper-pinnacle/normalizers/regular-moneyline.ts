@@ -1,7 +1,4 @@
-import {
-  NormalizeResult,
-  NewEsportsBettable,
-} from "@bet/types";
+import { NormalizeResult, NewEsportsBettable } from "@bet/types";
 import { RootMatchup, RegularMoneylineMarket } from "../pinnacle-api/types";
 import { commonBettable } from "./utils";
 
@@ -11,7 +8,7 @@ interface RegularMoneylineContext {
 }
 
 export default function regularMoneyline(
-  ctx: RegularMoneylineContext
+  ctx: RegularMoneylineContext,
 ): NormalizeResult {
   const { market, matchup } = ctx;
   const { sport } = matchup.league;
@@ -53,7 +50,7 @@ interface Price {
 function esportsBettable(
   matchup: RootMatchup,
   market: RegularMoneylineMarket,
-  price: Price
+  price: Price,
 ): NewEsportsBettable {
   if (market.period === 0) {
     return {

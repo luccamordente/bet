@@ -8,7 +8,7 @@ interface RegularTotalContext {
 }
 
 export default function regularTeamTotal(
-  ctx: RegularTotalContext
+  ctx: RegularTotalContext,
 ): NormalizeResult {
   const { market, matchup } = ctx;
   let bettableA;
@@ -53,7 +53,7 @@ interface Price {
 function soccerBettable(
   matchup: RootMatchup,
   market: TeamTotalMarket,
-  price: Price
+  price: Price,
 ): NewSoccerBettable {
   return {
     ...commonBettable(matchup, price),

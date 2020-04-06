@@ -11,7 +11,7 @@ interface Market {
   readonly kind: string;
   readonly operation: string;
   readonly period: readonly [string, number] | "match";
-  readonly team?: string
+  readonly team?: string;
   readonly unit: string;
 }
 
