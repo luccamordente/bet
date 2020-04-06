@@ -79,8 +79,8 @@ function esportsBettable(
       kind: "total",
       operation: "over_under",
       ...(market.period === 0
-        ? ({ unit: "rounds", period: ["map", market.period] } as const)
-        : ({ unit: "maps", period: "match" } as const)),
+        ? { unit: "maps", period: "match" }
+        : { unit: "rounds", period: ["map", market.period] }),
       team: undefined,
       value: [price.designation, price.points],
     },

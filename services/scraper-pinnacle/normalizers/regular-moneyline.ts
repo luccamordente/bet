@@ -52,31 +52,16 @@ function esportsBettable(
   market: RegularMoneylineMarket,
   price: Price,
 ): NewEsportsBettable {
-  if (market.period === 0) {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "result",
-        operation: "binary",
-        period: "match",
-        team: undefined,
-        unit: "team",
-        value: price.designation,
-      },
-    };
-  } else {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "result",
-        operation: "binary",
-        period: ["map", market.period],
-        team: undefined,
-        unit: "team",
-        value: price.designation,
-      },
-    };
-  }
+  return {
+    ...commonBettable(matchup, price),
+    sport: "esports",
+    market: {
+      kind: "result",
+      operation: "binary",
+      period: market.period === 0 ? "match" : ["map", market.period],
+      team: undefined,
+      unit: "team",
+      value: price.designation,
+    },
+  };
 }

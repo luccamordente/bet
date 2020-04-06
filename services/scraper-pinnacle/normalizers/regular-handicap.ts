@@ -72,31 +72,17 @@ function esportsBettable(
   market: SpreadMarket,
   price: Price,
 ): NewEsportsBettable {
-  if (market.period === 0) {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "handicap",
-        operation: "spread",
-        period: "match",
-        team: undefined,
-        unit: "maps",
-        value: [price.designation, price.points],
-      },
-    };
-  } else {
-    return {
-      ...commonBettable(matchup, price),
-      sport: "esports",
-      market: {
-        kind: "handicap",
-        operation: "spread",
-        period: ["map", market.period],
-        team: undefined,
-        unit: "rounds",
-        value: [price.designation, price.points],
-      },
-    };
-  }
+  return {
+    ...commonBettable(matchup, price),
+    sport: "esports",
+    market: {
+      kind: "handicap",
+      operation: "spread",
+      ...(market.period === 0
+        ? { unit: "maps", period: "match" }
+        : { unit: "rounds", period: ["map", market.period] }),
+      team: undefined,
+      value: [price.designation, price.points],
+    },
+  };
 }
