@@ -37,7 +37,7 @@ async function execute<T>(params: ExecuteParams): Promise<Sucess<T> | Failure> {
     },
     body: params.body,
     timeout: params.timeout,
-    signal: params.signal
+    signal: params.signal,
   });
 
   let json;
@@ -69,7 +69,7 @@ export function createGETEmpty<T>(url: string) {
       url,
       method: "GET",
       signal: request.signal,
-      timeout: request.timeout
+      timeout: request.timeout,
     });
 }
 
@@ -91,7 +91,7 @@ export function createGET<T, U extends object>(url: string) {
       url: newUrl,
       method: "GET",
       signal: request.signal,
-      timeout: request.timeout
+      timeout: request.timeout,
     });
   };
 }
@@ -104,7 +104,7 @@ export function createPOST<T, U extends object>(url: string) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(request.params),
       signal: request.signal,
-      timeout: request.timeout
+      timeout: request.timeout,
     });
   };
 }
@@ -123,7 +123,7 @@ interface AbortSignal {
           capture?: boolean;
           once?: boolean;
           passive?: boolean;
-        }
+        },
   ) => void;
 
   readonly removeEventListener: (
@@ -133,7 +133,7 @@ interface AbortSignal {
       | boolean
       | {
           capture?: boolean;
-        }
+        },
   ) => void;
 
   readonly dispatchEvent: (event: any) => boolean;

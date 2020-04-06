@@ -6,11 +6,8 @@
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
     "@bet/types": "workspace:packages/types",
-    "@types/mongodb": "^3.5.3",
     "@types/node": "^13.9.4",
     "@types/node-fetch": "^2.5.5",
-    "moment": "^2.24.0",
-    "mongodb": "^3.5.5",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {

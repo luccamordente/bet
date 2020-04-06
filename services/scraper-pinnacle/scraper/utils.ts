@@ -8,6 +8,4 @@ function americanToDecimal(american: number): number {
   return ret;
 }
 
-export {
-  americanToDecimal
-};
+export { americanToDecimal };

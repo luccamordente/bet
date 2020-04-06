@@ -1,4 +1,4 @@
 export interface Content {
-  content: string,
-  hasNextPage: boolean,
+  content: string;
+  hasNextPage: boolean;
 }

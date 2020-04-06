@@ -63,7 +63,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/health", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
     networks:
       - app-tier
@@ -76,7 +76,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
       - *scrapers-time-span
     networks:
@@ -88,7 +88,7 @@ services:
     build: ./
     volumes: *default-volumes
     command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
-    environment: 
+    environment:
       - MONGODB_CONNECTION_URI=mongodb://mongodb
       - *scrapers-time-span
     networks:
@@ -100,7 +100,7 @@ services:
   #   <<: *headless-chrome
   #   volumes: *default-volumes
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
-  #   environment: 
+  #   environment:
   #     - MONGODB_CONNECTION_URI=mongodb://mongodb
   #     - *x-scrapers-time-span
   #   networks:
