@@ -27,6 +27,9 @@ x-headless-chrome: &headless-chrome
   security_opt:
     - seccomp=docker/seccomp-chromium.json
 
+x-scrapers-env:
+  - &scrapers-time-span EVENT_TIME_SPAN_HOURS=2
+
 # Extension fields end
 
 networks:
@@ -75,6 +78,7 @@ services:
     command: [yarn, workspace, "@bet/scraper-marathon", dev]
     environment: 
       - MONGODB_CONNECTION_URI=mongodb://mongodb
+      - *scrapers-time-span
     networks:
       - app-tier
     depends_on:
@@ -86,15 +90,7 @@ services:
     command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
     environment: 
       - MONGODB_CONNECTION_URI=mongodb://mongodb
-    networks:
-      - app-tier
-    depends_on:
-      - mongodb
-
-  scraper-pinnacle-2:
-    build: ./
-    volumes: *default-volumes
-    command: [yarn, workspace, "@bet/scraper-pinnacle-2", dev]
+      - *scrapers-time-span
     networks:
       - app-tier
     depends_on:
@@ -106,6 +102,7 @@ services:
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
   #   environment: 
   #     - MONGODB_CONNECTION_URI=mongodb://mongodb
+  #     - *x-scrapers-time-span
   #   networks:
   #     - app-tier
   #   depends_on:

@@ -16,7 +16,7 @@ export function getPinnacleUrl(matchup: Matchup) {
   const [home, away] = matchup.participants;
   const matchupName = sanitize(`${home.name}-vs-${away.name}`);
 
-  return `https://www.pinnacle.com/pt/${matchup.league.sport.id}/${leagueName}/${matchupName}/${matchup.id}`;
+  return `https://www.pinnacle.com/pt/${matchup.league.sport.id}/${leagueName}/${matchupName}/${matchup.id}/`;
 }
 
 function sanitize(str: string) {

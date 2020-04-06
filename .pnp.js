@@ -223,6 +223,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-pinnacle-2/",
           "packageDependencies": [
             ["@bet/scraper-pinnacle-2", "workspace:services/scraper-pinnacle-2"],
+            ["@bet/assert", "workspace:packages/assert"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/mongodb", "npm:3.5.4"],
             ["@types/node", "npm:13.9.8"],

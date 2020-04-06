@@ -90,6 +90,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/scraper-pinnacle-2@workspace:services/scraper-pinnacle-2"
   dependencies:
+    "@bet/assert": "workspace:packages/assert"
     "@bet/types": "workspace:packages/types"
     "@types/mongodb": ^3.5.3
     "@types/node": ^13.9.4

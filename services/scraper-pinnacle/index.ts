@@ -1,37 +1,16 @@
-import PinnacleRetriveBetsAndUpdateDb from  './houses/pinnacle';
+import scraper from "./scraper";
+import store from "./storage";
 
-import DB from '@bet/db';
+import DB from "./db";
 
-const SCRAPPING_INTERVAL = 10 * 1000; // 10 seconds
+const config = {
+  time: 1000 * 60 * 60 * 24 * 1 // 24 hours
+};
 
-class Manager {
-  private scrappers = {};
-
-  async start(name: string, fn: () => Promise<number>): Promise<void> {
-    this.scrappers[name] = fn;
-    await this.run(name);
-  }
-
-  private async run(name) {
-    const scrapper = this.scrappers[name];
-
-    console.log(`Starting ${name} sync.`);
-    console.time(name);
-    const count = await scrapper();
-    console.log(`${name} ended with ${count} bets found. Time spent:`);
-    console.timeEnd(name);
-
-    setTimeout(() => {
-      this.run(name);
-    }, SCRAPPING_INTERVAL);
-  }
-}
-
-async function main() {
-  await DB.getInstance().connect();
-  const manager = new Manager();
-
-  manager.start("Pinnacle", PinnacleRetriveBetsAndUpdateDb);
-}
-
-main().then().catch(console.error);
+// TODO move database to a service
+DB.getInstance()
+  .connect()
+  .then(() => {
+    console.log(`Starting Pinnacle sync...`);
+    scraper.run(config, store);
+  });

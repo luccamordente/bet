@@ -1,5 +1,9 @@
 import * as types from "./types";
 import request from "./request";
+import { assertEnv } from "@bet/assert";
+
+assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+const { EVENT_TIME_SPAN_HOURS } = process.env;
 
 interface GetLeaguesParams {
   sportId: number;
@@ -16,9 +20,10 @@ interface GetMatchupsParams {
 }
 
 export async function getMatchups(params: GetMatchupsParams) {
-  return request<types.Matchup[]>(
+  const matchups = await request<types.Matchup[]>(
     `https://api.arcadia.pinnacle.com/0.1/leagues/${params.leagueId}/matchups`
   );
+  return matchups.filter((matchup) => new Date(matchup.startTime).getTime() - new Date().getTime() < parseInt(EVENT_TIME_SPAN_HOURS) * 60 * 60 * 1000);
 }
 
 interface GetMarketsParams {

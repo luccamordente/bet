@@ -33,12 +33,11 @@ function log(bettable: Bettable) {
 }
 
 export default function store(bettable: Bettable) {
-  console.log("Fake saving: ", bettable);
-  // return save(bettable)
-  //   .then(() => {
-  //     log(bettable);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error sending bettable to storage', error);
-  //   });
+  return save(bettable)
+    .then(() => {
+      log(bettable);
+    })
+    .catch(error => {
+      console.error('Error sending bettable to storage', error);
+    });
 }
