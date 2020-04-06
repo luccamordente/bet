@@ -131,7 +131,7 @@ __metadata:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
     "@bet/types": "workspace:packages/types"
-    "@types/node": ^13.9.4
+    "@types/node": ^13.11.0
     "@types/node-fetch": ^2.5.5
     node-fetch: ^2.6.0
     ts-node: ^8.8.1
@@ -211,14 +211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^13.9.4":
-  version: 13.9.8
-  resolution: "@types/node@npm:13.9.8"
-  checksum: 2/72610b1cca1ecb1b28ef493fac3a67975e32a814ec5dac888d55e9374c9475664ec797875ea7cb941b94a5016c9d4b0e4d40e60cc9793ef6aa279d3bd1e41fd3
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^13.11.0":
+"@types/node@npm:*, @types/node@npm:^13.11.0":
   version: 13.11.0
   resolution: "@types/node@npm:13.11.0"
   checksum: 2/8691b7c62a978a78e54c5019c5b055400ff7977fcd6694ce62c79c8c3b1bf5e4818195177693e77950df97134787703c6b0e54d6144eb4dfd183a2ac3e510f39

@@ -259,7 +259,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
             ["@bet/types", "workspace:packages/types"],
-            ["@types/node", "npm:13.9.8"],
+            ["@types/node", "npm:13.11.0"],
             ["@types/node-fetch", "npm:2.5.5"],
             ["node-fetch", "npm:2.6.0"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
@@ -293,7 +293,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-bson-npm-4.0.2-c4463d9659-2.zip/node_modules/@types/bson/",
           "packageDependencies": [
             ["@types/bson", "npm:4.0.2"],
-            ["@types/node", "npm:13.9.8"]
+            ["@types/node", "npm:13.11.0"]
           ],
           "linkType": "HARD",
         }]
@@ -340,7 +340,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/mongodb", "npm:3.5.4"],
             ["@types/bson", "npm:4.0.2"],
-            ["@types/node", "npm:13.9.8"]
+            ["@types/node", "npm:13.11.0"]
           ],
           "linkType": "HARD",
         }]
@@ -352,13 +352,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:13.11.0"]
           ],
           "linkType": "HARD",
-        }],
-        ["npm:13.9.8", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-13.9.8-71b44edd15-2.zip/node_modules/@types/node/",
-          "packageDependencies": [
-            ["@types/node", "npm:13.9.8"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["@types/node-fetch", [
@@ -366,7 +359,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.5-8e8fd22b28-2.zip/node_modules/@types/node-fetch/",
           "packageDependencies": [
             ["@types/node-fetch", "npm:2.5.5"],
-            ["@types/node", "npm:13.9.8"],
+            ["@types/node", "npm:13.11.0"],
             ["form-data", "npm:3.0.0"]
           ],
           "linkType": "HARD",
@@ -386,7 +379,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-puppeteer-npm-2.0.1-e37ace954a-2.zip/node_modules/@types/puppeteer/",
           "packageDependencies": [
             ["@types/puppeteer", "npm:2.0.1"],
-            ["@types/node", "npm:13.9.8"]
+            ["@types/node", "npm:13.11.0"]
           ],
           "linkType": "HARD",
         }]
