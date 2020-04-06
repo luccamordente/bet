@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
   timeout: 10000,
 };
 
-const DEFAULT_HEADERS = {
+const DEFAULT_HEADERS: { [key: string]: string } = {
   Accept: "application/json",
   "Content-Type": "application/json",
   "X-Api-Key": "CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R", // TODO can we get a different API key?
@@ -60,7 +60,7 @@ async function guestRequest<T>(
   const fetchOptions = {
     ...DEFAULT_OPTIONS,
     ...options,
-    headers: new Headers({ ...DEFAULT_HEADERS }),
+    headers: DEFAULT_HEADERS,
   };
 
   let json;
@@ -89,7 +89,7 @@ export default async function request<T>(url: string): Promise<T> {
   };
 
   if (sessionToken !== undefined) {
-    fetchOptions.headers.set("X-Session", sessionToken);
+    fetchOptions.headers["X-Session"] = sessionToken;
   }
 
   const resp = await fetch(url, fetchOptions);
