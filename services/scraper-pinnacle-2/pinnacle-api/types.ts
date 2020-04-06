@@ -74,12 +74,12 @@ export type Matchup = RootMatchup | ChildMatchup | SpecialMatchup;
 type OverUnderDesignationPrices = [
   {
     readonly designation: "over";
-    readonly points?: number;
+    readonly points: number;
     readonly price: number;
   },
   {
     readonly designation: "under";
-    readonly points?: number;
+    readonly points: number;
     readonly price: number;
   }
 ];
@@ -153,10 +153,15 @@ interface GenericMarket {
   readonly version: number;
 }
 
-export interface MoneylineMarket extends GenericMarket {
+export interface RegularMoneylineMarket extends GenericMarket {
   readonly prices:
     | TeamDesignationPrices
     | TeamDrawableDesignationPrices
+  readonly type: "moneyline";
+}
+
+export interface SpecialMoneylineMarket extends GenericMarket {
+  readonly prices:
     | ParticipantPrices;
   readonly type: "moneyline";
 }
@@ -178,7 +183,8 @@ export interface SpreadMarket extends GenericMarket {
 }
 
 export type Market =
-  | MoneylineMarket
+  | RegularMoneylineMarket
+  | SpecialMoneylineMarket
   | TotalMarket
   | TeamTotalMarket
   | SpreadMarket;

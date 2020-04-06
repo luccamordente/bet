@@ -13,9 +13,18 @@ function classify(context: MarketContext) {
     if (market.type === "spread") {
       return { kind: "regular_handicap", market, matchup } as const;
     }
+    if (market.type === "total") {
+      return { kind: "regular_total", market, matchup } as const;
+    }
+    if (market.type === "moneyline") {
+      return { kind: "regular_moneyline", market, matchup } as const;
+    }
+    if (market.type === "team_total") {
+      return { kind: "regular_team_total", market, matchup } as const;
+    }
   } else {
   }
-  return { kind: "total", market, matchup } as const;
+  return { kind: "unknown", market, matchup } as const;
 }
 
 export default function normalize(context: MarketContext): NormalizeResult {
@@ -24,13 +33,27 @@ export default function normalize(context: MarketContext): NormalizeResult {
   switch (classified.kind) {
     case "regular_handicap":
       return normalizers.regularHandicap(classified);
+    case "regular_total":
+      return normalizers.regularTotal(classified);
+    case "regular_moneyline":
+      return normalizers.regularMoneyline(classified);
+    case "regular_team_total":
+      return normalizers.regularTeamTotal(classified);
+
+    case "unknown":
+      return {
+        ok: false,
+        code: "not_classified",
+        message: "Don't know how to classify market context.",
+        data: { context },
+      };
 
     default:
       return {
         ok: false,
-        code: "unknown",
-        message: "Unknown error normalizing market context!",
-        data: { context },
+        code: "no_normalizer",
+        message: `No normalizer for this kind.`,
+        data: classified,
       };
   }
 }

@@ -5,7 +5,7 @@ type Map = readonly ["map", number];
 
 interface RoundsMarket {
   readonly period: Map | "match";
-  readonly unit: "round";
+  readonly unit: "rounds";
 }
 
 interface MapsMarket {
@@ -28,6 +28,9 @@ export default interface EsportsBettable extends GenericBettable {
 
     | (markets.Total & MapsMarket)
     | (markets.Total & RoundsMarket)
+
+    | (markets.TeamTotal & MapsMarket)
+    | (markets.TeamTotal & RoundsMarket)
 
     | (markets.Result & ResultMarket)
 }

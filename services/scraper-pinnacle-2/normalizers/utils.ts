@@ -1,4 +1,4 @@
-import { Matchup } from "../pinnacle-api/types";
+import { Matchup, RootMatchup } from "../pinnacle-api/types";
 
 export function americanOddToDecimal(american: number): number {
   let ret: number;
@@ -26,4 +26,21 @@ function sanitize(str: string) {
     .replace(" ", "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-");
+}
+
+export function commonBettable(matchup: RootMatchup, price: { price: number }) {
+  return {
+    house: "pinnacle",
+    extracted_at: new Date(),
+    event: {
+      league: matchup.league.name,
+      participants: {
+        home: matchup.participants[0].name,
+        away: matchup.participants[1].name,
+      },
+      starts_at: new Date(matchup.startTime),
+    },
+    odd: americanOddToDecimal(price.price),
+    url: getPinnacleUrl(matchup),
+  };
 }

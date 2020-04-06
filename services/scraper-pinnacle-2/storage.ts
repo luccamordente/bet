@@ -33,7 +33,7 @@ function log(bettable: Bettable) {
 }
 
 export default function store(bettable: Bettable) {
-  console.log(bettable);
+  console.log("Fake saving: ", bettable);
   // return save(bettable)
   //   .then(() => {
   //     log(bettable);

@@ -10,6 +10,13 @@ export interface Handicap {
 export interface Total {
   readonly kind: "total";
   readonly operation: "over_under";
+  readonly team: undefined;
+  readonly value: readonly ["over" | "under", number];
+}
+
+export interface TeamTotal {
+  readonly kind: "team_total";
+  readonly operation: "over_under";
   readonly team: Team;
   readonly value: readonly ["over" | "under", number];
 }

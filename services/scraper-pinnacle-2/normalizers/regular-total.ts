@@ -3,16 +3,16 @@ import {
   NewSoccerBettable,
   NewEsportsBettable,
 } from "@bet/types";
-import { SpreadMarket, RootMatchup } from "../pinnacle-api/types";
+import { RootMatchup, TotalMarket } from "../pinnacle-api/types";
 import { commonBettable } from "./utils";
 
-interface RegularHandicapContext {
-  readonly market: SpreadMarket;
+interface RegularTotalContext {
+  readonly market: TotalMarket;
   readonly matchup: RootMatchup;
 }
 
-export default function regularHandicap(
-  ctx: RegularHandicapContext
+export default function regularTotal(
+  ctx: RegularTotalContext
 ): NormalizeResult {
   const { market, matchup } = ctx;
   let bettableA;
@@ -43,25 +43,25 @@ export default function regularHandicap(
 }
 
 interface Price {
-  readonly designation: "home" | "away";
+  readonly designation: "over" | "under";
   readonly points: number;
   readonly price: number;
 }
 
 function soccerBettable(
   matchup: RootMatchup,
-  market: SpreadMarket,
+  market: TotalMarket,
   price: Price
 ): NewSoccerBettable {
   return {
     ...commonBettable(matchup, price),
     sport: "soccer",
     market: {
-      kind: "handicap",
-      operation: "spread",
+      kind: "total",
+      operation: "over_under",
       period: market.period === 0 ? "match" : ["half", market.period],
       team: undefined,
-      unit: "goals", // regular handicaps are only for goals
+      unit: "goals", // regular totals are only for goals
       value: [price.designation, price.points],
     },
   };
@@ -69,7 +69,7 @@ function soccerBettable(
 
 function esportsBettable(
   matchup: RootMatchup,
-  market: SpreadMarket,
+  market: TotalMarket,
   price: Price
 ): NewEsportsBettable {
   if (market.period === 0) {
@@ -77,8 +77,8 @@ function esportsBettable(
       ...commonBettable(matchup, price),
       sport: "esports",
       market: {
-        kind: "handicap",
-        operation: "spread",
+        kind: "total",
+        operation: "over_under",
         period: "match",
         team: undefined,
         unit: "maps",
@@ -90,8 +90,8 @@ function esportsBettable(
       ...commonBettable(matchup, price),
       sport: "esports",
       market: {
-        kind: "handicap",
-        operation: "spread",
+        kind: "total",
+        operation: "over_under",
         period: ["map", market.period],
         team: undefined,
         unit: "rounds",

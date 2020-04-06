@@ -11,5 +11,6 @@ export default interface SoccerBettable extends GenericBettable {
   readonly market:
     | (markets.Handicap & GoalsMarket)
     | (markets.OddEven & GoalsMarket)
-    | (markets.Total & GoalsMarket);
+    | (markets.Total & GoalsMarket)
+    | (markets.TeamTotal & GoalsMarket);
 }
