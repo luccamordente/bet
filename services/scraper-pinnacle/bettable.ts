@@ -1,7 +1,7 @@
 import DB from "@bet/db";
-import { Bettable } from "@bet/types";
+import { NewBettable } from "@bet/types";
 
-async function save(bettable: Bettable): Promise<void> {
+async function save(bettable: NewBettable): Promise<void> {
   const { db } = DB.getInstance();
   return db.collection("bettables").replaceOne(
     {
@@ -15,4 +15,4 @@ async function save(bettable: Bettable): Promise<void> {
   );
 }
 
-export { save, Bettable };
+export { save };
