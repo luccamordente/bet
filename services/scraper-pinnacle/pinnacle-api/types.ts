@@ -149,7 +149,12 @@ interface GenericMarket {
     | ParticipantPrices;
   readonly side?: "home" | "away";
   readonly status?: string;
-  readonly type: "moneyline" | "total" | "team_total" | "spread";
+  readonly type:
+    | "moneyline"
+    | "special_moneyline"
+    | "total"
+    | "team_total"
+    | "spread";
   readonly version: number;
 }
 
@@ -160,7 +165,7 @@ export interface RegularMoneylineMarket extends GenericMarket {
 
 export interface SpecialMoneylineMarket extends GenericMarket {
   readonly prices: ParticipantPrices;
-  readonly type: "moneyline";
+  readonly type: "special_moneyline";
 }
 
 export interface TotalMarket extends GenericMarket {
