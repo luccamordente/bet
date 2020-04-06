@@ -11,7 +11,7 @@ interface GetLeaguesParams {
 
 export async function getLeagues(params: GetLeaguesParams) {
   return request<types.League[]>(
-    `https://api.arcadia.pinnacle.com/0.1/sports/${params.sportId}/leagues?all=false`
+    `https://api.arcadia.pinnacle.com/0.1/sports/${params.sportId}/leagues?all=false`,
   );
 }
 
@@ -21,9 +21,13 @@ interface GetMatchupsParams {
 
 export async function getMatchups(params: GetMatchupsParams) {
   const matchups = await request<types.Matchup[]>(
-    `https://api.arcadia.pinnacle.com/0.1/leagues/${params.leagueId}/matchups`
+    `https://api.arcadia.pinnacle.com/0.1/leagues/${params.leagueId}/matchups`,
   );
-  return matchups.filter((matchup) => new Date(matchup.startTime).getTime() - new Date().getTime() < parseInt(EVENT_TIME_SPAN_HOURS) * 60 * 60 * 1000);
+  return matchups.filter(
+    (matchup) =>
+      new Date(matchup.startTime).getTime() - new Date().getTime() <
+      parseInt(EVENT_TIME_SPAN_HOURS) * 60 * 60 * 1000,
+  );
 }
 
 interface GetMarketsParams {
@@ -37,7 +41,7 @@ interface GetMarketsParams {
  */
 export async function getMarkets(params: GetMarketsParams) {
   const markets = await request<types.Market[]>(
-    `https://api.arcadia.pinnacle.com/0.1/matchups/${params.matchId}/markets/related/straight`
+    `https://api.arcadia.pinnacle.com/0.1/matchups/${params.matchId}/markets/related/straight`,
   );
   return markets.filter((market) => market.matchupId === params.matchId);
 }

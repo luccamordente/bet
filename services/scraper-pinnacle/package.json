@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
+    "@bet/db": "workspace:packages/db",
     "@bet/types": "workspace:packages/types",
     "@types/node": "^13.9.4",
     "@types/node-fetch": "^2.5.5",

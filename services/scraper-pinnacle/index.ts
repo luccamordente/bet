@@ -1,10 +1,10 @@
 import scraper from "./scraper";
 import store from "./storage";
 
-import DB from "./db";
+import DB from "@bet/db";
 
 const config = {
-  time: 1000 * 60 * 60 * 24 * 1 // 24 hours
+  time: 1000 * 60 * 60 * 24 * 1, // 24 hours
 };
 
 // TODO move database to a service

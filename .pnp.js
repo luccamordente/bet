@@ -257,6 +257,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@bet/scraper-pinnacle", "workspace:services/scraper-pinnacle"],
             ["@bet/assert", "workspace:packages/assert"],
+            ["@bet/db", "workspace:packages/db"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.9.8"],
             ["@types/node-fetch", "npm:2.5.5"],
