@@ -85,7 +85,7 @@ async function guestRequest<T>(
 export default async function request<T>(url: string): Promise<T> {
   const fetchOptions = {
     ...DEFAULT_OPTIONS,
-    headers: new Headers({ ...DEFAULT_HEADERS }),
+    headers: DEFAULT_HEADERS,
   };
 
   if (sessionToken !== undefined) {
