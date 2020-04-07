@@ -1,6 +1,6 @@
 import { Bettable } from "@bet/types";
 
-function p(obj: any) {
+function p(obj: unknown) {
   return JSON.stringify(obj).padStart(15);
 }
 

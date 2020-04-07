@@ -8,9 +8,8 @@ function periodMatches(a: Market, b: Market): boolean {
   // TODO make sure we cover all types possibilities
   if (a.period === b.period) {
     return true;
-  } else {
-    return a.period[0] === b.period[0] && a.period[1] === b.period[1];
   }
+  return a.period[0] === b.period[0] && a.period[1] === b.period[1];
 }
 
 /**
