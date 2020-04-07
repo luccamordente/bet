@@ -1,5 +1,3 @@
-import { MarketKey } from "../../models/bettable";
-
 export enum MarketName {
   TOTAL_GOALS = "Total Goals",
   TOTAL_POINTS = "Total Points",
@@ -8,7 +6,7 @@ export enum MarketName {
   TO_WIN_MATCH_WITH_HANDICAP_BY_MAPS = "To Win Match With Handicap By Maps",
 }
 
-export const NORMALIZED_MARKET_KEY: Record<MarketName, MarketKey> = {
+export const NORMALIZED_MARKET_KEY: Record<MarketName, string> = {
   [MarketName.TOTAL_GOALS]: "game_score_total",
   [MarketName.TOTAL_POINTS]: "game_score_total",
   [MarketName.TOTAL_MAPS]: "game_score_total",
@@ -16,7 +14,7 @@ export const NORMALIZED_MARKET_KEY: Record<MarketName, MarketKey> = {
   [MarketName.TO_WIN_MATCH_WITH_HANDICAP_BY_MAPS]: "game_score_handicap",
 };
 
-export function normalizedMarketKey(marketName: string): MarketKey {
+export function normalizedMarketKey(marketName: string): string {
   const key = NORMALIZED_MARKET_KEY[marketName];
 
   if (key === undefined) {

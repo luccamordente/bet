@@ -1,12 +1,16 @@
-import puppeteer from "puppeteer";
 import moment from "moment";
 
-import { Bettable, BettableMarket, MarketType } from "../../models/bettable";
+import { NewBettable } from "@bet/types";
 
 import SportPage from "./pages/sportPage";
 import FootballMatchPage, { Members, Price } from "./pages/footballMatchPage";
 import { normalizedMarketKey } from "./types";
-import { sanitizedEquals } from "../../utils";
+import { sanitizedEquals } from "./utils";
+import { GenericMarket } from "@bet/types/bettable/generic";
+import { assertEnv } from "@bet/assert";
+
+assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+const { EVENT_TIME_SPAN_HOURS } = process.env;
 
 export interface Bet {
   sport: string;
@@ -28,21 +32,20 @@ declare const document: {
 };
 
 const SPORTS = [
-  { key: "basketball", id: 6 },
+  // { key: "basketball", id: 6 },
   { key: "esports", id: 1895085 },
   { key: "soccer", id: 11 },
-  { key: "hockey", id: 537 },
+  // { key: "hockey", id: 537 },
   // { key: 'tabletennis', id: 382549, },
   // { key: 'tennis', id: 2398, },
 ];
-const TIME_SPAN_HOURS = 24;
 
 class MarathonWebsite {
   async *retrieveBets(): AsyncGenerator<Bet> {
     try {
       for (const sport of SPORTS) {
         const sportPage = new SportPage(
-          `https://www.marathonbet.com/en/betting/${sport.id}?periodGroupAllEvents=${TIME_SPAN_HOURS}`,
+          `https://www.marathonbet.com/en/betting/${sport.id}?periodGroupAllEvents=${EVENT_TIME_SPAN_HOURS}`,
         );
 
         const { urls } = await sportPage.getData();
@@ -87,26 +90,26 @@ function normalizeDate(date: string): Date {
   throw new Error(`Cannot normalize date: ${date}`);
 }
 
-function normalizeMarket(bet: Bet): BettableMarket {
+function normalizeMarket(bet: Bet): GenericMarket {
   let member: string;
   let value: string;
   let operator;
-  let type: MarketType;
   const key = normalizedMarketKey(bet.price.mn);
+
+  const unit = bet.sport === "soccer" ? "goals" : "maps";
 
   switch (key) {
     case "game_score_total":
       [, operator, value] = bet.price.sn.match(/(\w+)\s+([\d\.]+)/);
       operator = operator === "Under" ? "under" : "over";
-      type = "over_under";
 
       return {
-        key,
-        type: "over_under",
-        operation: {
-          operator,
-          value: parseFloat(value),
-        },
+        kind: "total",
+        operation: "over_under",
+        period: "match",
+        team: "both",
+        value: [operator, parseFloat(value)] as [string, number],
+        unit,
       };
 
     case "game_score_handicap":
@@ -127,12 +130,12 @@ function normalizeMarket(bet: Bet): BettableMarket {
       }
 
       return {
-        key,
-        type: "spread",
-        operation: {
-          operator,
-          value: parseFloat(value),
-        },
+        kind: "handicap",
+        operation: "spread",
+        period: "match",
+        team: null,
+        value: [operator, parseFloat(value)] as [string, number],
+        unit,
       };
 
     default:
@@ -140,7 +143,7 @@ function normalizeMarket(bet: Bet): BettableMarket {
   }
 }
 
-function normalizeBet(bet: Bet): Bettable {
+function normalizeBet(bet: Bet): NewBettable {
   return {
     odd: parseFloat(bet.price.epr),
     market: normalizeMarket(bet),
@@ -162,7 +165,6 @@ function normalizeBet(bet: Bet): Bettable {
 export default async function* retriveBets() {
   const website = new MarathonWebsite();
   for await (const bet of website.retrieveBets()) {
-    console.log(JSON.stringify(bet));
     yield normalizeBet(bet);
   }
 }
