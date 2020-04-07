@@ -60,7 +60,7 @@ function soccerBettable(
       kind: "handicap",
       operation: "spread",
       period: market.period === 0 ? "match" : ["half", market.period],
-      team: undefined,
+      team: null,
       unit: "goals", // regular handicaps are only for goals
       value: [price.designation, price.points],
     },
@@ -81,7 +81,7 @@ function esportsBettable(
       ...(market.period === 0
         ? { unit: "maps", period: "match" }
         : { unit: "rounds", period: ["map", market.period] }),
-      team: undefined,
+      team: null,
       value: [price.designation, price.points],
     },
   };

@@ -14,16 +14,13 @@ function classify(context: MarketContext) {
     if (market.type === "spread") {
       return { kind: "regular_handicap", market, matchup } as const;
     }
-    if (market.type === "total") {
+    if (market.type === "total" || market.type === "team_total") {
       return { kind: "regular_total", market, matchup } as const;
     }
     if (market.type === "moneyline") {
       if (isRegularMoneylineMarket(market)) {
         return { kind: "regular_moneyline", market, matchup } as const;
       }
-    }
-    if (market.type === "team_total") {
-      return { kind: "regular_team_total", market, matchup } as const;
     }
   }
   return { kind: "unknown", market, matchup } as const;
@@ -39,8 +36,6 @@ export default function normalize(context: MarketContext): NormalizeResult {
       return normalizers.regularTotal(classified);
     case "regular_moneyline":
       return normalizers.regularMoneyline(classified);
-    case "regular_team_total":
-      return normalizers.regularTeamTotal(classified);
 
     case "unknown":
       return {

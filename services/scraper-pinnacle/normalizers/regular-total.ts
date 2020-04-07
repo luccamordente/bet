@@ -3,11 +3,15 @@ import {
   NewSoccerBettable,
   NewEsportsBettable,
 } from "@bet/types";
-import { RootMatchup, TotalMarket } from "../pinnacle-api/types";
+import {
+  RootMatchup,
+  TotalMarket,
+  TeamTotalMarket,
+} from "../pinnacle-api/types";
 import { commonBettable } from "./utils";
 
 interface RegularTotalContext {
-  readonly market: TotalMarket;
+  readonly market: TotalMarket | TeamTotalMarket;
   readonly matchup: RootMatchup;
 }
 
@@ -50,7 +54,7 @@ interface Price {
 
 function soccerBettable(
   matchup: RootMatchup,
-  market: TotalMarket,
+  market: TotalMarket | TeamTotalMarket,
   price: Price,
 ): NewSoccerBettable {
   return {
@@ -60,7 +64,7 @@ function soccerBettable(
       kind: "total",
       operation: "over_under",
       period: market.period === 0 ? "match" : ["half", market.period],
-      team: undefined,
+      team: market.side !== undefined ? market.side : "both",
       unit: "goals", // regular totals are only for goals
       value: [price.designation, price.points],
     },
@@ -69,7 +73,7 @@ function soccerBettable(
 
 function esportsBettable(
   matchup: RootMatchup,
-  market: TotalMarket,
+  market: TotalMarket | TeamTotalMarket,
   price: Price,
 ): NewEsportsBettable {
   return {
@@ -81,7 +85,7 @@ function esportsBettable(
       ...(market.period === 0
         ? { unit: "maps", period: "match" }
         : { unit: "rounds", period: ["map", market.period] }),
-      team: undefined,
+      team: market.side !== undefined ? market.side : "both",
       value: [price.designation, price.points],
     },
   };

@@ -59,7 +59,7 @@ function esportsBettable(
       kind: "result",
       operation: "binary",
       period: market.period === 0 ? "match" : ["map", market.period],
-      team: undefined,
+      team: null,
       unit: "team",
       value: price.designation,
     },

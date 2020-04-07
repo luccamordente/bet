@@ -26,7 +26,5 @@ export default interface EsportsBettable extends GenericBettable {
     | (markets.OddEven & RoundsMarket)
     | (markets.Total & MapsMarket)
     | (markets.Total & RoundsMarket)
-    | (markets.TeamTotal & MapsMarket)
-    | (markets.TeamTotal & RoundsMarket)
     | (markets.Result & ResultMarket);
 }
