@@ -1,5 +1,5 @@
-import Operation from "./operation";
-import OverUnder from "./over_under";
-import Spread from "./spread";
+import * as OverUnder from "./over_under";
+import * as Spread from "./spread";
+import * as Binary from "./binary";
 
-export { Operation, OverUnder, Spread };
+export { OverUnder, Spread, Binary };

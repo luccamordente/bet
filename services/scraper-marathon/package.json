@@ -4,7 +4,9 @@
     "dev": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
+    "@bet/assert": "workspace:packages/assert",
     "@bet/db": "workspace:packages/db",
+    "@bet/types": "workspace:packages/types",
     "@types/node": "^13.11.0",
     "axios": "^0.19.2",
     "moment": "^2.24.0",

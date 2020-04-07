@@ -1,10 +1,5 @@
-import Operation from "./operation";
+import { Handicap } from "@bet/types/bettable/markets";
 
-export default class Spread extends Operation<"spread"> {
-  check(): boolean {
-    return (
-      this.operationA.operator !== this.operationB.operator &&
-      this.operationA.value === -this.operationB.value
-    );
-  }
+export function check(a: Handicap, b: Handicap): boolean {
+  return a.value[0] !== b.value[0] && a.value[1] === -b.value[1];
 }

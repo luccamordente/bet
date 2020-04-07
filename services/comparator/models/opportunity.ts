@@ -1,6 +1,6 @@
 import DB from "@bet/db";
 
-import { Bettable } from "./bettable";
+import { Bettable } from "@bet/types";
 
 export type Stakeable = Bettable & {
   stake: number;

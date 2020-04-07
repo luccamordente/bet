@@ -8,7 +8,7 @@ const { MONGODB_CONNECTION_URI } = process.env;
 export default class DB {
   private static instance: DB;
   private client: MongoClient;
-  private db: Db;
+  public db: Db;
 
   private constructor() {}
 
