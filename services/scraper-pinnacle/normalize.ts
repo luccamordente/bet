@@ -2,6 +2,7 @@ import { MarketContext } from "./types";
 import { NormalizeResult } from "../../packages/types";
 
 import * as normalizers from "./normalizers";
+import { isRegularMoneylineMarket } from "./pinnacle-api/types";
 
 function classify(context: MarketContext) {
   const { market, matchup } = context;
@@ -17,7 +18,9 @@ function classify(context: MarketContext) {
       return { kind: "regular_total", market, matchup } as const;
     }
     if (market.type === "moneyline") {
-      return { kind: "regular_moneyline", market, matchup } as const;
+      if (isRegularMoneylineMarket(market)) {
+        return { kind: "regular_moneyline", market, matchup } as const;
+      }
     }
     if (market.type === "team_total") {
       return { kind: "regular_team_total", market, matchup } as const;
