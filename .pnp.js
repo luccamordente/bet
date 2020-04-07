@@ -169,6 +169,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
             ["@bet/telegram-bot-api", "workspace:packages/telegram-bot-api"],
+            ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.0"],
             ["@types/string-similarity", "npm:3.0.0"],
             ["moment", "npm:2.24.0"],
@@ -240,7 +241,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-marathon/",
           "packageDependencies": [
             ["@bet/scraper-marathon", "workspace:services/scraper-marathon"],
+            ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.0"],
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],

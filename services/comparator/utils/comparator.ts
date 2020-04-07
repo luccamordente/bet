@@ -1,37 +1,39 @@
-import { Bettable, Odd, MarketType } from "../models/bettable";
+import { Bettable } from "@bet/types";
+import { Market } from "@bet/types/bettable/markets";
 import { Opportunity, Stakeable } from "../models/opportunity";
 
-import * as Operations from "./operations";
+import * as operations from "./operations";
 
-const OPERATIONS_MAP: Record<
-  MarketType,
-  any extends typeof Operations.Operation ? any : never
-> = {
-  over_under: Operations.OverUnder,
-  spread: Operations.Spread,
-};
+function periodMatches(a: Market, b: Market): boolean {
+  // TODO make sure we cover all types possibilities
+  if (a.period === b.period) {
+    return true;
+  } else {
+    return a.period[0] === b.period[0] && a.period[1] === b.period[1];
+  }
+}
 
 /**
  * Validates if bettables are complementary by looking at the
  * market type and matching the operations against each other.
  */
 function isComplementary(a: Bettable, b: Bettable): boolean {
-  // Market key and type must be the same for each bettable
-  if (a.market.key !== b.market.key || a.market.type !== b.market.type) {
+  if (
+    a.market.team !== b.market.team ||
+    a.market.unit !== b.market.unit ||
+    !periodMatches(a.market, b.market)
+  ) {
     return false;
   }
 
-  switch (a.market.type) {
+  // TODO make sure b.market is compatible
+  switch (a.market.operation) {
     case "over_under":
-      return new Operations.OverUnder(
-        a.market.operation,
-        b.market.operation,
-      ).check();
+      return operations.OverUnder.check(a.market, b.market);
     case "spread":
-      return new Operations.Spread(
-        a.market.operation,
-        b.market.operation,
-      ).check();
+      return operations.Spread.check(a.market, b.market);
+    case "binary":
+      return operations.Binary.check(a.market, b.market);
   }
 }
 
@@ -65,7 +67,7 @@ function combine<T>(
 /**
  * Calculate the profit off two odds, assuming they are complementary.
  */
-function calculateProfit(a: Odd, b: Odd): number {
+function calculateProfit(a: number, b: number): number {
   const [stakeA, stakeB] = calculateStake(a, b);
   const profit = (a * stakeA + b * stakeB) / 2 - 1;
   return profit;

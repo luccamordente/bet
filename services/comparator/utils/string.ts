@@ -1,6 +1,6 @@
 import { Stakeable } from "../models/opportunity";
 import moment from "moment";
-import { Bettable, BettableMarket } from "../models/bettable";
+import { Bettable } from "@bet/types";
 
 const SPORTS = {
   basketball: "🏀 Basquete",
@@ -10,6 +10,13 @@ const SPORTS = {
   tabletennis: "🏓 Tênis de Mesa",
   tennis: "🎾 Tênis",
 } as const;
+
+const OPERATORS = {
+  over: "Over ↑",
+  under: "Under ↓",
+  odd: "Ímpar (odd)",
+  even: "Par (even)",
+};
 
 export function oddToString(odd: number): string {
   return `${Math.round(odd * 100) / 100}`;
@@ -56,12 +63,11 @@ export function comparableToString(comparable: Bettable) {
   const {
     odd,
     house,
-    market: { operation },
     event: { starts_at, participants },
   } = comparable;
-  return ` 🏦 ${houseToString(house)} (${operation.operator} ${
-    operation.value
-  } ⇢ ${oddToString(odd)}) 🗓  ${startDateToString(
+  return ` 🏦 ${houseToString(house)} (${marketOperationToString(
+    comparable,
+  )} (${oddToString(odd)})) 🗓  ${startDateToString(
     starts_at,
   )} 🎭 ${participantsToString(participants)}`;
 }
@@ -74,70 +80,55 @@ export function participantsToString(participants: {
   return `${home} × ${away}`;
 }
 
-export function marketToString(market: BettableMarket, sport: string) {
-  switch (market.key) {
-    case "game_score_total":
-      switch (sport) {
-        case "basketball":
-        case "tabletennis":
-        case "tennis":
-          return "Total de pontos no jogo";
-        case "esports":
-          return "Total de mapas no jogo";
-        case "hockey":
-        case "soccer":
-          return "Total de gols no jogo";
-      }
-      break;
-    case "game_score_handicap":
-      switch (sport) {
-        case "basketball":
-        case "tabletennis":
-        case "tennis":
-          return "Handicap de pontos no jogo";
-        case "esports":
-          return "Handicap de mapas no jogo";
-        case "hockey":
-        case "soccer":
-          return "Handicap de gols no jogo";
-      }
-      break;
+export function marketToString(bettable: Bettable) {
+  const { market } = bettable;
+
+  switch (market.kind) {
+    case "total":
+      return `Total de ${market.unit} em ${market.period}`;
+    case "handicap":
+      return `Handicap de ${market.unit} em ${market.period}`;
+    case "odd_even":
+      return `${market.unit} em ${market.period} (ímpar/par)`;
+    case "result":
+      return `Vencedor em ${market.period}`;
   }
-  return market.key;
+}
+
+function formatSpread(spread: number): string {
+  return spread < 0 ? `${spread}` : `+${spread}`;
 }
 
 function marketOperationToString(bettable: Bettable): string {
   const {
-    market: { operation },
+    market,
     event: { participants },
   } = bettable;
 
-  let operator: string;
-  switch (operation.operator) {
-    case "home":
-      operator = participants.home;
-      break;
-    case "away":
-      operator = participants.away;
-      break;
-    case "over":
-      operator = "Over ↑";
-      break;
-    case "under":
-      operator = "Under ↓";
-      break;
-  }
+  switch (market.operation) {
+    case "spread":
+      return `${participants[market.value[0]]}: ${formatSpread(
+        market.value[1],
+      )}`;
 
-  return `${operator} ${operation.value}`;
+    case "over_under":
+      return `${OPERATORS[market.value[0]]} ${market.value[1]}`;
+
+    case "binary":
+      switch (market.kind) {
+        case "odd_even":
+          return OPERATORS[market.value];
+        case "result":
+          return participants[market.value];
+      }
+  }
 }
 
 export function bettableToString(stakeable: Stakeable) {
   const {
-    sport,
     house,
     stake,
     odd,
-    market,
     extracted_at,
     url,
     event: { starts_at, participants },
@@ -145,7 +136,7 @@ export function bettableToString(stakeable: Stakeable) {
   return `🏦 ${houseToString(house)} 🗓  ${startDateToString(
     starts_at,
   )} 🎭 ${participantsToString(participants)}
-  🛒 ${marketToString(market, sport)}: ${marketOperationToString(
+  🛒 ${marketToString(stakeable)}: ${marketOperationToString(
     stakeable,
   )} ⇢ ${oddToString(odd)}
   💰 Stake: ${(stake * 100).toFixed(1)}%
@@ -185,11 +176,11 @@ export function profitToTelegramString(amount: number): string {
 }
 
 export function bettableToTelegramString(stakeable: Stakeable) {
-  const { sport, house, stake, odd, market, url } = stakeable;
+  const { house, stake, odd, url } = stakeable;
   return (
     `🏦 __${telegramEscape(houseToString(house))}__\n` +
     telegramEscape(
-      `   🛒 ${marketToString(market, sport)}: ${marketOperationToString(
+      `   🛒 ${marketToString(stakeable)}: ${marketOperationToString(
         stakeable,
       )}\n`,
     ) +

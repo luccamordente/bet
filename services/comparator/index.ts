@@ -2,8 +2,9 @@ import { compareTwoStrings } from "string-similarity";
 import moment from "moment";
 
 import DB from "@bet/db";
+import { Bettable } from "@bet/types";
 
-import { getCollection, Bettable } from "./models/bettable";
+import { getCollection } from "./models/bettable";
 
 import group from "./utils/group";
 import compare from "./utils/comparator";
@@ -17,7 +18,7 @@ import {
 } from "./utils/string";
 import publishOpportunity from "./publishOpportunity";
 
-const MAXIMUM_EXTRACT_MINUTES = 1;
+const MAXIMUM_EXTRACT_MINUTES = 2;
 
 const MINIMUM_PROFIT_TO_PUBLISH = 0.02;
 
@@ -46,11 +47,10 @@ const PARTICIPANT_NAME_SANITIZERS = [
 
 function announceComparison(opportunity: Opportunity) {
   const [a, b] = opportunity.stakeables;
-  const { sport } = a;
   console.group(
     `${profitToString(opportunity.profit)} ${sportToString(
       a.sport,
-    )} 🛒 ${marketToString(a.market, sport)}`,
+    )} 🛒 ${marketToString(a)}`,
   );
   console.log(comparableToString(a));
   console.log(comparableToString(b));
@@ -59,15 +59,12 @@ function announceComparison(opportunity: Opportunity) {
 
 function announceOpportunity(profitable: Opportunity): void {
   const [b1, b2] = profitable.stakeables;
-  const { sport } = b1;
   console.group(
     `${profitToString(profitable.profit)} profit opportunity! ${
       profitable._id
     }`,
   );
-  console.log(
-    `${sportToString(b1.sport)} 🛒 ${marketToString(b1.market, sport)}`,
-  );
+  console.log(`${sportToString(b1.sport)} 🛒 ${marketToString(b1)}`);
   console.log(bettableToString(b1));
   console.log(bettableToString(b2));
   console.groupEnd();
@@ -78,15 +75,17 @@ function announceOpportunity(profitable: Opportunity): void {
  */
 function sanitizeParticipantName(name: string): string {
   let sanitized = name;
+  sanitized = sanitized.toLowerCase();
   for (const sanitizer of PARTICIPANT_NAME_SANITIZERS) {
     sanitized = sanitized.replace(sanitizer, "");
   }
+  sanitized = sanitized.replace(/[^a-z0-9]/g, "");
   return sanitized;
 }
 
 function groupBettables(bettables: Bettable[]) {
   const s = sanitizeParticipantName;
-  return group(
+  return group<Bettable>(
     bettables,
     (a, b) => {
       let x;
@@ -94,8 +93,8 @@ function groupBettables(bettables: Bettable[]) {
       return (
         a.sport === b.sport &&
         a.event.starts_at.getTime() === b.event.starts_at.getTime() &&
-        a.market.key === b.market.key &&
-        a.market.type === b.market.type &&
+        a.market.kind === b.market.kind &&
+        a.market.operation === b.market.operation &&
         // try exact match first
         ((s(a.event.participants.home) === s(b.event.participants.home) &&
           s(a.event.participants.away) === s(b.event.participants.away)) ||
@@ -117,8 +116,8 @@ function groupBettables(bettables: Bettable[]) {
       return {
         sport: item.sport,
         market: {
-          key: item.market.key,
-          type: item.market.type,
+          kind: item.market.kind,
+          operation: item.market.operation,
         },
         event: {
           starts_at: item.event.starts_at,
@@ -161,6 +160,7 @@ async function run() {
   console.group("🔀 Comparing");
 
   const groups = groupBettables(bettables);
+  // console.log(JSON.stringify(groups, null, 2))
 
   let totalCount = 0;
   let profitCount = 0;

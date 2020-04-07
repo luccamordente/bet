@@ -28,7 +28,7 @@ x-headless-chrome: &headless-chrome
     - seccomp=docker/seccomp-chromium.json
 
 x-scrapers-env:
-  - &scrapers-time-span EVENT_TIME_SPAN_HOURS=2
+  - &scrapers-time-span EVENT_TIME_SPAN_HOURS=24
 
 # Extension fields end
 
