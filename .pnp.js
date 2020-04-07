@@ -35,6 +35,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/telegram-bot-api"
       },
       {
+        "name": "@bet/types",
+        "reference": "workspace:packages/types"
+      },
+      {
         "name": "@bet/comparator",
         "reference": "workspace:services/comparator"
       },
@@ -66,7 +70,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@bet/scraper-1xbet", ["workspace:services/scraper-1xbet"]],
       ["@bet/scraper-marathon", ["workspace:services/scraper-marathon"]],
       ["@bet/scraper-pinnacle", ["workspace:services/scraper-pinnacle"]],
-      ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]]
+      ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]],
+      ["@bet/types", ["workspace:packages/types"]]
     ],
     "fallbackPool": [
       [
@@ -79,7 +84,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ],
       [
         "prettier",
-        "npm:2.0.2"
+        "npm:2.0.4"
       ],
       [
         "pretty-quick",
@@ -99,7 +104,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@yarnpkg/pnpify", "virtual:7cb986fb20c404cc5a47cfab9da2f0a5996c2cce69656261b6204372d9840e5ff59301e648706158608c696ea42bbc170b234518e30b1dc6a6badcec34848747#npm:2.0.0-rc.20"],
             ["husky", "npm:4.2.3"],
-            ["prettier", "npm:2.0.2"],
+            ["prettier", "npm:2.0.4"],
             ["pretty-quick", "virtual:7cb986fb20c404cc5a47cfab9da2f0a5996c2cce69656261b6204372d9840e5ff59301e648706158608c696ea42bbc170b234518e30b1dc6a6badcec34848747#npm:2.0.1"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
@@ -168,7 +173,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/string-similarity", "npm:3.0.0"],
             ["moment", "npm:2.24.0"],
             ["string-similarity", "npm:4.0.1"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
           "linkType": "SOFT",
@@ -181,7 +186,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/core", "workspace:."],
             ["@yarnpkg/pnpify", "virtual:7cb986fb20c404cc5a47cfab9da2f0a5996c2cce69656261b6204372d9840e5ff59301e648706158608c696ea42bbc170b234518e30b1dc6a6badcec34848747#npm:2.0.0-rc.20"],
             ["husky", "npm:4.2.3"],
-            ["prettier", "npm:2.0.2"],
+            ["prettier", "npm:2.0.4"],
             ["pretty-quick", "virtual:7cb986fb20c404cc5a47cfab9da2f0a5996c2cce69656261b6204372d9840e5ff59301e648706158608c696ea42bbc170b234518e30b1dc6a6badcec34848747#npm:2.0.1"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
@@ -208,7 +213,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/db", "workspace:packages/db"],
             ["@types/node", "npm:13.11.0"],
             ["moment", "npm:2.24.0"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
           "linkType": "SOFT",
@@ -224,7 +229,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/puppeteer", "npm:2.0.1"],
             ["moment", "npm:2.24.0"],
             ["puppeteer", "npm:2.1.1"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
           "linkType": "SOFT",
@@ -240,7 +245,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.19.2"],
             ["moment", "npm:2.24.0"],
             ["node-html-parser", "npm:1.2.14"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
           "linkType": "SOFT",
@@ -251,11 +256,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./services/scraper-pinnacle/",
           "packageDependencies": [
             ["@bet/scraper-pinnacle", "workspace:services/scraper-pinnacle"],
+            ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.0"],
-            ["axios", "npm:0.19.2"],
-            ["moment", "npm:2.24.0"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["@types/node-fetch", "npm:2.5.5"],
+            ["node-fetch", "npm:2.6.0"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
           ],
           "linkType": "SOFT",
@@ -268,6 +275,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/telegram-bot-api", "workspace:packages/telegram-bot-api"],
             ["@types/node-fetch", "npm:2.5.5"],
             ["node-fetch", "npm:2.6.0"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@bet/types", [
+        ["workspace:packages/types", {
+          "packageLocation": "./packages/types/",
+          "packageDependencies": [
+            ["@bet/types", "workspace:packages/types"]
           ],
           "linkType": "SOFT",
         }]
@@ -1495,10 +1511,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prettier", [
-        ["npm:2.0.2", {
-          "packageLocation": "./.yarn/cache/prettier-npm-2.0.2-662859f303-2.zip/node_modules/prettier/",
+        ["npm:2.0.4", {
+          "packageLocation": "./.yarn/cache/prettier-npm-2.0.4-8d1f5f638d-2.zip/node_modules/prettier/",
           "packageDependencies": [
-            ["prettier", "npm:2.0.2"]
+            ["prettier", "npm:2.0.4"]
           ],
           "linkType": "HARD",
         }]
@@ -1514,7 +1530,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ignore", "npm:5.1.4"],
             ["mri", "npm:1.1.5"],
             ["multimatch", "npm:4.0.0"],
-            ["prettier", "npm:2.0.2"]
+            ["prettier", "npm:2.0.4"]
           ],
           "packagePeers": [
             "prettier"
@@ -1832,10 +1848,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["ts-node", [
-        ["virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1", {
-          "packageLocation": "./.yarn/$$virtual/ts-node-virtual-6cad6e6cb7/0/cache/ts-node-npm-8.8.1-8d06811307-2.zip/node_modules/ts-node/",
+        ["virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2", {
+          "packageLocation": "./.yarn/$$virtual/ts-node-virtual-db340d4437/0/cache/ts-node-npm-8.8.2-2dddc3a281-2.zip/node_modules/ts-node/",
           "packageDependencies": [
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.1"],
+            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["arg", "npm:4.1.3"],
             ["diff", "npm:4.0.2"],
             ["make-error", "npm:1.3.6"],
