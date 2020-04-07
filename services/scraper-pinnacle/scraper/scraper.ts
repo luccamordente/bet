@@ -17,7 +17,6 @@ function run(emit: Listener): void {
     const normalized = normalize(event);
 
     if (normalized.ok) {
-      console.log("Normalized: ", JSON.stringify(event, null, 4));
       normalized.bettables.forEach(emit);
     } else {
       console.error(normalized.message, JSON.stringify(normalized, null, 4));
