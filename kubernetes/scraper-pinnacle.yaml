@@ -18,6 +18,8 @@ spec:
           env:
             - name: MONGODB_CONNECTION_URI
               value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+            - name: EVENT_TIME_SPAN_HOURS
+              value: "24"
           resources:
             limits:
               memory: "256Mi"
