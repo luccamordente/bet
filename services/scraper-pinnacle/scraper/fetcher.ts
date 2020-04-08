@@ -64,9 +64,4 @@ function run(emit: Listener): void {
   fetch();
 }
 
-function logError(error: unknown) {
-  console.error("Error fetching data!");
-  console.error(error);
-}
-
 export default { run };

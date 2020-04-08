@@ -1,4 +1,4 @@
-import fetch, { Headers } from "node-fetch";
+import fetch from "node-fetch";
 
 const trustCode =
   "3c84a514550800652d6b7a99a45549f22683f822a58bfe234cd4f4cc874f9d3a";
@@ -67,16 +67,15 @@ async function guestRequest<T>(
   const resp = await fetch(url, fetchOptions);
 
   if (!resp.ok) {
-    throw new Error(
-      `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`,
-    );
+    console.error(resp);
+    throw new Error(`Unexpected response from Pinnacle`);
   }
 
   try {
     json = await resp.json();
   } catch (err) {
     console.error(err);
-    throw new Error("Unexpected error parsing guest response.");
+    throw err;
   }
 
   return json;
@@ -85,19 +84,17 @@ async function guestRequest<T>(
 export default async function request<T>(url: string): Promise<T> {
   const fetchOptions = {
     ...DEFAULT_OPTIONS,
-    headers: DEFAULT_HEADERS,
+    headers: {
+      ...DEFAULT_HEADERS,
+      ...(sessionToken != null ? { "X-Session": sessionToken } : null),
+    },
   };
-
-  if (sessionToken !== undefined) {
-    fetchOptions.headers["X-Session"] = sessionToken;
-  }
 
   const resp = await fetch(url, fetchOptions);
 
   if (!resp.ok) {
-    throw new Error(
-      `Unexpected response from Pinnacle: ${JSON.stringify(resp, null, 2)}`,
-    );
+    console.error(resp);
+    throw new Error(`Unexpected response from Pinnacle`);
   }
 
   // Unautheticated
@@ -111,7 +108,7 @@ export default async function request<T>(url: string): Promise<T> {
     json = await resp.json();
   } catch (err) {
     console.error(err);
-    throw new Error("Unexpected error parsing response.");
+    throw err;
   }
 
   return json;
