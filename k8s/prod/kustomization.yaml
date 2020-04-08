@@ -4,7 +4,7 @@ resources:
   - ../base
 images:
   - name: poluga
-    newName: 914977074407.dkr.ecr.us-east-1.amazonaws.com/poluga
+    newName: 914977074407.dkr.ecr.ap-south-1.amazonaws.com/poluga
     newTag: $COMMIT_SHORT_HASH
 secretGenerator:
   - name: secret-env
