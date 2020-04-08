@@ -20,6 +20,16 @@ spec:
               value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
             - name: EVENT_TIME_SPAN_HOURS
               value: "24"
+            - name: API_KEY
+              value: CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R
+            - name: DEVICE_UUID
+              value: 441c0a6b-9cf666fe-38d75bda-32c8e40d
+            - name: TRUST_CODE
+              value: 3c84a514550800652d6b7a99a45549f22683f822a58bfe234cd4f4cc874f9d3a
+            - name: USERNAME
+              value: poluga@protonmail.com
+            - name: PASSWORD
+              value: YNm!%r%7ha32T6uWVYur
           resources:
             limits:
               memory: "256Mi"

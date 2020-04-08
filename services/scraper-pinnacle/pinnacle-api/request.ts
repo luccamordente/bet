@@ -1,7 +1,14 @@
-import fetch, { Headers } from "node-fetch";
+import fetch from "node-fetch";
+import { assertEnv } from "@bet/assert";
 
-const trustCode =
-  "3c84a514550800652d6b7a99a45549f22683f822a58bfe234cd4f4cc874f9d3a";
+assertEnv(process.env, [
+  "API_KEY",
+  "DEVICE_UUID",
+  "TRUST_CODE",
+  "USERNAME",
+  "PASSWORD",
+]);
+const { API_KEY, DEVICE_UUID, TRUST_CODE, USERNAME, PASSWORD } = process.env;
 
 const DEFAULT_OPTIONS = {
   compress: true,
@@ -11,8 +18,8 @@ const DEFAULT_OPTIONS = {
 const DEFAULT_HEADERS: { [key: string]: string } = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  "X-Api-Key": "CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R", // TODO can we get a different API key?
-  "X-Device-Uuid": "441c0a6b-9cf666fe-38d75bda-32c8e40d", // TODO get a different Device UUID
+  "X-Api-Key": API_KEY, // TODO can we get a different API key?
+  "X-Device-Uuid": DEVICE_UUID, // TODO get a different Device UUID
   Referer: "https://www.pinnacle.com/en/soccer/leagues/",
   "User-Agent":
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15",
@@ -34,10 +41,10 @@ async function login(): Promise<LoginResponse> {
     {
       method: "POST",
       body: JSON.stringify({
-        username: "poluga@protonmail.com",
-        password: "YNm!%r%7ha32T6uWVYur",
+        username: USERNAME,
+        password: PASSWORD,
         captchaToken: "",
-        trustCode,
+        trustCode: TRUST_CODE,
       }),
     },
   );
