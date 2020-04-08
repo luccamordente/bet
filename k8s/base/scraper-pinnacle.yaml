@@ -13,11 +13,19 @@ spec:
     spec:
       containers:
         - name: scraper-pinnacle
-          image: poluga:latest
+          image: poluga
           command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
           env:
             - name: MONGODB_CONNECTION_URI
-              value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+              valueFrom:
+                secretKeyRef:
+                  name: secret-env
+                  key: MONGODB_CONNECTION_URI
+            - name: EVENT_TIME_SPAN_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  key: EVENT_TIME_SPAN_HOURS
+                  name: env
           resources:
             limits:
               memory: "256Mi"

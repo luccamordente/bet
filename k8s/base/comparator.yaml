@@ -13,15 +13,24 @@ spec:
     spec:
       containers:
         - name: comparator
-          image: poluga:latest
+          image: poluga
           command: [yarn, workspace, "@bet/comparator", dev]
           env:
-            - name: BET_TELEGRAM_BOT_TOKEN
-              value: 1038969865:AAFLLkFSH5nSCQWDIXN1tniNyGcr714ugj0
             - name: TELEGRAM_OPPORTUNITY_CHAT_ID
-              value: "-1001315097157"
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: TELEGRAM_OPPORTUNITY_CHAT_ID
+            - name: BET_TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: secret-env
+                  key: BET_TELEGRAM_BOT_TOKEN
             - name: MONGODB_CONNECTION_URI
-              value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+              valueFrom:
+                secretKeyRef:
+                  name: secret-env
+                  key: MONGODB_CONNECTION_URI
           resources:
             limits:
               memory: "256Mi"
