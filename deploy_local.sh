@@ -25,7 +25,7 @@ tmp_dir=$(mktemp -d -t poluga_deploy_XXXXXXX)
 cp -a kubernetes/. ${tmp_dir}/
 
 # Replace placeholder with image tag
-sed -i '' "s/\$IMAGE_TAG/$tag/g" $tmp_dir/kustomization.yaml
+sed -i "s/\$IMAGE_TAG/$tag/g" $tmp_dir/kustomization.yaml
 
 # Apply manifests to cluster
 kubectl apply -k $tmp_dir
