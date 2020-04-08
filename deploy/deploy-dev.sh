@@ -22,13 +22,15 @@ docker tag $IMG_NAME $IMG_NAME:$tag
 
 # Copy manifests to temporary dir
 tmp_dir=$(mktemp -d -t poluga_deploy_XXXXXXX)
-cp -a kubernetes/. ${tmp_dir}/
+mkdir $tmp_dir/base $tmp_dir/dev
+cp -a k8s/base/. $tmp_dir/base/
+cp -a k8s/dev/. $tmp_dir/dev/
 
 # Replace placeholder with image tag
-sed -i "s/\$IMAGE_TAG/$tag/g" $tmp_dir/kustomization.yaml
+sed -i "s/\$IMAGE_TAG/$tag/g" $tmp_dir/dev/kustomization.yaml
 
 # Apply manifests to cluster
-kubectl apply -k $tmp_dir
+./bin/kustomize build $tmp_dir/dev | kubectl apply -f -
 
 # Clean up
 rm -rf $tmp_dir

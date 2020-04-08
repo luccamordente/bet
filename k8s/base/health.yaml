@@ -13,11 +13,14 @@ spec:
     spec:
       containers:
         - name: health
-          image: poluga:latest
+          image: poluga
           command: [yarn, workspace, "@bet/health", dev]
           env:
             - name: MONGODB_CONNECTION_URI
-              value: mongodb+srv://poluga:D0TG%25Ps92T82TH!kw9ES1YIq@cluster0-diuwt.mongodb.net/test?retryWrites=true&w=majority
+              valueFrom:
+                secretKeyRef:
+                  name: secret-env
+                  key: MONGODB_CONNECTION_URI
           resources:
             limits:
               memory: "256Mi"

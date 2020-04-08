@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-pinnacle
+spec:
+  selector:
+    matchLabels:
+      app: scraper-pinnacle
+  template:
+    metadata:
+      labels:
+        app: scraper-pinnacle
+    spec:
+      containers:
+        - name: scraper-pinnacle
+          image: poluga
+          command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
+          env:
+            - name: MONGODB_CONNECTION_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGODB_CONNECTION_URI
+                  name: secret-env
+            - name: EVENT_TIME_SPAN_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  key: EVENT_TIME_SPAN_HOURS
+                  name: env
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: PINNACLE_API_KEY
+                  name: secret-env
+            - name: DEVICE_UUID
+              valueFrom:
+                secretKeyRef:
+                  key: PINNACLE_DEVICE_UUID
+                  name: secret-env
+            - name: TRUST_CODE
+              valueFrom:
+                secretKeyRef:
+                  key: PINNACLE_TRUST_CODE
+                  name: secret-env
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: PINNACLE_USERNAME
+                  name: secret-env
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PINNACLE_PASSWORD
+                  name: secret-env
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
