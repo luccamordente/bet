@@ -54,7 +54,7 @@ __metadata:
     "@bet/db": "workspace:packages/db"
     "@bet/telegram-bot-api": "workspace:packages/telegram-bot-api"
     "@bet/types": "workspace:packages/types"
-    "@types/node": ^13.11.0
+    "@types/node": ^13.11.1
     "@types/string-similarity": ^3.0.0
     moment: ^2.24.0
     string-similarity: ^4.0.1
@@ -68,7 +68,7 @@ __metadata:
   resolution: "@bet/core@workspace:."
   dependencies:
     "@yarnpkg/pnpify": ^2.0.0-rc.20
-    husky: ^4.2.3
+    husky: ^4.2.5
     prettier: ^2.0.4
     pretty-quick: ^2.0.1
     typescript: ^3.8.3
@@ -80,7 +80,7 @@ __metadata:
   resolution: "@bet/db@workspace:packages/db"
   dependencies:
     "@bet/assert": "workspace:packages/assert"
-    "@types/mongodb": ^3.5.4
+    "@types/mongodb": ^3.5.5
     mongodb: ^3.5.5
   languageName: unknown
   linkType: soft
@@ -90,7 +90,7 @@ __metadata:
   resolution: "@bet/health@workspace:services/health"
   dependencies:
     "@bet/db": "workspace:packages/db"
-    "@types/node": ^13.11.0
+    "@types/node": ^13.11.1
     moment: ^2.24.0
     ts-node: ^8.8.2
     typescript: ^3.8.3
@@ -102,7 +102,7 @@ __metadata:
   resolution: "@bet/scraper-1xbet@workspace:services/scraper-1xbet"
   dependencies:
     "@bet/db": "workspace:packages/db"
-    "@types/node": ^13.11.0
+    "@types/node": ^13.11.1
     "@types/puppeteer": ^2.0.1
     moment: ^2.24.0
     puppeteer: ^2.1.1
@@ -118,10 +118,10 @@ __metadata:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
     "@bet/types": "workspace:packages/types"
-    "@types/node": ^13.11.0
+    "@types/node": ^13.11.1
     axios: ^0.19.2
     moment: ^2.24.0
-    node-html-parser: ^1.2.14
+    node-html-parser: ^1.2.15
     ts-node: ^8.8.2
     typescript: ^3.8.3
   languageName: unknown
@@ -134,7 +134,7 @@ __metadata:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
     "@bet/types": "workspace:packages/types"
-    "@types/node": ^13.11.0
+    "@types/node": ^13.11.1
     "@types/node-fetch": ^2.5.5
     node-fetch: ^2.6.0
     ts-node: ^8.8.2
@@ -194,13 +194,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.5.4":
-  version: 3.5.4
-  resolution: "@types/mongodb@npm:3.5.4"
+"@types/mongodb@npm:^3.5.5":
+  version: 3.5.5
+  resolution: "@types/mongodb@npm:3.5.5"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: 2/11916651eb6d9c95f5314b4c49fc90a79cae2809be0f24af1a64d8203610b90f0a3221ac9ce0e283178ce80333bfa834e233059eacc1ac9dc97657ba0b69dccd
+  checksum: 2/0c077b9e086a089210dc24663616af845f9f4ace8a61bccf29b2ce4706a17adca78f43477d8695ec154eb18f6243f62a88394266aa0c1802c4071adcf2e40dc8
   languageName: node
   linkType: hard
 
@@ -214,10 +214,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^13.11.0":
-  version: 13.11.0
-  resolution: "@types/node@npm:13.11.0"
-  checksum: 2/8691b7c62a978a78e54c5019c5b055400ff7977fcd6694ce62c79c8c3b1bf5e4818195177693e77950df97134787703c6b0e54d6144eb4dfd183a2ac3e510f39
+"@types/node@npm:*, @types/node@npm:^13.11.1":
+  version: 13.11.1
+  resolution: "@types/node@npm:13.11.1"
+  checksum: 2/0ced8498fb982d1275ce4f2e13554243d53386315e57de641d934fddeb02d86bc745c2c6b2aacad1072f081b0984d5f3beb81d309823202ec6cf8653f6d8100b
   languageName: node
   linkType: hard
 
@@ -437,6 +437,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "chalk@npm:4.0.0"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: 2/12b01a228b5ca2f03a82684c62d54c06e2ba2f7b81dd08fac56c5b9288958dd24f9cae866e140df5c29cb736059cb4be0165157ebb0b15039cc1ea511a2dab60
+  languageName: node
+  linkType: hard
+
 "ci-info@npm:^2.0.0":
   version: 2.0.0
   resolution: "ci-info@npm:2.0.0"
@@ -497,7 +507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compare-versions@npm:^3.5.1":
+"compare-versions@npm:^3.6.0":
   version: 3.6.0
   resolution: "compare-versions@npm:3.6.0"
   checksum: 2/09525264502bda1f6667ad2429eaf5520b543d997e79e7a94b66a5896df8921cdc3a97140dfff75af6c9ba1859c872de1921c3cf8a6c48ed807bbf9f582cf093
@@ -799,13 +809,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^4.2.3":
-  version: 4.2.3
-  resolution: "husky@npm:4.2.3"
+"husky@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "husky@npm:4.2.5"
   dependencies:
-    chalk: ^3.0.0
+    chalk: ^4.0.0
     ci-info: ^2.0.0
-    compare-versions: ^3.5.1
+    compare-versions: ^3.6.0
     cosmiconfig: ^6.0.0
     find-versions: ^3.2.0
     opencollective-postinstall: ^2.0.2
@@ -816,7 +826,7 @@ __metadata:
   bin:
     husky-run: bin/run.js
     husky-upgrade: lib/upgrader/bin.js
-  checksum: 2/ab5154c891ac3a2e9a5977014e7b10d60ffb53eddf9016a889fac74a0cd1b7b979ac3f8a2ad25a4b87c2ee54f9e1abdd949f377588661a5063915708dc557975
+  checksum: 2/9d03d38c66688ab61166b425aa70229665c93a2a6fbd0d7388923205622fe34c6cc4c251777337b0813a40891750a18d603eff8451a58d06953807535a8908ed
   languageName: node
   linkType: hard
 
@@ -1064,12 +1074,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-html-parser@npm:^1.2.14":
-  version: 1.2.14
-  resolution: "node-html-parser@npm:1.2.14"
+"node-html-parser@npm:^1.2.15":
+  version: 1.2.15
+  resolution: "node-html-parser@npm:1.2.15"
   dependencies:
     he: 1.1.1
-  checksum: 2/7bbb2abe4df2c162c0791aea9b1b5ffadb32ad3687d3ab9e3ef5530fb7ebc62a38d18b09c5ae8bffd9ce492d1718a9be14b251a4a5856ff87272314de1bd7eab
+  checksum: 2/19aa2883749c45b6acbf4c258cfe0e157431839c47821977427ff483b573ebb5984a9008d9bcb8c8b5b78b555e5b33e99c7a4afac3b609ca4bcbca4859e67636
   languageName: node
   linkType: hard
 
