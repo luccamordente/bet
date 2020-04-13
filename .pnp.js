@@ -31,6 +31,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/db"
       },
       {
+        "name": "@bet/heart-beat-health",
+        "reference": "workspace:packages/heart-beat-health"
+      },
+      {
         "name": "@bet/telegram-bot-api",
         "reference": "workspace:packages/telegram-bot-api"
       },
@@ -67,6 +71,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@bet/core", ["workspace:."]],
       ["@bet/db", ["workspace:packages/db"]],
       ["@bet/health", ["workspace:services/health"]],
+      ["@bet/heart-beat-health", ["workspace:packages/heart-beat-health"]],
       ["@bet/scraper-1xbet", ["workspace:services/scraper-1xbet"]],
       ["@bet/scraper-marathon", ["workspace:services/scraper-marathon"]],
       ["@bet/scraper-pinnacle", ["workspace:services/scraper-pinnacle"]],
@@ -168,6 +173,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/comparator", "workspace:services/comparator"],
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/heart-beat-health", "workspace:packages/heart-beat-health"],
             ["@bet/telegram-bot-api", "workspace:packages/telegram-bot-api"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.1"],
@@ -212,10 +218,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@bet/health", "workspace:services/health"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/heart-beat-health", "workspace:packages/heart-beat-health"],
             ["@types/node", "npm:13.11.1"],
             ["moment", "npm:2.24.0"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@bet/heart-beat-health", [
+        ["workspace:packages/heart-beat-health", {
+          "packageLocation": "./packages/heart-beat-health/",
+          "packageDependencies": [
+            ["@bet/heart-beat-health", "workspace:packages/heart-beat-health"],
+            ["@types/ramda", "npm:0.27.3"],
+            ["ramda", "npm:0.27.0"]
           ],
           "linkType": "SOFT",
         }]
@@ -243,6 +261,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/scraper-marathon", "workspace:services/scraper-marathon"],
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/heart-beat-health", "workspace:packages/heart-beat-health"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.1"],
             ["axios", "npm:0.19.2"],
@@ -261,6 +280,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/scraper-pinnacle", "workspace:services/scraper-pinnacle"],
             ["@bet/assert", "workspace:packages/assert"],
             ["@bet/db", "workspace:packages/db"],
+            ["@bet/heart-beat-health", "workspace:packages/heart-beat-health"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.1"],
             ["@types/node-fetch", "npm:2.5.5"],
@@ -383,6 +403,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/puppeteer", "npm:2.0.1"],
             ["@types/node", "npm:13.11.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/ramda", [
+        ["npm:0.27.3", {
+          "packageLocation": "./.yarn/cache/@types-ramda-npm-0.27.3-91cd53916f-2.zip/node_modules/@types/ramda/",
+          "packageDependencies": [
+            ["@types/ramda", "npm:0.27.3"],
+            ["ts-toolbelt", "npm:6.4.2"]
           ],
           "linkType": "HARD",
         }]
@@ -1607,6 +1637,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["ramda", [
+        ["npm:0.27.0", {
+          "packageLocation": "./.yarn/cache/ramda-npm-0.27.0-0ac931b47f-2.zip/node_modules/ramda/",
+          "packageDependencies": [
+            ["ramda", "npm:0.27.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["readable-stream", [
         ["npm:2.3.7", {
           "packageLocation": "./.yarn/cache/readable-stream-npm-2.3.7-77b22a9818-2.zip/node_modules/readable-stream/",
@@ -1873,6 +1912,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "packagePeers": [
             "typescript"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-toolbelt", [
+        ["npm:6.4.2", {
+          "packageLocation": "./.yarn/cache/ts-toolbelt-npm-6.4.2-011f0a446f-2.zip/node_modules/ts-toolbelt/",
+          "packageDependencies": [
+            ["ts-toolbelt", "npm:6.4.2"]
           ],
           "linkType": "HARD",
         }]

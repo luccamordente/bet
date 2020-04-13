@@ -1,7 +1,9 @@
 import moment from "moment";
+import DB from "@bet/db";
 
 import { getCollection } from "./models/bettable";
-import DB from "@bet/db";
+import heart from "./heart";
+import server from "./server";
 
 const SPORTS = {
   basketball: "🏀 Basketball",
@@ -211,6 +213,7 @@ async function run() {
   try {
     console.group(`\n🏥 Health Check ${moment().format("DD/MM/YY hh:mm")}`);
     console.log(reportToString(processReport(await getReport())));
+    heart.beat();
   } catch (error) {
     console.log(error);
   } finally {
@@ -220,10 +223,12 @@ async function run() {
 }
 
 async function main() {
+  server.listen(8080);
   await DB.getInstance().connect();
   await run();
 }
 
 main().catch((e) => {
-  throw e;
+  console.log(e);
+  process.exit(1);
 });

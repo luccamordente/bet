@@ -17,6 +17,8 @@ import {
   marketToString,
 } from "./utils/string";
 import publishOpportunity from "./publishOpportunity";
+import heart from "./heart";
+import server from "./server";
 
 const MAXIMUM_EXTRACT_MINUTES = 2;
 
@@ -198,15 +200,18 @@ async function run() {
   );
   console.groupEnd();
   console.groupEnd();
+  heart.beat();
 
   setTimeout(run, 5 * 1000);
 }
 
 async function main() {
+  server.listen(8080);
   await DB.getInstance().connect();
   await run();
 }
 
 main().catch((e) => {
-  throw e;
+  console.error(e);
+  process.exit(1);
 });

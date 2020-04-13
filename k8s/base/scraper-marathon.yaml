@@ -26,6 +26,12 @@ spec:
                 configMapKeyRef:
                   key: EVENT_TIME_SPAN_HOURS
                   name: env
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
           resources:
             limits:
               memory: "256Mi"

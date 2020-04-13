@@ -52,6 +52,7 @@ __metadata:
   dependencies:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
+    "@bet/heart-beat-health": "workspace:packages/heart-beat-health"
     "@bet/telegram-bot-api": "workspace:packages/telegram-bot-api"
     "@bet/types": "workspace:packages/types"
     "@types/node": ^13.11.1
@@ -90,10 +91,20 @@ __metadata:
   resolution: "@bet/health@workspace:services/health"
   dependencies:
     "@bet/db": "workspace:packages/db"
+    "@bet/heart-beat-health": "workspace:packages/heart-beat-health"
     "@types/node": ^13.11.1
     moment: ^2.24.0
     ts-node: ^8.8.2
     typescript: ^3.8.3
+  languageName: unknown
+  linkType: soft
+
+"@bet/heart-beat-health@workspace:packages/heart-beat-health":
+  version: 0.0.0-use.local
+  resolution: "@bet/heart-beat-health@workspace:packages/heart-beat-health"
+  dependencies:
+    "@types/ramda": ^0.27.3
+    ramda: ^0.27.0
   languageName: unknown
   linkType: soft
 
@@ -117,6 +128,7 @@ __metadata:
   dependencies:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
+    "@bet/heart-beat-health": "workspace:packages/heart-beat-health"
     "@bet/types": "workspace:packages/types"
     "@types/node": ^13.11.1
     axios: ^0.19.2
@@ -133,6 +145,7 @@ __metadata:
   dependencies:
     "@bet/assert": "workspace:packages/assert"
     "@bet/db": "workspace:packages/db"
+    "@bet/heart-beat-health": "workspace:packages/heart-beat-health"
     "@bet/types": "workspace:packages/types"
     "@types/node": ^13.11.1
     "@types/node-fetch": ^2.5.5
@@ -234,6 +247,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 2/8824a20456bef17864547e23f3f1211da046a49231e06fbf32c2df41bb2ea3834825064b200f6cd2639f5cb33268a10227f5242475a22effc8aa5ca7ef2af880
+  languageName: node
+  linkType: hard
+
+"@types/ramda@npm:^0.27.3":
+  version: 0.27.3
+  resolution: "@types/ramda@npm:0.27.3"
+  dependencies:
+    ts-toolbelt: ^6.3.3
+  checksum: 2/f8ab2733121ab151a1f93fe559fa20cb8b48f640cf07fe4aa2dbc65238aae26f4f9f0ee0d7c4524a07b010d651b0454cab95d6693872016e068576bf1505b390
   languageName: node
   linkType: hard
 
@@ -1308,6 +1330,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ramda@npm:^0.27.0":
+  version: 0.27.0
+  resolution: "ramda@npm:0.27.0"
+  checksum: 2/27b2346803bb30acdde0afa25a364c99280a7fbf480ad959cfb5237371d0dd4719c7fb5052b2cbae4c92790c90ee9086e6cbb677500f3f8b4c338144cb71ecce
+  languageName: node
+  linkType: hard
+
 "readable-stream@npm:^2.2.2, readable-stream@npm:^2.3.5":
   version: 2.3.7
   resolution: "readable-stream@npm:2.3.7"
@@ -1548,6 +1577,13 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 2/fbbb4a795bd3ceca5b77fa680bae16cf313a35f0de80db032f0cd6f39aa4deb26bab43b0a62f00eb6a3e78fdd49951e220fc14a33d7fb590f812157168eb744f
+  languageName: node
+  linkType: hard
+
+"ts-toolbelt@npm:^6.3.3":
+  version: 6.4.2
+  resolution: "ts-toolbelt@npm:6.4.2"
+  checksum: 2/acd10157f605458be0831a566f927fac6fedfe225df598f5e03861a2c5d2ab3b48152a7c9f6d820e935ceb892a7da7239eafcab201baee078b5358a71f53a919
   languageName: node
   linkType: hard
 

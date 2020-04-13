@@ -1,7 +1,8 @@
+import DB from "@bet/db";
+
 import scraper from "./scraper";
 import store from "./storage";
-
-import DB from "@bet/db";
+import server from "./server";
 
 // TODO move database to a service
 DB.getInstance()
@@ -10,3 +11,5 @@ DB.getInstance()
     console.log(`Starting Pinnacle sync...`);
     scraper.run(store);
   });
+
+server.listen(8080);
