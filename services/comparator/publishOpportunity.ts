@@ -12,7 +12,7 @@ import {
 } from "./utils/string";
 import { SendMessageParams } from "@bet/telegram-bot-api";
 
-assertEnv(process.env, ["TELEGRAM_OPPORTUNITY_CHAT_ID"]);
+assertEnv(process.env, "TELEGRAM_OPPORTUNITY_CHAT_ID");
 
 const { TELEGRAM_OPPORTUNITY_CHAT_ID } = process.env;
 

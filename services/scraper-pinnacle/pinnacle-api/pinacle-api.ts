@@ -2,7 +2,7 @@ import * as types from "./types";
 import request from "./request";
 import { assertEnv } from "@bet/assert";
 
-assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+assertEnv(process.env, "EVENT_TIME_SPAN_HOURS");
 const { EVENT_TIME_SPAN_HOURS } = process.env;
 
 interface GetLeaguesParams {
