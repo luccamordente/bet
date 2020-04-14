@@ -10,7 +10,7 @@ x-volumes: &default-volumes
   - ./.yarn/releases:/app/.yarn/releases:ro
   - ./packages:/app/packages:ro
   - ./services:/app/services:ro
-  - ./.pnp.js:/app/.pnp.js:rw
+  - ./.pnp.js:/app/.pnp.js:ro
   - ./.yarnrc.yml:/app/.yarnrc.yml:ro
   - ./package.json:/app/package.json:ro
   - ./tsconfig.json:/app/tsconfig.json:ro

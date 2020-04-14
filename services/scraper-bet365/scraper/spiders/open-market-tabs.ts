@@ -1,35 +1,52 @@
 import puppeteer from "puppeteer";
-import { Data } from "../types";
+import { Egg } from "../types";
 
-interface Params {
-  data: Data;
-  page: puppeteer.Page;
-  element: puppeteer.ElementHandle;
+import openMarketGroups from "./open-market-groups";
+import { hasClass } from "../utils/element";
+
+const TAB_CLASS = "cl-MarketGroupNavBarButton";
+const SELECTED_TAB_CLASS = "cl-MarketGroupNavBarButton_Selected";
+
+const TAB_XPATH = `//div[contains(concat(' ', normalize-space(@class), ' '), ' ${TAB_CLASS} ')]`;
+
+async function isTabSelected(element: puppeteer.ElementHandle) {
+  return await hasClass(element, SELECTED_TAB_CLASS);
 }
 
-/**
- *
- */
-async function run(params: Params) {
-  const { page, data, element } = params;
+async function run(egg: Egg) {
+  const { page, data } = egg;
 
-  const matches = await element.$x(
-    `//div[contains(@class,'sgl-ParticipantFixtureDetails')]`,
-  );
+  async function* getTabElements() {
+    const length = (await page.$x(TAB_XPATH)).length;
 
-  for (const match of matches) {
-    // In Play Clock existance implies that match is live.
-    const inPlayClock = await match.$(".pi-CouponParticipantClockInPlay");
-    if (inPlayClock != null) {
-      // Skip In Play matches
-      continue;
+    for (let index = 1; index <= length; index++) {
+      const xpath = `${TAB_XPATH}[${index}]`;
+      await page.waitForXPath(xpath);
+
+      const tabElement = (await page.$x(xpath))[0];
+      yield tabElement;
+    }
+  }
+
+  await page.waitForXPath(TAB_XPATH);
+
+  for await (const tabElement of getTabElements()) {
+    if (!(await isTabSelected(tabElement))) {
+      await tabElement.click();
     }
 
-    // TODO Get date, time and filter
+    const url = page.url();
 
-    await openMatch({ page, data: { ...data }, element: match });
-    break; // TODO remove this
+    await openMarketGroups({
+      page,
+      data: {
+        ...data,
+        url,
+      },
+    });
   }
+
+  process.exit(0);
 
   await Promise.all([
     page.waitForNavigation({ waitUntil: "networkidle0" }),

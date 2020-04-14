@@ -3,7 +3,7 @@ import puppeteer from "puppeteer";
 async function launch() {
   return await puppeteer.launch({
     headless: true,
-    defaultViewport: { width: 1900, height: 1900 },
+    defaultViewport: { width: 1900, height: 9900 },
     args: [],
   });
 }

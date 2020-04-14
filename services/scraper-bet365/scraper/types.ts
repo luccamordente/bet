@@ -7,12 +7,13 @@ export interface Data {
   eventTime?: string;
   eventParticipants?: [string, string];
   marketGroup?: string;
-  marketName?: string;
   marketMatrix?: unknown;
+  url?: string;
 }
 
 export interface Egg {
   data: Data;
   page: puppeteer.Page;
-  element?: puppeteer.ElementHandle;
+  /** XPath to be used by spiders to narrow search */
+  xpath?: string;
 }
