@@ -14,7 +14,7 @@ spec:
       containers:
         - name: scraper-pinnacle
           image: poluga
-          command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
+          command: [yarn, workspace, "@bet/scraper-pinnacle", start]
           env:
             - name: MONGODB_CONNECTION_URI
               valueFrom:

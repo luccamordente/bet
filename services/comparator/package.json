@@ -2,7 +2,8 @@
   "name": "@bet/comparator",
   "scripts": {
     "console": "ts-node --transpile-only repl.ts",
-    "dev": "ts-node --transpile-only index.ts"
+    "dev": "node-dev --respawn --no-notify -r ts-node/register/transpile-only --unhandled-rejections=strict ./index.ts",
+    "start": "node -r ts-node/register/transpile-only --unhandled-rejections=strict index.ts"
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
@@ -16,6 +17,7 @@
     "string-similarity": "^4.0.1"
   },
   "devDependencies": {
+    "node-dev": "^4.0.0",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   }

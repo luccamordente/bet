@@ -14,7 +14,7 @@ spec:
       containers:
         - name: comparator
           image: poluga
-          command: [yarn, workspace, "@bet/comparator", dev]
+          command: [yarn, workspace, "@bet/comparator", start]
           env:
             - name: TELEGRAM_OPPORTUNITY_CHAT_ID
               valueFrom:
