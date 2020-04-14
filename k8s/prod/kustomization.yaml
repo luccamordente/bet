@@ -5,7 +5,7 @@ resources:
 images:
   - name: poluga
     newName: 914977074407.dkr.ecr.ap-south-1.amazonaws.com/poluga
-    newTag: $COMMIT_SHORT_HASH
+    newTag: "$COMMIT_SHORT_HASH" # keep quoted, the replaced value can be a number
 secretGenerator:
   - name: secret-env
     envs:
