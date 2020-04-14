@@ -81,7 +81,7 @@ __metadata:
   resolution: "@bet/db@workspace:packages/db"
   dependencies:
     "@bet/assert": "workspace:packages/assert"
-    "@types/mongodb": ^3.5.5
+    "@types/mongodb": ^3.5.6
     mongodb: ^3.5.5
   languageName: unknown
   linkType: soft
@@ -133,7 +133,7 @@ __metadata:
     "@types/node": ^13.11.1
     axios: ^0.19.2
     moment: ^2.24.0
-    node-html-parser: ^1.2.15
+    node-html-parser: ^1.2.16
     ts-node: ^8.8.2
     typescript: ^3.8.3
   languageName: unknown
@@ -148,7 +148,7 @@ __metadata:
     "@bet/heart-beat-health": "workspace:packages/heart-beat-health"
     "@bet/types": "workspace:packages/types"
     "@types/node": ^13.11.1
-    "@types/node-fetch": ^2.5.5
+    "@types/node-fetch": ^2.5.6
     node-fetch: ^2.6.0
     ts-node: ^8.8.2
     typescript: ^3.8.3
@@ -159,7 +159,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bet/telegram-bot-api@workspace:packages/telegram-bot-api"
   dependencies:
-    "@types/node-fetch": ^2.5.5
+    "@types/node-fetch": ^2.5.6
     node-fetch: ^2.6.0
   languageName: unknown
   linkType: soft
@@ -207,23 +207,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.5.5":
-  version: 3.5.5
-  resolution: "@types/mongodb@npm:3.5.5"
+"@types/mongodb@npm:^3.5.6":
+  version: 3.5.6
+  resolution: "@types/mongodb@npm:3.5.6"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: 2/0c077b9e086a089210dc24663616af845f9f4ace8a61bccf29b2ce4706a17adca78f43477d8695ec154eb18f6243f62a88394266aa0c1802c4071adcf2e40dc8
+  checksum: 2/060f4b0f2d269da1631c51ba632633c9e1d66c0c463fd6d7556992edac31d28bfaa1cf536fa8ac8d1d51161f7947ac94d7c3b316d71fd7a9d92bab942666b627
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.5":
-  version: 2.5.5
-  resolution: "@types/node-fetch@npm:2.5.5"
+"@types/node-fetch@npm:^2.5.6":
+  version: 2.5.6
+  resolution: "@types/node-fetch@npm:2.5.6"
   dependencies:
     "@types/node": "*"
     form-data: ^3.0.0
-  checksum: 2/f877e0bc99fb08e8080bbc88ecabc29fdb060b19f1bdcea219562e6d234e3438a5f2cb36a4d4172a12043eb1148f9d0a043c0a578725c90caa9e78b90c61f9f4
+  checksum: 2/f1554e8eac29ad288ece66dcb7354a61782c0f864b08704d893c463680321f32138bb0a8718474b8f1d3ade5d18676607377857ff426a75a6360b7921f7acb80
   languageName: node
   linkType: hard
 
@@ -1096,12 +1096,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-html-parser@npm:^1.2.15":
-  version: 1.2.15
-  resolution: "node-html-parser@npm:1.2.15"
+"node-html-parser@npm:^1.2.16":
+  version: 1.2.16
+  resolution: "node-html-parser@npm:1.2.16"
   dependencies:
     he: 1.1.1
-  checksum: 2/19aa2883749c45b6acbf4c258cfe0e157431839c47821977427ff483b573ebb5984a9008d9bcb8c8b5b78b555e5b33e99c7a4afac3b609ca4bcbca4859e67636
+  checksum: 2/83b1bc82d53be5073c5636aba2c706d199ca0a86d0829733c2712cabb48222f5bd1f91d8760a64e2758bdb0d28b93659d68c440aeb57e9e4e8d88e2c9c695422
   languageName: node
   linkType: hard
 
