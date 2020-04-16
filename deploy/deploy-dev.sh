@@ -9,28 +9,38 @@
 #
 # Must be executed from the root of the repository.
 
+ALLOW_DIRTY_WORKING_THREE=true source deploy/images.sh
 set -eux -o pipefail
+export PATH="./bin:$PATH"
 
-IMG_NAME=poluga
+TMP_DIR_PREFIX=poluga_deploy
 
-# Build image
-DOCKER_BUILDKIT=1 docker build -t $IMG_NAME .
+declare -A tags
+dev_imgs=()
 
-# Tag image with its hash (id)
-tag=imageid-$(docker image inspect --format='{{.ID}}' $IMG_NAME | cut -c 8-19)
-docker tag $IMG_NAME $IMG_NAME:$tag
+# Build and tag development images with their image ids
+for name in "${repo_names[@]}"; do
+  DOCKER_BUILDKIT=1 docker build -t $name ${build_args[$name]}
+  tag=imageid-$(docker image inspect --format='{{.ID}}' $name | cut -c 8-19)
+  tagged_img=$name:$tag
+  docker tag $name $tagged_img
+  tags[$name]=$tag
+  dev_imgs+=($tagged_img)
+done
 
 # Copy manifests to temporary dir
-tmp_dir=$(mktemp -d -t poluga_deploy_XXXXXXX)
+tmp_dir=$(mktemp -d -t "${TMP_DIR_PREFIX}_XXXXXXX")
 mkdir $tmp_dir/base $tmp_dir/dev
 cp -a k8s/base/. $tmp_dir/base/
 cp -a k8s/dev/. $tmp_dir/dev/
 
-# Replace placeholder with image tag
-sed -i "s/\$IMAGE_TAG/$tag/g" $tmp_dir/dev/kustomization.yaml
+# Replace placeholders with image tags
+for name in "${repo_names[@]}"; do
+  sed -i "s/\$image_id($name)/${tags[$name]}/g" $tmp_dir/dev/kustomization.yaml
+done
 
 # Apply manifests to cluster
-./bin/kustomize build $tmp_dir/dev | kubectl apply -f -
+kustomize build $tmp_dir/dev | kubectl apply -f -
 
 # Clean up
 rm -rf $tmp_dir

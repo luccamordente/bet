@@ -4,7 +4,7 @@ ARG INSTALL_CHROMIUM=false
 RUN test ${INSTALL_CHROMIUM} = false || ( \
   echo http://nl.alpinelinux.org/alpine/edge/community > /etc/apk/repositories \
   && echo http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories \
-  && apk add --no-cache chromium=80.0.3987.132-r2 \
+  && apk add --no-cache chromium=80.0.3987.149-r0 \
 )
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
