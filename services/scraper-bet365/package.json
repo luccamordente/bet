@@ -1,7 +1,8 @@
 {
   "name": "@bet/scraper-bet365",
   "scripts": {
-    "dev": "ts-node --transpile-only index.ts"
+    "dev": "node-dev --respawn --no-notify -r ts-node/register/transpile-only --unhandled-rejections=strict ./index.ts",
+    "start": "node -r ts-node/register/transpile-only --unhandled-rejections=strict index.ts"
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",

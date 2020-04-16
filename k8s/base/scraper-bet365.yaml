@@ -13,8 +13,8 @@ spec:
     spec:
       containers:
         - name: scraper-bet365
-          image: 914977074407.dkr.ecr.ap-south-1.amazonaws.com/poluga-chromium:ab12345
-          command: [yarn, workspace, "@bet/scraper-bet365", dev]
+          image: poluga-chromium
+          command: [yarn, workspace, "@bet/scraper-bet365", start]
           env:
             - name: MONGODB_CONNECTION_URI
               valueFrom:
