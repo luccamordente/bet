@@ -82,8 +82,8 @@ __metadata:
   resolution: "@bet/db@workspace:packages/db"
   dependencies:
     "@bet/assert": "workspace:packages/assert"
-    "@types/mongodb": ^3.5.6
-    mongodb: ^3.5.5
+    "@types/mongodb": ^3.5.8
+    mongodb: ^3.5.6
   languageName: unknown
   linkType: soft
 
@@ -212,13 +212,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.5.6":
-  version: 3.5.6
-  resolution: "@types/mongodb@npm:3.5.6"
+"@types/mongodb@npm:^3.5.8":
+  version: 3.5.8
+  resolution: "@types/mongodb@npm:3.5.8"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: 2/060f4b0f2d269da1631c51ba632633c9e1d66c0c463fd6d7556992edac31d28bfaa1cf536fa8ac8d1d51161f7947ac94d7c3b316d71fd7a9d92bab942666b627
+  checksum: 2/80181ed277dd0d81bbf2dc29d9a7af40f5a26844d18ec4b4f57be298b68e2e3f42c128f68802c139db5e16937a9cf743cba6ccda482146a437bcb54850ea14f2
   languageName: node
   linkType: hard
 
@@ -422,7 +422,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bson@npm:^1.1.1":
+"bson@npm:^1.1.4":
   version: 1.1.4
   resolution: "bson@npm:1.1.4"
   checksum: 2/ec5d5fb1f57273c9203dfb31b0df30a58abb4e701851373233ae6693bcaac240631c42b05615fc91601458a76c56d9999a8fbfc8ec68163ac0273138db43cf70
@@ -1229,12 +1229,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^3.5.5":
-  version: 3.5.5
-  resolution: "mongodb@npm:3.5.5"
+"mongodb@npm:^3.5.6":
+  version: 3.5.6
+  resolution: "mongodb@npm:3.5.6"
   dependencies:
     bl: ^2.2.0
-    bson: ^1.1.1
+    bson: ^1.1.4
     denque: ^1.4.1
     require_optional: ^1.0.1
     safe-buffer: ^5.1.2
@@ -1242,7 +1242,7 @@ __metadata:
   dependenciesMeta:
     saslprep:
       optional: true
-  checksum: 2/a46d77e87f98b48bb4a2f6179b1755162534ee32bf5f9c658a770bf598a6a34a2c7ac8299cb50f68647ac505822c5b35f7b92b4207404dfa665b0b455c9eb66c
+  checksum: 2/7acf7c7aca77a20d428f56af1d0d476e114ea98c7e9519ff8ae0bd9cf1cba34f70f0868e1a6d4e94ce58bf0fc12b8a14f3f6720aeda857275061b09f0a2875fb
   languageName: node
   linkType: hard
 

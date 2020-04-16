@@ -207,8 +207,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@bet/db", "workspace:packages/db"],
             ["@bet/assert", "workspace:packages/assert"],
-            ["@types/mongodb", "npm:3.5.6"],
-            ["mongodb", "npm:3.5.5"]
+            ["@types/mongodb", "npm:3.5.8"],
+            ["mongodb", "npm:3.5.6"]
           ],
           "linkType": "SOFT",
         }]
@@ -363,10 +363,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/mongodb", [
-        ["npm:3.5.6", {
-          "packageLocation": "./.yarn/cache/@types-mongodb-npm-3.5.6-10ab8abc27-2.zip/node_modules/@types/mongodb/",
+        ["npm:3.5.8", {
+          "packageLocation": "./.yarn/cache/@types-mongodb-npm-3.5.8-7f725a4a90-2.zip/node_modules/@types/mongodb/",
           "packageDependencies": [
-            ["@types/mongodb", "npm:3.5.6"],
+            ["@types/mongodb", "npm:3.5.8"],
             ["@types/bson", "npm:4.0.2"],
             ["@types/node", "npm:13.11.1"]
           ],
@@ -1527,10 +1527,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["mongodb", [
-        ["npm:3.5.5", {
-          "packageLocation": "./.yarn/cache/mongodb-npm-3.5.5-d2255af090-2.zip/node_modules/mongodb/",
+        ["npm:3.5.6", {
+          "packageLocation": "./.yarn/cache/mongodb-npm-3.5.6-d2780b9dee-2.zip/node_modules/mongodb/",
           "packageDependencies": [
-            ["mongodb", "npm:3.5.5"],
+            ["mongodb", "npm:3.5.6"],
             ["bl", "npm:2.2.0"],
             ["bson", "npm:1.1.4"],
             ["denque", "npm:1.4.1"],
