@@ -10,7 +10,7 @@ fi
 
 eksctl create cluster \
   --name poluga \
-  --region us-east-1 \
+  --region ap-south-1 \
   --version 1.15 \
   --nodegroup-name poluga-t3asmall-workers \
   --node-type t3a.small \

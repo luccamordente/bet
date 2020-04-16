@@ -1,6 +1,7 @@
 import fetcher, { Listener as FetcherListener } from "./fetcher";
 import { NewBettable } from "@bet/types";
 import normalize from "../normalize";
+import heart from "../heart";
 
 type Listener = (bettable: NewBettable) => void;
 
@@ -18,6 +19,7 @@ function run(emit: Listener): void {
 
     if (normalized.ok) {
       normalized.bettables.forEach(emit);
+      heart.beat();
     } else {
       console.error(normalized.message, JSON.stringify(normalized, null, 4));
     }

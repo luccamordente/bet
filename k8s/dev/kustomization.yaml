@@ -4,7 +4,9 @@ resources:
   - ../base
 images:
   - name: poluga
-    newTag: $IMAGE_TAG
+    newTag: "$image_id(poluga)" # keep quoted, the replaced value can be a number
+  - name: poluga-chromium
+    newTag: "$image_id(poluga-chromium)"
 secretGenerator:
   - name: secret-env
     envs:

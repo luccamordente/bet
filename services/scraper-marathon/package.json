@@ -1,18 +1,21 @@
 {
   "name": "@bet/scraper-marathon",
   "scripts": {
-    "dev": "ts-node --transpile-only index.ts"
+    "dev": "node-dev --respawn --no-notify -r ts-node/register/transpile-only --unhandled-rejections=strict ./index.ts",
+    "start": "node -r ts-node/register/transpile-only --unhandled-rejections=strict index.ts"
   },
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
     "@bet/db": "workspace:packages/db",
+    "@bet/heart-beat-health": "workspace:packages/heart-beat-health",
     "@bet/types": "workspace:packages/types",
-    "@types/node": "^13.11.0",
+    "@types/node": "^13.11.1",
     "axios": "^0.19.2",
     "moment": "^2.24.0",
-    "node-html-parser": "^1.2.14"
+    "node-html-parser": "^1.2.16"
   },
   "devDependencies": {
+    "node-dev": "^4.0.0",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   }

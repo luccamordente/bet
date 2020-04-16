@@ -9,7 +9,7 @@ import { sanitizedEquals } from "./utils";
 import { GenericMarket } from "@bet/types/bettable/generic";
 import { assertEnv } from "@bet/assert";
 
-assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+assertEnv(process.env, "EVENT_TIME_SPAN_HOURS");
 const { EVENT_TIME_SPAN_HOURS } = process.env;
 
 export interface Bet {

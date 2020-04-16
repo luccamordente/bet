@@ -10,27 +10,39 @@
 
 source deploy/images.sh
 set -eux -o pipefail
+export PATH="./bin:$PATH"
 
-# This command ensures the current commit image exists. Without it we
-# can deploy a manifest with a image tag that wasn't built and pushed
-aws ecr describe-images \
-  --repository-name=$poluga_repo_name \
-  --image-ids=imageTag=$commit_id
+TMP_DIR_PREFIX=poluga_deploy
+
+declare -A image_digests
+
+# Get digests from remote repository
+for name in "${repo_names[@]}"; do
+  image_digests[$name]=$(
+    aws ecr describe-images \
+      --repository-name=$name \
+      --image-ids=imageTag=$commit_id \
+      --query='imageDetails[0].imageDigest' \
+      --output=text
+  )
+done
 
 # Copy manifests to temporary dir
-tmp_dir=$(mktemp -d -t poluga_deploy_XXXXXXX)
+tmp_dir=$(mktemp -d -t "${TMP_DIR_PREFIX}_XXXXXXX")
 mkdir $tmp_dir/base $tmp_dir/prod
 cp -a k8s/base/. $tmp_dir/base/
 cp -a k8s/prod/. $tmp_dir/prod/
 
-# Replace placeholder with image tag
-sed -i "s/\$COMMIT_SHORT_HASH/$commit_id/g" $tmp_dir/prod/kustomization.yaml
+# Replace placeholders with digests
+for name in "${repo_names[@]}"; do
+  sed -i "s/\$image_digest($name)/${image_digests[$name]}/g" $tmp_dir/prod/kustomization.yaml
+done
 
 # Decrypt secret.env
-./bin/sops -d -i $tmp_dir/prod/secret.env
+sops -d -i $tmp_dir/prod/secret.env
 
 # Apply manifests to cluster
-./bin/kustomize build $tmp_dir/prod | kubectl apply -f -
+kustomize build $tmp_dir/prod | kubectl apply -f -
 
 # Clean up
 rm -rf $tmp_dir

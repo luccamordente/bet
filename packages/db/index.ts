@@ -1,7 +1,7 @@
 import { MongoClient, Db } from "mongodb";
 import { assertEnv } from "@bet/assert";
 
-assertEnv(process.env, ["MONGODB_CONNECTION_URI"]);
+assertEnv(process.env, "MONGODB_CONNECTION_URI");
 
 const { MONGODB_CONNECTION_URI } = process.env;
 

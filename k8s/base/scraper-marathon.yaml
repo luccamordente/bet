@@ -14,7 +14,7 @@ spec:
       containers:
         - name: scraper-marathon
           image: poluga
-          command: [yarn, workspace, "@bet/scraper-marathon", dev]
+          command: [yarn, workspace, "@bet/scraper-marathon", start]
           env:
             - name: MONGODB_CONNECTION_URI
               valueFrom:
@@ -26,6 +26,12 @@ spec:
                 configMapKeyRef:
                   key: EVENT_TIME_SPAN_HOURS
                   name: env
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
           resources:
             limits:
               memory: "256Mi"

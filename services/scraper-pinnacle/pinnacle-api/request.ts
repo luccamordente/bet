@@ -1,13 +1,14 @@
 import fetch from "node-fetch";
 import { assertEnv } from "@bet/assert";
 
-assertEnv(process.env, [
+assertEnv(
+  process.env,
   "API_KEY",
   "DEVICE_UUID",
   "TRUST_CODE",
   "USERNAME",
   "PASSWORD",
-]);
+);
 const { API_KEY, DEVICE_UUID, TRUST_CODE, USERNAME, PASSWORD } = process.env;
 
 const DEFAULT_OPTIONS = {

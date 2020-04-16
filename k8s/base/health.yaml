@@ -14,14 +14,20 @@ spec:
       containers:
         - name: health
           image: poluga
-          command: [yarn, workspace, "@bet/health", dev]
+          command: [yarn, workspace, "@bet/health", start]
           env:
             - name: MONGODB_CONNECTION_URI
               valueFrom:
                 secretKeyRef:
                   name: secret-env
                   key: MONGODB_CONNECTION_URI
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
           resources:
             limits:
               memory: "256Mi"
-              cpu: "100m"
+              cpu: "250m"
