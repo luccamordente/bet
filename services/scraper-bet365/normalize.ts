@@ -60,19 +60,9 @@ function normalize(data: Data): NormalizeResult {
     case "match_lines_total_maps":
       return normalizers.matchLinesTotalMaps(classified);
     case "nth_map_winner":
-      return {
-        ok: false,
-        code: "no_normalizer",
-        message: "Normalizer not implemented yet.",
-        data: classified,
-      };
+      return normalizers.nthMapWinner(classified);
     case "nth_map_rounds_handicap":
-      return {
-        ok: false,
-        code: "no_normalizer",
-        message: "Normalizer not implemented yet.",
-        data: classified,
-      };
+      return normalizers.nthMapRoundsHandicap(classified);
     case "nth_map_total_rounds":
       return normalizers.nthMapTotalRounds(classified);
     case "unknown":

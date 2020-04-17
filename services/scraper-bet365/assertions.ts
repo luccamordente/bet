@@ -3,6 +3,7 @@ import {
   CompleteOddsOnlyData,
   HeaderOnlyData,
   CompleteHandicapData,
+  SimpleWinnerData
 } from "./scraper/types";
 
 export function assertIsCompleteOddsOnlyData(
