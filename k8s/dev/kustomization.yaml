@@ -2,11 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../base
-images:
-  - name: poluga
-    newTag: "$image_id(poluga)" # keep quoted, the replaced value can be a number
-  - name: poluga-chromium
-    newTag: "$image_id(poluga-chromium)"
 secretGenerator:
   - name: secret-env
     behavior: replace

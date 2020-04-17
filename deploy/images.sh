@@ -21,8 +21,8 @@ for name in "${!build_args[@]}"; do
   repo_names+=($name)
 done
 
-declare -A image_names
+declare -A image_tags
 for name in "${repo_names[@]}"; do
-  img="$REPO_PREFIX/$name:$commit_id"
-  image_names[$name]=$img
+  tag="$REPO_PREFIX/$name:$commit_id"
+  image_tags[$name]=$tag
 done

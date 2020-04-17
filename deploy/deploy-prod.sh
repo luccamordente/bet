@@ -10,7 +10,7 @@
 
 source deploy/images.sh
 set -eux -o pipefail
-export PATH="./bin:$PATH"
+export PATH="$(pwd)/bin:$PATH"
 
 TMP_DIR_PREFIX=poluga_deploy
 
@@ -33,10 +33,13 @@ mkdir $tmp_dir/base $tmp_dir/prod
 cp -a k8s/base/. $tmp_dir/base/
 cp -a k8s/prod/. $tmp_dir/prod/
 
-# Replace placeholders with digests
-for name in "${repo_names[@]}"; do
-  sed -i "s/\$image_digest($name)/${image_digests[$name]}/g" $tmp_dir/prod/kustomization.yaml
-done
+# Set images to be replaced
+(
+  cd $tmp_dir/prod && \
+  for name in "${repo_names[@]}"; do
+    kustomize edit set image $name=$REPO_PREFIX/$name@${image_digests[$name]}
+  done
+)
 
 # Decrypt secret.env
 sops -d -i $tmp_dir/prod/secret.env
