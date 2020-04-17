@@ -55,10 +55,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:services/scraper-bet365"
       },
       {
-        "name": "@bet/scraper-bet365-bkp",
-        "reference": "workspace:services/scraper-bet365.bkp"
-      },
-      {
         "name": "@bet/scraper-marathon",
         "reference": "workspace:services/scraper-marathon"
       },
@@ -77,7 +73,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@bet/health", ["workspace:services/health"]],
       ["@bet/scraper-1xbet", ["workspace:services/scraper-1xbet"]],
       ["@bet/scraper-bet365", ["workspace:services/scraper-bet365"]],
-      ["@bet/scraper-bet365-bkp", ["workspace:services/scraper-bet365.bkp"]],
       ["@bet/scraper-marathon", ["workspace:services/scraper-marathon"]],
       ["@bet/scraper-pinnacle", ["workspace:services/scraper-pinnacle"]],
       ["@bet/telegram-bot-api", ["workspace:packages/telegram-bot-api"]],
@@ -255,24 +250,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@bet/db", "workspace:packages/db"],
             ["@bet/types", "workspace:packages/types"],
             ["@types/node", "npm:13.11.0"],
+            ["@types/node-fetch", "npm:2.5.6"],
             ["@types/puppeteer", "npm:2.0.1"],
-            ["puppeteer", "npm:2.1.1"],
-            ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
-            ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
-          ],
-          "linkType": "SOFT",
-        }]
-      ]],
-      ["@bet/scraper-bet365-bkp", [
-        ["workspace:services/scraper-bet365.bkp", {
-          "packageLocation": "./services/scraper-bet365.bkp/",
-          "packageDependencies": [
-            ["@bet/scraper-bet365-bkp", "workspace:services/scraper-bet365.bkp"],
-            ["@bet/assert", "workspace:packages/assert"],
-            ["@bet/db", "workspace:packages/db"],
-            ["@bet/types", "workspace:packages/types"],
-            ["@types/node", "npm:13.11.0"],
-            ["@types/puppeteer", "npm:2.0.1"],
+            ["node-fetch", "npm:2.6.0"],
             ["puppeteer", "npm:2.1.1"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
@@ -406,6 +386,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.5-8e8fd22b28-2.zip/node_modules/@types/node-fetch/",
           "packageDependencies": [
             ["@types/node-fetch", "npm:2.5.5"],
+            ["@types/node", "npm:13.11.0"],
+            ["form-data", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.5.6", {
+          "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.6-d602c588f6-2.zip/node_modules/@types/node-fetch/",
+          "packageDependencies": [
+            ["@types/node-fetch", "npm:2.5.6"],
             ["@types/node", "npm:13.11.0"],
             ["form-data", "npm:3.0.0"]
           ],

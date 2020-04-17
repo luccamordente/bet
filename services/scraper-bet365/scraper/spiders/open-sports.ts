@@ -1,26 +1,23 @@
-import puppeteer from "puppeteer";
-import { Data } from "../types";
+import { Egg } from "../types";
 
 import openAllMatches from "./open-all-matches";
 
-const SPORTS = ["E-Sports"];
+const SPORTS = ["Esports"];
 
-interface Params {
-  data: Data;
-  page: puppeteer.Page;
-}
+const MENU_SELECTOR = `.wn-Menu`;
+const MENU_ITEM_CLASS = `wn-PreMatchItem`;
 
-async function run(params: Params) {
-  const { page, data } = params;
+async function run(egg: Egg) {
+  const { page, data } = egg;
 
   // Wait for menu to load
-  await page.waitForSelector(".wn-WebNavModule");
+  await page.waitForSelector(MENU_SELECTOR);
 
   // For each menu item, click it and deploy a spider
   for (const sport of SPORTS) {
     const item = (
       await page.$x(
-        `//div[contains(@class,'wn-Classification')][contains(text(), '${sport}')]`,
+        `//div[contains(@class,'${MENU_ITEM_CLASS}')][contains(text(), '${sport}')]`,
       )
     )[0];
 
@@ -36,7 +33,7 @@ async function run(params: Params) {
     ]);
 
     switch (sport) {
-      case "E-Sports":
+      case "Esports":
         await openAllMatches({ page, data: { ...data, sportName: sport } });
         break;
       default:

@@ -1,14 +1,11 @@
-import puppeteer from "puppeteer";
 import { Egg } from "../types";
+
+import extractMarketItems from "./extract-market-items";
 
 const MARKET_GROUP_CLASS = "gl-MarketGroup";
 const MARKET_GROUP_XPATH = `//div[contains(concat(' ', normalize-space(@class), ' '), ' ${MARKET_GROUP_CLASS} ')]`;
 const MARKET_GROUP_BUTTON_TEXT_CLASS = "gl-MarketGroupButton_Text";
 const MARKET_GROUP_BUTTON_TEXT_SELECTOR = `.${MARKET_GROUP_BUTTON_TEXT_CLASS}`;
-
-async function convertToMatrix(element: puppeteer.ElementHandle) {
-  return await element.evaluate((el) => el.textContent);
-}
 
 async function run(egg: Egg) {
   const { page, data } = egg;
@@ -38,14 +35,12 @@ async function run(egg: Egg) {
       (el) => el.textContent,
     );
 
-    const marketMatrix = await convertToMatrix(marketGroupElement);
-
-    console.log({
+    await extractMarketItems({
       data: {
         ...data,
         marketGroup,
-        marketMatrix,
       },
+      element: marketGroupElement,
     });
   }
 }
