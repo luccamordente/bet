@@ -22,7 +22,7 @@ function classify(data: Data) {
         return { kind: "match_lines_team_to_win", data } as const;
       case "Match Handicap":
         assertIsCompleteHandicapData(data);
-        return { kind: "match_maps_handicap", data } as const;
+        return { kind: "match_lines_maps_handicap", data } as const;
       case "Total Maps":
         assertIsCompleteHandicapData(data);
         return { kind: "match_lines_total_maps", data } as const;
@@ -30,7 +30,7 @@ function classify(data: Data) {
   }
   if (marketGroup === "Alternative Match Handicap") {
     assertIsHeaderOnlyData(data);
-    return { kind: "match_maps_handicap", data } as const;
+    return { kind: "alternative_match_maps_handicap", data } as const;
   }
   if (marketGroup.match(/^Map \d+ - /) != null) {
     if (marketGroup.match(/- Winner$/) != null) {
@@ -55,8 +55,10 @@ function normalize(data: Data): NormalizeResult {
   switch (classified.kind) {
     case "match_lines_team_to_win":
       return normalizers.matchLinesTeamToWin(classified);
-    case "match_maps_handicap":
-      return normalizers.matchMapsHandicap(classified);
+    case "match_lines_maps_handicap":
+      return normalizers.matchLinesMapsHandicap(classified);
+    case "alternative_match_maps_handicap":
+      return normalizers.alternativeMatchMapsHandicap(classified);
     case "match_lines_total_maps":
       return normalizers.matchLinesTotalMaps(classified);
     case "nth_map_winner":

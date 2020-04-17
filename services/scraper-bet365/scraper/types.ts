@@ -43,7 +43,7 @@ interface SimpleWinnerMarket extends GenericMarket {
 interface HeaderOnlyMarket extends GenericMarket {
   header: string;
   label: null;
-  value: HandicapMarketValue;
+  value: NamedMarketValue;
 }
 
 interface CompleteHandicapMarket extends GenericMarket {
