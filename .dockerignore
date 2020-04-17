@@ -12,9 +12,6 @@
 !/yarn.lock
 !/package.json
 
-# typescript
-!/tsconfig.json
-
 # source code
 !/packages/**
 !/services/**
@@ -25,6 +22,9 @@
 # git
 **/.gitattributes
 **/.gitignore
+
+# docker
+**/.dockerignore
 
 # macOS
 **/.DS_Store

@@ -19,7 +19,15 @@ RUN addgroup -S apprunner && adduser -S -g apprunner apprunner \
   && chown -R apprunner:apprunner /home/apprunner
 
 WORKDIR /app
-COPY . .
+
+# Copy dependencies and related files
+COPY .yarn/ .yarn/
+COPY .pnp.js .yarnrc.yml yarn.lock package.json ./
+
+# Copy our code
+COPY packages/ packages/
+COPY services/ services/
+
 RUN yarn install --immutable --immutable-cache
 
 # Run everything after as non-privileged user.
