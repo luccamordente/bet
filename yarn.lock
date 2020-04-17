@@ -135,6 +135,7 @@ __metadata:
     "@types/node": ^13.11.1
     "@types/node-fetch": ^2.5.6
     "@types/puppeteer": ^2.0.1
+    node-dev: ^4.0.0
     node-fetch: ^2.6.0
     puppeteer: ^2.1.1
     ts-node: ^8.8.2

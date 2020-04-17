@@ -273,6 +273,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:13.11.1"],
             ["@types/node-fetch", "npm:2.5.6"],
             ["@types/puppeteer", "npm:2.0.1"],
+            ["node-dev", "npm:4.0.0"],
             ["node-fetch", "npm:2.6.0"],
             ["puppeteer", "npm:2.1.1"],
             ["ts-node", "virtual:2d4635b4962955f1568088ca9b17301e842f280799e1a34b14380086bf3732bb6a187d28ac86b0c4f477971318e5570d077798a5b68c9810f45dc9ef71e15690#npm:8.8.2"],
