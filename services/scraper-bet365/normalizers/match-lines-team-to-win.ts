@@ -1,7 +1,8 @@
 import { CompleteOddsOnlyData } from "../scraper/types";
 import { NormalizeResult } from "@bet/types";
+import { commonBettable } from "./common";
 
-export default function normalize(normalizable: {
+function normalize(normalizable: {
   data: CompleteOddsOnlyData;
 }): NormalizeResult {
   const { data } = normalizable;
@@ -20,7 +21,7 @@ export default function normalize(normalizable: {
     ok: true,
     bettables: [
       {
-        odd: parseFloat(data.market.value.odds),
+        ...commonBettable(data),
         market: {
           kind: "result",
           operation: "binary",
@@ -29,19 +30,9 @@ export default function normalize(normalizable: {
           unit: "team",
           period: "match",
         },
-        house: "bet365",
-        sport: "esports",
-        event: {
-          league: data.leagueName,
-          participants: {
-            home: data.eventParticipants[0],
-            away: data.eventParticipants[1],
-          },
-          starts_at: data.eventStartTime,
-        },
-        extracted_at: new Date(),
-        url: data.url,
       },
     ],
   };
 }
+
+export default normalize;

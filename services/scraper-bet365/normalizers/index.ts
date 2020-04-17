@@ -1,3 +1,5 @@
-import matchLinesTeamToWin from "./match_lines_team_to_win";
+import matchLinesTeamToWin from "./match-lines-team-to-win";
+import matchLinesMapsHandicap from "./match-lines-maps-handicap";
+import matchLinesTotalMaps from "./match-lines-total-maps";
 
-export { matchLinesTeamToWin };
+export { matchLinesTeamToWin, matchLinesMapsHandicap, matchLinesTotalMaps };
