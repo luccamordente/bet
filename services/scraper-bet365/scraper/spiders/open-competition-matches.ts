@@ -6,7 +6,7 @@ import { hasClass } from "../utils/element";
 
 import { assertEnv } from "@bet/assert";
 
-assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+assertEnv(process.env, "EVENT_TIME_SPAN_HOURS");
 const { EVENT_TIME_SPAN_HOURS } = process.env;
 
 /** The main match class */
@@ -44,15 +44,6 @@ const PARTICIPANT_SELECTOR = ".sgl-ParticipantFixtureDetails_Team";
 async function isLiveMatch(element: puppeteer.ElementHandle<any>) {
   const inPlayClockElement = await element.$(IN_PLAY_CLOCK_SELECTOR);
   return inPlayClockElement != null;
-}
-
-/**
- * Test to see if this is a date element by testing the element's class.
- * @param element The element to be tested
- * @returns `true` if the element is a date element. `false` otherwise.
- */
-async function isDateElement(element: puppeteer.ElementHandle<any>) {
-  return await hasClass(element, DATE_CLASS);
 }
 
 /**
