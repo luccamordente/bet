@@ -32,7 +32,11 @@ async function run(egg: Egg) {
 
   for await (const tabElement of getTabElements()) {
     if (!(await isTabSelected(tabElement))) {
-      await tabElement.click();
+      await Promise.all([
+        // Make sure the URL changes before moving on
+        page.waitForNavigation(),
+        tabElement.click(),
+      ]);
     }
 
     const url = page.url();
@@ -46,6 +50,7 @@ async function run(egg: Egg) {
     });
   }
 
+  // Remove this to allow the process to continue
   process.exit(0);
 
   await Promise.all([

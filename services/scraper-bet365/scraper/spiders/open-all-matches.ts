@@ -4,11 +4,11 @@ import { Data } from "../types";
 import openCompetitions from "./open-competitions";
 
 interface Params {
-  data: Data;
+  data: Partial<Data>;
   page: puppeteer.Page;
 }
 
-const ALL_MATCHES_LABEL = "Todas as Partidas";
+const ALL_MATCHES_LABEL = "All Matches";
 
 /**
  * Looks for the "All Matches" link and click it.

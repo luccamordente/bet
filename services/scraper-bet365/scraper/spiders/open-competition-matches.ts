@@ -4,22 +4,28 @@ import { Egg } from "../types";
 import openMarketTabs from "./open-market-tabs";
 import { hasClass } from "../utils/element";
 
+import { assertEnv } from "@bet/assert";
+
+assertEnv(process.env, ["EVENT_TIME_SPAN_HOURS"]);
+const { EVENT_TIME_SPAN_HOURS } = process.env;
+
 /** The main match class */
 const MATCH_CLASS = "sgl-ParticipantFixtureDetails";
 
 /** The date headers for a set of matches */
 const DATE_CLASS = "rcl-MarketHeaderLabel-isdate";
 
-/** XPath to find match and date heading elements together. Do not match matches with no additional markets. */
-const MATCH_OR_DATE_XPATH =
+/** XPath to find match Do not match matches with no additional markets. */
+const MATCH_XPATH =
   `//div[` +
-  `contains(concat(' ', normalize-space(@class), ' '), ' ${DATE_CLASS} ')` +
-  ` or ` +
   `contains(concat(' ', normalize-space(@class), ' '), ' ${MATCH_CLASS} ')` +
   ` and ` +
   // TODO implement support for matches with moneyline markets only
   `not(contains(concat(' ', normalize-space(@class), ' '), ' sgl-ParticipantFixtureDetails_NoAdditionalMarkets '))` +
   `]`;
+
+/** XPath to be used in conjunction with a match XPath to get the nearest preceding date element */
+const PRECEDING_DATE_XPATH = `/preceding-sibling::div[contains(concat(' ', normalize-space(@class), ' '), ' ${DATE_CLASS} ')]`;
 
 /** The clock inside a match. It's presence indicate that the match is live now. */
 const IN_PLAY_CLOCK_SELECTOR = ".pi-CouponParticipantClockInPlay";
@@ -57,51 +63,64 @@ async function isDateElement(element: puppeteer.ElementHandle<any>) {
  */
 async function* getMatches(page: puppeteer.Page, xpath: string) {
   /**
-   * Gets contextualized match or date XPath for either all or a specific element.
+   * Gets contextualized match XPath for either all or a specific match.
    * The XPath is narrowed to the current competition.
    * @param index The index of the element (optional)
    */
-  const getMatchOrDateXPath = function (index?: number) {
-    return `${xpath}${MATCH_OR_DATE_XPATH}${index != null ? `[${index}]` : ""}`;
+  const getMatchXPath = function (index?: number) {
+    return `${xpath}${MATCH_XPATH}${index != null ? `[${index}]` : ""}`;
   };
 
   /**
-   * Gets either all or a specific contextualized match or date element.
+   * Gets either all or a specific contextualized match element.
    * @param index The index of the element to be retrieved. If not provided
    * will return all the elements.
    */
-  const getMatchOrDateElements = async function (index?: number) {
-    return await page.$x(getMatchOrDateXPath(index));
+  const getMatchElements = async function (index?: number) {
+    return await page.$x(getMatchXPath(index));
+  };
+
+  /**
+   * Gets the corresponding date element from a match index.
+   * @param index The index of the match element for which to
+   * retrieve the date element.
+   */
+  const getDateElementForMatch = async function (index: number) {
+    const dates = await page.$x(getMatchXPath(index) + PRECEDING_DATE_XPATH);
+    // Elements will come in reverse order, so we need to get the last match.
+    return dates.pop();
   };
 
   let date: string | null = null;
 
-  const length = (await getMatchOrDateElements()).length;
+  const length = (await getMatchElements()).length;
 
   for (let index = 1; index <= length; index++) {
     // This can come right after a navigation, so we better check.
 
-    await page.waitForXPath(getMatchOrDateXPath(index));
-    const matchOrDateElement = (await getMatchOrDateElements(index))[0];
+    // Get the match element
+    await page.waitForXPath(getMatchXPath(index));
+    const matchElement = (await getMatchElements(index))[0];
 
-    if (matchOrDateElement == null) {
-      console.error("Match or Date element does not exist.");
+    if (matchElement == null) {
+      console.error("Match element does not exist anymore.");
       return;
     }
 
-    // If it's a date element, only get the date and continue to the match
-    if (await isDateElement(matchOrDateElement)) {
-      date = await matchOrDateElement.evaluate((el) => el.textContent);
-      continue;
+    // Get the date
+    const dateElement = await getDateElementForMatch(index);
+    if (dateElement == null) {
+      console.error("Couldn't find a date element for match");
+      return;
     }
 
+    date = await dateElement.evaluate((el) => el.textContent);
     if (date == null) {
       throw new Error("Date is supposed to be defined, but it's not.");
     }
 
-    // It's a match!
     yield {
-      matchElement: matchOrDateElement,
+      matchElement,
       date,
     };
   }
@@ -113,9 +132,11 @@ async function* getMatches(page: puppeteer.Page, xpath: string) {
  * @param time
  * @returns `true` if it's inside the timespan, `false` otherwise.
  */
-function isInsideTimeSpan(date: string, time: string) {
-  console.warn("WARN: Timespan filter not implemented!");
-  return true;
+function isInsideTimeSpan(date: Date) {
+  return (
+    date.getTime() - new Date().getTime() <
+    parseInt(EVENT_TIME_SPAN_HOURS) * 60 * 60 * 1000
+  );
 }
 
 /**
@@ -144,8 +165,20 @@ async function run(egg: Egg) {
     }
     const time = await timeElement.evaluate((el) => el.textContent);
 
+    const startTime = new Date(
+      await page.evaluate(
+        (d, t) => {
+          return new Date(
+            `${d} ${new Date().getFullYear()} ${t}`,
+          ).toISOString();
+        },
+        date,
+        time,
+      ),
+    );
+
     // Filter out matches outside time span
-    if (!isInsideTimeSpan(date, time)) {
+    if (!isInsideTimeSpan(startTime)) {
       continue;
     }
 
@@ -173,8 +206,7 @@ async function run(egg: Egg) {
       page,
       data: {
         ...data,
-        eventDate: date,
-        eventTime: time,
+        eventStartTime: startTime,
         eventParticipants: participants as [string, string],
       },
     });
