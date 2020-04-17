@@ -11,6 +11,7 @@ images:
     digest: "$image_digest(poluga-chromium)"
 secretGenerator:
   - name: secret-env
+    behavior: replace
     envs:
       - secret.env
 patchesStrategicMerge:

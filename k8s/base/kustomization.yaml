@@ -10,3 +10,5 @@ configMapGenerator:
   - name: env
     literals:
       - EVENT_TIME_SPAN_HOURS=24
+secretGenerator:
+  - name: secret-env

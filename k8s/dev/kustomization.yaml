@@ -9,6 +9,7 @@ images:
     newTag: "$image_id(poluga-chromium)"
 secretGenerator:
   - name: secret-env
+    behavior: replace
     envs:
       - secret.env
 patchesStrategicMerge:
