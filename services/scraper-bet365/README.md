@@ -130,6 +130,12 @@ Turn the scraped HTML data for each Market Group into a structured JSON format.
 
 Emit the structured JSON data to whoever is interested in working with it. In our case, the [Main ETL](#main-etl).
 
+# Under the radar strategies
+
+- Random viewport size
+- Random mirror website
+- Random user agent string
+
 # Good to know
 
 - Desktop website is lighter (1.8 MB) and loads faster than mobile (2.0 MB)

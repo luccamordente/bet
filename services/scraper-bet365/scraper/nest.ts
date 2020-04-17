@@ -9,8 +9,10 @@ import em from "./utils/events";
 export async function fetch(emit: (data: Data) => void) {
   em.on("data", emit);
 
-  await withWebsite(async (page) => {
-    await setup(page);
-    await openSports({ page, data: {} });
-  });
+  while (true) {
+    await withWebsite(async (page) => {
+      await setup(page);
+      await openSports({ page, data: {} });
+    });
+  }
 }
