@@ -1,4 +1,10 @@
-import puppeteer from "puppeteer";
+import vanillaPuppeteer, { Page } from "puppeteer";
+
+import { addExtra } from "puppeteer-extra";
+
+import AdblockerPlugin from "puppeteer-extra-plugin-adblocker";
+import AnonymizeUAPlugin from "puppeteer-extra-plugin-anonymize-ua";
+
 import { random } from "./array";
 
 const VIEWPORTS = [
@@ -30,19 +36,7 @@ const MIRRORS = [
   "https://www.248365365.com",
   "https://www.365466.com",
   "https://www.878365.com",
-];
-
-const USER_AGENTS = [
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
-  "Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36",
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
-  "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36",
-  "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1",
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36",
-  "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36",
-  "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36",
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36",
-  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36",
+  "https://www.68365365.com",
 ];
 
 function getRandomViewport(): { width: number; height: number } {
@@ -54,7 +48,56 @@ function getRandomViewport(): { width: number; height: number } {
   return pick;
 }
 
+function setupPuppeteer() {
+  const puppeteer = addExtra(vanillaPuppeteer);
+
+  puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
+
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/console.debug")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/chrome.runtime")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/console.debug")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/iframe.contentWindow")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/media.codecs")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/navigator.languages")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/navigator.permissions")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/navigator.plugins")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/navigator.webdriver")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/user-agent-override")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/webgl.vendor")(),
+  );
+  puppeteer.use(
+    require("puppeteer-extra-plugin-stealth/evasions/window.outerdimensions")(),
+  );
+
+  puppeteer.use(AnonymizeUAPlugin());
+
+  return puppeteer;
+}
+
 async function launch() {
+  const puppeteer = setupPuppeteer();
+
   return await puppeteer.launch({
     headless: true,
     defaultViewport: getRandomViewport(),
@@ -62,11 +105,10 @@ async function launch() {
   });
 }
 
-async function withWebsite(todo: (page: puppeteer.Page) => Promise<void>) {
+async function withWebsite(todo: (page: Page) => Promise<void>) {
   const browser = await launch();
 
   const page = await browser.newPage();
-  await page.setUserAgent(random(USER_AGENTS));
   await page.goto(random(MIRRORS));
 
   try {

@@ -12,7 +12,12 @@
     "@types/node-fetch": "^2.5.6",
     "@types/puppeteer": "^2.0.1",
     "node-fetch": "^2.6.0",
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^2.1.1",
+    "puppeteer-extra": "^3.1.9",
+    "puppeteer-extra-plugin-adblocker": "^2.11.3",
+    "puppeteer-extra-plugin-anonymize-ua": "^2.2.8",
+    "puppeteer-extra-plugin-block-resources": "^2.2.4",
+    "puppeteer-extra-plugin-stealth": "^2.4.9"
   },
   "devDependencies": {
     "node-dev": "^4.0.0",
