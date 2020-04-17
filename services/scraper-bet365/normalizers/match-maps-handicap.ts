@@ -1,9 +1,9 @@
-import { CompleteHandicapData } from "../scraper/types";
+import { CompleteHandicapData, HeaderOnlyData } from "../scraper/types";
 import { NormalizeResult } from "@bet/types";
 import { commonBettable } from "./common";
 
 function normalize(normalizable: {
-  data: CompleteHandicapData;
+  data: HeaderOnlyData | CompleteHandicapData;
 }): NormalizeResult {
   const { data } = normalizable;
   const { market } = data;

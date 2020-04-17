@@ -29,3 +29,13 @@ export function detectOverUnder(str: string): ["over" | "under", number] {
   }
   throw new Error(`Can't detect over or under designation on string "${str}".`);
 }
+
+export function detectMapPeriod(str: string): ["map", number] {
+  const match = str.match(/Map (\d+)/);
+
+  if (match == null || match[1] == null) {
+    throw new Error(`Can't detect map on string "${str}".`);
+  }
+
+  return ["map", parseInt(match[1])];
+}

@@ -1,6 +1,6 @@
 import { CompleteHandicapData } from "../scraper/types";
 import { NormalizeResult } from "@bet/types";
-import { commonBettable, detectOverUnder } from "./common";
+import { commonBettable, detectOverUnder, detectMapPeriod } from "./common";
 
 function normalize(normalizable: {
   data: CompleteHandicapData;
@@ -19,8 +19,8 @@ function normalize(normalizable: {
             operation: "over_under",
             team: "both",
             value: detectOverUnder(market.value.handicap),
-            unit: "maps",
-            period: "match",
+            unit: "rounds",
+            period: detectMapPeriod(data.marketGroup),
           },
         },
       ],
