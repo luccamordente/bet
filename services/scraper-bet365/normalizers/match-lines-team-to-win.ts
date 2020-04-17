@@ -1,6 +1,6 @@
 import { CompleteOddsOnlyData } from "../scraper/types";
 import { NormalizeResult } from "@bet/types";
-import { commonBettable } from "./common";
+import { commonBettable, detectHomeAway } from "./common";
 
 function normalize(normalizable: {
   data: CompleteOddsOnlyData;
@@ -8,31 +8,31 @@ function normalize(normalizable: {
   const { data } = normalizable;
   const { market } = data;
 
-  if (!data.eventParticipants.includes(market.header)) {
+  try {
+    return {
+      ok: true,
+      bettables: [
+        {
+          ...commonBettable(data),
+          market: {
+            kind: "result",
+            operation: "binary",
+            team: null,
+            value: detectHomeAway(data, market.header),
+            unit: "team",
+            period: "match",
+          },
+        },
+      ],
+    };
+  } catch (err) {
     return {
       ok: false,
       code: "invalid_data",
-      message: `Couldn't find '${market.header}' in the list of event participants.`,
+      message: err.message,
       data: normalizable,
     };
   }
-
-  return {
-    ok: true,
-    bettables: [
-      {
-        ...commonBettable(data),
-        market: {
-          kind: "result",
-          operation: "binary",
-          team: null,
-          value: market.header === data.eventParticipants[0] ? "home" : "away",
-          unit: "team",
-          period: "match",
-        },
-      },
-    ],
-  };
 }
 
 export default normalize;

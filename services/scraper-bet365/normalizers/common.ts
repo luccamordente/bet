@@ -39,3 +39,16 @@ export function detectMapPeriod(str: string): ["map", number] {
 
   return ["map", parseInt(match[1])];
 }
+
+export function detectHomeAway(
+  data: Data,
+  participant: string,
+): "home" | "away" {
+  if (!data.eventParticipants.includes(participant)) {
+    throw new Error(
+      `Couldn't find '${participant}' in the list of event participants.`,
+    );
+  }
+
+  return participant === data.eventParticipants[0] ? "home" : "away";
+}
