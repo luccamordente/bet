@@ -5,9 +5,13 @@ resources:
 images:
   - name: poluga
     newName: 914977074407.dkr.ecr.ap-south-1.amazonaws.com/poluga
-    newTag: "$COMMIT_SHORT_HASH" # keep quoted, the replaced value can be a number
+    digest: "$image_digest(poluga)"
+  - name: poluga-chromium
+    newName: 914977074407.dkr.ecr.ap-south-1.amazonaws.com/poluga-chromium
+    digest: "$image_digest(poluga-chromium)"
 secretGenerator:
   - name: secret-env
+    behavior: replace
     envs:
       - secret.env
 patchesStrategicMerge:

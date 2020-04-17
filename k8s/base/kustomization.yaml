@@ -5,7 +5,10 @@ resources:
   - health.yaml
   - scraper-marathon.yaml
   - scraper-pinnacle.yaml
+  - scraper-bet365.yaml
 configMapGenerator:
   - name: env
     literals:
       - EVENT_TIME_SPAN_HOURS=24
+secretGenerator:
+  - name: secret-env

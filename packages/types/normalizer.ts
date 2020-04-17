@@ -10,6 +10,7 @@ interface Failure {
   readonly code:
     | "sport_not_supported"
     | "no_normalizer"
+    | "invalid_data"
     | "not_classified"
     | "unknown";
   readonly message: string;

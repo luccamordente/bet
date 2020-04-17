@@ -4,7 +4,7 @@ ARG INSTALL_CHROMIUM=false
 RUN test ${INSTALL_CHROMIUM} = false || ( \
   echo http://nl.alpinelinux.org/alpine/edge/community > /etc/apk/repositories \
   && echo http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories \
-  && apk add --no-cache chromium=80.0.3987.132-r2 \
+  && apk add --no-cache chromium=80.0.3987.149-r0 \
 )
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
@@ -19,7 +19,15 @@ RUN addgroup -S apprunner && adduser -S -g apprunner apprunner \
   && chown -R apprunner:apprunner /home/apprunner
 
 WORKDIR /app
-COPY . .
+
+# Copy dependencies and related files
+COPY .yarn/ .yarn/
+COPY .pnp.js .yarnrc.yml yarn.lock package.json ./
+
+# Copy our code
+COPY packages/ packages/
+COPY services/ services/
+
 RUN yarn install --immutable --immutable-cache
 
 # Run everything after as non-privileged user.

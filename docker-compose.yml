@@ -15,6 +15,7 @@ x-volumes: &default-volumes
   - ./package.json:/app/package.json:ro
   - ./tsconfig.json:/app/tsconfig.json:ro
   - ./yarn.lock:/app/yarn.lock:ro
+  - ./.screenshots:/tmp/screenshots
 
 # Minimal headless chrome service configuration
 x-headless-chrome: &headless-chrome
@@ -101,13 +102,25 @@ services:
     depends_on:
       - mongodb
 
+  scraper-bet365:
+    <<: *headless-chrome
+    volumes: *default-volumes
+    command: [yarn, workspace, "@bet/scraper-bet365", dev]
+    environment:
+      - MONGODB_CONNECTION_URI=mongodb://mongodb
+      - *scrapers-time-span
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+
   # scraper-1xbet:
   #   <<: *headless-chrome
   #   volumes: *default-volumes
   #   command: [yarn, workspace, "@bet/scraper-pinnacle", dev]
   #   environment:
   #     - MONGODB_CONNECTION_URI=mongodb://mongodb
-  #     - *x-scrapers-time-span
+  #     - *scrapers-time-span
   #   networks:
   #     - app-tier
   #   depends_on:

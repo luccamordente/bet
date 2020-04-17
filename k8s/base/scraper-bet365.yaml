@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-bet365
+spec:
+  selector:
+    matchLabels:
+      app: scraper-bet365
+  template:
+    metadata:
+      labels:
+        app: scraper-bet365
+    spec:
+      containers:
+        - name: scraper-bet365
+          image: poluga-chromium
+          command: [yarn, workspace, "@bet/scraper-bet365", start]
+          env:
+            - name: MONGODB_CONNECTION_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGODB_CONNECTION_URI
+                  name: secret-env
+            - name: EVENT_TIME_SPAN_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  key: EVENT_TIME_SPAN_HOURS
+                  name: env
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
