@@ -2,7 +2,7 @@
   "name": "@bet/heart-beat-health",
   "description": "Library to implement simple heart beat health checks.",
   "dependencies": {
-    "@types/ramda": "^0.27.3",
+    "@types/ramda": "^0.27.4",
     "ramda": "^0.27.0"
   }
 }
