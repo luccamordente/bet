@@ -6,7 +6,10 @@ fi
 
 set -eux -o pipefail
 
-REPO_PREFIX=914977074407.dkr.ecr.ap-south-1.amazonaws.com
+if [[ -z ${REPO_PREFIX=} ]]; then
+  echo "Missing REPO_PREFIX env var"
+  exit 1
+fi
 
 commit_id=$(git rev-parse --short HEAD)
 
