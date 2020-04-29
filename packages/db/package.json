@@ -3,6 +3,6 @@
   "dependencies": {
     "@bet/assert": "workspace:packages/assert",
     "@types/mongodb": "^3.5.8",
-    "mongodb": "^3.5.6"
+    "mongodb": "^3.5.7"
   }
 }
