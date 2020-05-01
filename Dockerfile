@@ -1,4 +1,4 @@
-FROM node:13.13.0-alpine3.11
+FROM node:14.1.0-alpine3.11
 
 ARG INSTALL_CHROMIUM=false
 RUN test ${INSTALL_CHROMIUM} = false || ( \
