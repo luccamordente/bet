@@ -8,7 +8,7 @@
     "@bet/db": "workspace:packages/db",
     "@bet/heart-beat-health": "workspace:packages/heart-beat-health",
     "@types/node": "^13.11.1",
-    "moment": "^2.24.0"
+    "moment": "^2.25.3"
   },
   "devDependencies": {
     "node-dev": "^4.0.0",

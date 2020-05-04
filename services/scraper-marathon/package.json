@@ -11,7 +11,7 @@
     "@bet/types": "workspace:packages/types",
     "@types/node": "^13.11.1",
     "axios": "^0.19.2",
-    "moment": "^2.24.0",
+    "moment": "^2.25.3",
     "node-html-parser": "^1.2.16"
   },
   "devDependencies": {
