@@ -7,7 +7,7 @@
   "dependencies": {
     "@bet/db": "workspace:packages/db",
     "@bet/heart-beat-health": "workspace:packages/heart-beat-health",
-    "@types/node": "^13.11.1",
+    "@types/node": "^13.13.5",
     "moment": "^2.24.0"
   },
   "devDependencies": {

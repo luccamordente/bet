@@ -9,7 +9,7 @@
     "@bet/db": "workspace:packages/db",
     "@bet/heart-beat-health": "workspace:packages/heart-beat-health",
     "@bet/types": "workspace:packages/types",
-    "@types/node": "^13.11.1",
+    "@types/node": "^13.13.5",
     "axios": "^0.19.2",
     "moment": "^2.24.0",
     "node-html-parser": "^1.2.16"
